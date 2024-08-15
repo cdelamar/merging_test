@@ -105,7 +105,7 @@ void parsing(t_token **token_list, char **envp)
         return;
 
     if (!parse_tokens(split_line, token_list))
-        return;
+        return; // TODO les returns risque de poser probleme, a voir si on peut pas mettre parsing en int
 
     final_tab = generate_final_tab(token_list, envp);
 
@@ -113,6 +113,28 @@ void parsing(t_token **token_list, char **envp)
     print_node(*token_list);  // Debugging prints
 
     cleanup_parsing(line, split_line, token_list);
+}
+
+
+static void executing(char *line, t_cmd *cmd)
+{
+    if (line == NULL)
+    {
+        printf("CTRL + D from shell_loop\n");
+        free_structs(cmd);
+        exit(0); // Handle exit on EOF (CTRL + D)
+    }
+
+    if (*line)
+        add_history(line);
+
+    if (execute(line, cmd) == EXIT_COMMAND) // rename execute (process input ?)
+    {
+        printf("FREE by EXIT COMMAND (shell_loop)\n");
+        free_structs(cmd);
+        free(line);
+        exit(0); // Handle explicit exit command
+    }
 }
 
 // SHELL LOOP
@@ -125,13 +147,12 @@ void shell(char **envp) // shell_exec_loop
 
     while (1)
     {
-        if (init_shell_exec(&cmd, envp) != 0)
+        if (init_shell_exec(&cmd, envp) != 0) // init for executing
             return;
 
         parsing(&token_list, envp); // tout ton code demarre ici lulu
 
-        					// Assuming `line` was generated during parsing, and `cmd` can be filled with tokenized commands
-        line = cmd->line;	// TODO return a proper data for the exectuing
+        line = cmd->line;	// TODO return a proper data for the exectuing IMPORTANT
 
         executing(line, cmd); // MODIF process_input
         cleanup(line, cmd);
@@ -153,6 +174,22 @@ int main(int argc, char **argv, char **envp)
 
     return 0;
 }
+
+
+/*
+dans split_dop/verif_error la fonction badchar dedans a la fin cest ca qui faut gerer
+en gros si il y a "" ou '' tu envoie a clemment () bah rien
+et les return dans les main il faut les suprimer et gere les erreur sans stop le mini
+shell*/
+
+
+
+//faire un check avant tout de verifier si lutilisateur a mis les caractere \x01 ou \x02
+//le cas echo "caca"|oui et bien les double quote ne fusione pas avec le pipe pareil pour les > ex..
+//le realloc tu doit le recoder dans parsing.c
+//enlever les returne 0 en cas derreur pour ne pas quiter les minishell
+
+
 /*
 int	add_node(t_token **token_list, char **strs, int i)
 {
@@ -242,15 +279,4 @@ int	main(int argc, char **argv, char **envp)
 }
 */
 
-/*
-dans split_dop/verif_error la fonction badchar dedans a la fin cest ca qui faut gerer
-en gros si il y a "" ou '' tu envoie a clemment () bah rien
-et les return dans les main il faut les suprimer et gere les erreur sans stop le mini
-shell*/
 
-
-
-//faire un check avant tout de verifier si lutilisateur a mis les caractere \x01 ou \x02
-//le cas echo "caca"|oui et bien les double quote ne fusione pas avec le pipe pareil pour les > ex..
-//le realloc tu doit le recoder dans parsing.c
-//enlever les returne 0 en cas derreur pour ne pas quiter les minishell

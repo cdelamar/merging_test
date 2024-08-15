@@ -106,7 +106,7 @@ static int init_shell_exec(t_cmd **cmd, char **envp)
     (*cmd)->heredoc_processed = FALSE;
     return 0;
 }
-
+/*
 void shell_exec_loop(char **envp)
 {
     char *line;
@@ -140,5 +140,5 @@ int main(int argc, char **argv, char **envp)
     shell_exec_loop(envp);
 
     return 0;
-}
+}*/
 
