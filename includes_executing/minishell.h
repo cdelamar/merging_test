@@ -54,6 +54,37 @@
 # define STDERR 2
 # define EXIT_COMMAND	3
 
+# define ERROR_NODE 1
+# define ERROR_ARGS 2
+# define ERROR_QUOTE 3
+
+extern volatile int	g_var;
+/* ========== ENUM ================= */
+
+typedef enum token_num
+{
+	WORD, //commande
+	SPACES,
+	PIPE, // |
+	REDIRECTION, // <<
+	VAR, // $
+	DOUBLE_QUOTE, //
+	SIMPLE_QUOTE,
+	LAST_VERIF,
+	GLOBAL, // $?
+	ERROR, // erreur
+	END, // \0
+}	t_token_enum;
+
+/* ========== STRUCTURE ============= */
+
+typedef struct s_token
+{
+	t_token_enum	type; // COMMANDE
+	char			*content; // LS..cd ex...
+	int				index; // 1 2 3
+	struct s_token	*next; // next
+}	t_token;
 typedef struct s_cmd
 {
 	int		fd[2];
@@ -69,6 +100,7 @@ typedef struct s_cmd
 	char	**path_command;
 	char	**env;
 	int		export_added;
+	char	*line; //WIP
 }	t_cmd;
 
 // excecuting

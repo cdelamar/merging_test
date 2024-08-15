@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../includes/minishell.h" // MODIF /src/executing/...
 
 char	*cmd_cat(const char *path_split, char *slash, char *command)
 {
