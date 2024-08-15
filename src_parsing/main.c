@@ -13,8 +13,29 @@
 #include "minishell.h"
 #include <unistd.h>
 
+// TODO : once merge is fully implmented
+// adding all new function to lib
+// adding all new files to makefile
+
 volatile int	g_var = 0;
 
+
+int main(int argc, char **argv, char **envp)
+{
+    (void)argv;
+
+    if (argc != 1)
+    {
+        printf("MiniSnail is supposed to work by typing './minishell'\n");
+        return (0);
+    }
+
+    handle_signals();
+    shell(envp);
+
+    return 0;
+}
+/*
 int	add_node(t_token **token_list, char **strs, int i)
 {
 	t_token	*new_node;
@@ -101,6 +122,8 @@ int	main(int argc, char **argv, char **envp)
 		token_lstclear(&token_list, free);// pause des leaks
 	}
 }
+*/
+
 /*
 dans split_dop/verif_error la fonction badchar dedans a la fin cest ca qui faut gerer
 en gros si il y a "" ou '' tu envoie a clemment () bah rien
