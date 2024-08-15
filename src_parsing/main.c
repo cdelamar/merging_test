@@ -16,6 +16,9 @@
 // TODO : once merge is fully implmented
 // adding all new function to lib
 // adding all new files to makefile
+// adding lucas lib to the original one, or create one especially for it
+// -lib
+// -parse_lib
 
 volatile int	g_var = 0;
 
@@ -30,8 +33,8 @@ int main(int argc, char **argv, char **envp)
         return (0);
     }
 
-    handle_signals();
-    shell(envp);
+    signals();
+    shell(envp); // MODIF shell_exec_loop
 
     return 0;
 }
