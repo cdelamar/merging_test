@@ -95,17 +95,7 @@ static void process_input(char *line, t_cmd *cmd)
     }
 }
 
-static int init_shell_exec(t_cmd **cmd, char **envp)
-{
-    if (malloc_structs(cmd) != 0)
-    {
-        ft_putendl_fd(MALLOC_FAILURE, 2);
-        return 1;
-    }
-    (*cmd)->env = envp;
-    (*cmd)->heredoc_processed = FALSE;
-    return 0;
-}
+
 /*
 void shell_exec_loop(char **envp)
 {

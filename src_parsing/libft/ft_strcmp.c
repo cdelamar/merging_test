@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
-
+/*
 int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;
@@ -34,4 +34,4 @@ int	ft_strncmp(char *s1, char *s2, size_t n)
 		i++;
 	}
 	return (0);
-}
+}*/

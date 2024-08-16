@@ -20,6 +20,51 @@
 // -parse_lib
 
 volatile int	g_var = 0;
+/*
+static void process_input(char *line, t_cmd *cmd)
+{
+    if (line == NULL)
+    {
+        printf("CTRL + D from shell_loop\n");
+        free_structs(cmd);
+        exit(0); // Handle exit on EOF (CTRL + D)
+    }
+
+    if (*line)
+        add_history(line);
+
+    if (execute(line, cmd) == EXIT_COMMAND)
+    {
+        printf("FREE by EXIT COMMAND (shell_loop)\n");
+        free_structs(cmd);
+        free(line);
+        exit(0); // Handle explicit exit command
+    }
+}*/
+
+static int init_shell_exec(t_cmd **cmd, char **envp)
+{
+    if (malloc_structs(cmd) != 0)
+    {
+        ft_putendl_fd(MALLOC_FAILURE, 2);
+        return 1;
+    }
+    (*cmd)->env = envp;
+    (*cmd)->heredoc_processed = FALSE;
+    return 0;
+}
+
+int	add_node(t_token **token_list, char **strs, int i)
+{
+	t_token	*new_node;
+
+	new_node = token_lstnew(strs[i]);
+	if (new_node == NULL)
+		return (check_error(ERROR_NODE));
+	new_node->index = i;
+	token_lstadd_back(token_list, new_node);
+	return (1);
+}
 
 void free_split_line(char **split_line)
 {
