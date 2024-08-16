@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../includes/executing.h"
 
 // TODO : handle '< test.txt cat' (*)
 // TODO : handle 'cat <test.txt'

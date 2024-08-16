@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../includes/executing.h"
 
 void cleanup(char *line, t_cmd *cmd)
 {

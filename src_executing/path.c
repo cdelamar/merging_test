@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../includes/executing.h"
 
 char	*path_finder(t_cmd *cmd, char *path, int size)
 {

@@ -12,7 +12,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../includes/executing.h"
 
 // TODO implement exit through builtins
 

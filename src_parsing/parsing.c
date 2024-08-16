@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/parsing.h"
 
 int	assign_enum(t_token *token)
 {

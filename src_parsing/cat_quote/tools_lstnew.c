@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/parsing.h"
 
 int	check_is_space_node(char **str, int i)
 {

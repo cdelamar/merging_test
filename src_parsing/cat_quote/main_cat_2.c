@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../includes/parsing.h"
 
 int	add_node_with_cat(t_token **token_list, char **str, int i)
 {

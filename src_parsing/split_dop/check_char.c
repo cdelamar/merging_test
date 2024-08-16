@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/parsing.h"
 
 int	check_is_compar(int i, char *s, char **lst, int j)
 {

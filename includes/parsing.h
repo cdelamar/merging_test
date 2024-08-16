@@ -10,11 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef PARSING_H
+# define PARSING_H
 
 /* ========== INCLUDE ============= */
 
+# include "executing.h"
+# include "libft.h"
 # include "unistd.h"
 # include "stdlib.h"
 # include "signal.h"

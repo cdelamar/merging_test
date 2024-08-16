@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-
-
+#include "../includes/executing.h"
 
 // Function to check if a variable name is valid
 int is_valid_var_name(char *name)

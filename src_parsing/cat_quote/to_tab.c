@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../includes/parsing.h"
 
 char	**replace_x0_to_space(char **finish_tab)
 {

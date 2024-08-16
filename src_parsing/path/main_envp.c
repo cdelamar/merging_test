@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../includes/parsing.h"
 
 int	skip_prefix(char *word)
 {

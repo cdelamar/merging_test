@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 
-#include "../includes/minishell.h"
+#include "../includes/executing.h"
 
 
 // TODO : fix   MINISHELL>qwwqls | wc

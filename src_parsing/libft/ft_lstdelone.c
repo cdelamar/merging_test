@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/parsing.h"
 
 void	ft_lstdelone(t_token *lst, void (*del)(void*))
 {

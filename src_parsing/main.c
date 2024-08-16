@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include <unistd.h>
+#include "../includes/parsing.h"
 
 // TODO : once merge is fully implmented
 // adding all new function to lib

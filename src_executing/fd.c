@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 
-#include "../includes/minishell.h"
+#include "../includes/executing.h"
 
 void close_fds(int *fd)
 {
