@@ -16,7 +16,7 @@ int ft_unset(char **split_line, t_cmd *cmd)
 {
     int i, j, len;
 
-    if (!split_line[1])  // Ensure there's at least one argument after unset
+    if (!split_line[1])  // au moins 1 arg a unset sinon cest debile
         return (EXIT_FAILURE);
 
     i = 0;
@@ -33,7 +33,7 @@ int ft_unset(char **split_line, t_cmd *cmd)
         return (EXIT_FAILURE);
     }
 
-    // free(cmd->env[i]);  // Free the environment variable being unset
+    // free(cmd->env[i]);  // Free the environment variable being unset TODO
     j = i;
     while (cmd->env[j])
     {

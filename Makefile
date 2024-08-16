@@ -15,23 +15,54 @@ NAME = minishell
 LIBFT = lib/libft.a
 
 CC = cc
-CFLAGS = -g -Iincludes -Ilib/includes -Wall -Wextra -Werror
+CFLAGS = -g -Iincludes -Ilib/includes -Wall -Wextra -Werror -pthread
 LFLAGS = -Llib -lft -lreadline
 
 SRC_DIRS = src/ builtins/
 OBJ_DIR = obj/
 
-SRC_FILES = command main exec memory path signal redirection heredoc fd basic_exec pipe_exec#token
-
+EXECUTING_FILES = command exec memory path signal redirection heredoc fd basic_exec pipe_exec #main
 BUILTIN_FILES = call_builtins ft_echo ft_env ft_pwd ft_unset ft_cd ft_export ft_exit
 
-SRC_SRCS = $(addprefix src/, $(addsuffix .c, $(SRC_FILES)))
-BUILTIN_SRCS = $(addprefix builtins/, $(addsuffix .c, $(BUILTIN_FILES)))
-SRCS = $(SRC_SRCS) $(BUILTIN_SRCS)
+PARSING_FILES =	main \
+				parsing \
+				error \
+				tools \
+				libft/all_lst \
+				free_all \
+				libft/ft_isalpha \
+				libft/sub_chr_cpy \
+				libft/ft_strtrim \
+				split_dop/ft_split_boosted \
+				split_dop/count_word \
+				split_dop/check_char \
+				split_dop/verif_error \
+				cat_quote/tools_for_cat \
+				cat_quote/main_cat_2 \
+				cat_quote/to_tab \
+				cat_quote/lstnew_with_cat \
+				cat_quote/tools_lstnew \
+				print_ascii \
+				path/main_envp \
+				signal \
+				#libft/ft_strdup \
+				libft/ft_strjoin \
+				libft/ft_lstdelone \
+				libft/ft_strlcpy \
+				libft/ft_strlen \
+				libft/ft_strcmp \
+				libft/ft_bzero \
 
-SRC_OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
+
+EXEC_SRCS = $(addprefix src_executing/, $(addsuffix .c, $(EXECUTING_FILES)))
+BUILTIN_SRCS = $(addprefix builtins/, $(addsuffix .c, $(BUILTIN_FILES)))
+PARSE_SRCS = $(addprefix src_parsing/, $(addsuffix .c, $(PARSING_FILES)))
+SRCS = $(EXEC_SRCS) $(BUILTIN_SRCS) $(PARSING_FILES)
+
+EXEC_OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(EXECUTING_FILES)))
 BUILTIN_OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(BUILTIN_FILES)))
-OBJS = $(SRC_OBJS) $(BUILTIN_OBJS)
+PARSE_OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(BUILTIN_FILES)))
+OBJS = $(EXEC_OBJS) $(BUILTIN_OBJS) $(PARSE_OBJS)
 
 VALGRIND_SUPP = valgrind.supp
 
