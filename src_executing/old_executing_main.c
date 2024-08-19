@@ -72,7 +72,8 @@ VALGRIND
 - fix autant de leak que possible avant de merge les deux parties
 */
 
-volatile sig_atomic_t g_signal = 0;
+// volatile sig_atomic_t g_signal = 0;
+extern volatile int	g_var;
 
 static void process_input(char *line, t_cmd *cmd)
 {

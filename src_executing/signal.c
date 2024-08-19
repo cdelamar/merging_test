@@ -81,7 +81,7 @@ Additional Considerations
 
 */
 
-extern sig_atomic_t g_signal;
+extern volatile int	g_var;
 
 // MAIN SIGNAL
 
@@ -89,7 +89,7 @@ void sigint_handler(int sig)
 {
     if (sig == SIGINT)
 	{
-        g_signal = 1;
+        g_var = 1;
         printf ("appel de signal\n");
         rl_replace_line("", 0);
         printf("\n");
@@ -110,7 +110,7 @@ void sigint_heredoc(int sig)
 {
     if (sig == SIGINT)
     {
-        g_signal = 1;
+        g_var = 1;
         printf("\n");
     }
 }

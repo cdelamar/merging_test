@@ -12,7 +12,7 @@
 
 #include "../includes/parsing.h"
 
-void sigint_handler(int sig)
+/*void sigint_handler(int sig)
 {
     if (sig == SIGINT)
 	{
@@ -26,4 +26,4 @@ void	signals(void)
 {
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN); // CTRL + \ interaction
-}
+}*/

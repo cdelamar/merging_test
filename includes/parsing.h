@@ -156,6 +156,6 @@ int			skip_space(char *s, int i);
 void		print_split(char **split_line);
 int			solo_quote(char **split_line);
 
-void		signals(void);
-void		sigint_handler(int sig);
+// void		signals(void);
+// void		sigint_handler(int sig);
 #endif

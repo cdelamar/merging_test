@@ -30,9 +30,9 @@ PARSING_FILES = main parsing error tools libft/all_lst free_all \
                 cat_quote/tools_for_cat cat_quote/main_cat_2 \
                 cat_quote/to_tab cat_quote/lstnew_with_cat \
                 cat_quote/tools_lstnew print_ascii path/main_envp \
-                signal libft/ft_strjoin libft/ft_lstdelone \
+                libft/ft_strjoin libft/ft_lstdelone \
                 libft/ft_strlcpy libft/ft_strlen libft/ft_strcmp \
-                libft/ft_bzero
+                libft/ft_bzero libft/ft_strdup
 
 EXEC_SRCS = $(addprefix src_executing/, $(addsuffix .c, $(EXECUTING_FILES)))
 BUILTIN_SRCS = $(addprefix builtins/, $(addsuffix .c, $(BUILTIN_FILES)))
@@ -43,6 +43,8 @@ EXEC_OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(EXECUTING_FILES)))
 BUILTIN_OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(BUILTIN_FILES)))
 PARSE_OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(PARSING_FILES)))
 OBJS = $(EXEC_OBJS) $(BUILTIN_OBJS) $(PARSE_OBJS)
+
+VALGRIND_SUPP = valgrind.supp
 
 all: $(NAME)
 

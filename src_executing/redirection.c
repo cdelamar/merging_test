@@ -16,7 +16,7 @@
 // TODO : handle 'cat <test.txt'
 // TODO : handle ctrl+c in heredocs
 
-extern sig_atomic_t g_signal;
+extern volatile int	g_var;
 
 int ft_output_redirect(char **args, int i, int append)
 {

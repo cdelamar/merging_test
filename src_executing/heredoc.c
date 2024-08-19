@@ -17,7 +17,8 @@
 
 // TODO ; handle "exit [un argument]" return " too many arguments"
 
-extern sig_atomic_t g_signal;
+// extern sig_atomic_t g_signal;
+extern volatile int	g_var;
 
 int ft_heredoc(char *limit)
 {
@@ -26,7 +27,7 @@ int ft_heredoc(char *limit)
     char *line;
     int heredoc_fd;
 
-    g_signal = 0;
+    g_var = 0;
     heredoc_signals();
 
     heredoc_fd = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -39,7 +40,7 @@ int ft_heredoc(char *limit)
 
     while (1)
     {
-        if (g_signal == 1) // check ctrl + C
+        if (g_var == 1) // check ctrl + C
         {
             printf ("signal = 1\n");
             close(heredoc_fd);

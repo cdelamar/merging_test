@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
-
+/*
 char	*ft_strdup(const char *src)
 {
 	int		i;
@@ -30,7 +30,7 @@ char	*ft_strdup(const char *src)
 	}
 	dest[i] = '\0';
 	return (dest);
-}
+}*/
 
 char	*ft_strdup_for_quote(const char *src)
 {
