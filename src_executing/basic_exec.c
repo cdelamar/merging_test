@@ -13,6 +13,11 @@
 // TODO handle exit 0 | exit 1
 // attention : tres chiant
 
+
+// TODO adding extern functions
+
+extern volatile int g_var;
+
 #include "../includes/executing.h"
 
 int set_command_path(t_cmd *cmd)

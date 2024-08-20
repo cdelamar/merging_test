@@ -23,16 +23,18 @@ OBJ_DIR = obj/
 
 EXECUTING_FILES = command exec memory path signal redirection heredoc fd basic_exec pipe_exec
 BUILTIN_FILES = call_builtins ft_echo ft_env ft_pwd ft_unset ft_cd ft_export ft_exit
-PARSING_FILES = main parsing error tools libft/all_lst free_all \
+PARSING_FILES = main parsing error tools \
+				libft/all_lst free_all \
                 libft/ft_isalpha libft/sub_chr_cpy libft/ft_strtrim \
                 split_dop/ft_split_boosted split_dop/count_word \
                 split_dop/check_char split_dop/verif_error \
                 cat_quote/tools_for_cat cat_quote/main_cat_2 \
                 cat_quote/to_tab cat_quote/lstnew_with_cat \
-                cat_quote/tools_lstnew print_ascii path/main_envp \
+                cat_quote/tools_lstnew print_ascii \
+				path/tools_of_path path/main_envp \
                 libft/ft_strjoin libft/ft_lstdelone \
                 libft/ft_strlcpy libft/ft_strlen libft/ft_strcmp \
-                libft/ft_bzero libft/ft_strdup
+                libft/ft_bzero libft/ft_strdup \
 
 EXEC_SRCS = $(addprefix src_executing/, $(addsuffix .c, $(EXECUTING_FILES)))
 BUILTIN_SRCS = $(addprefix builtins/, $(addsuffix .c, $(BUILTIN_FILES)))

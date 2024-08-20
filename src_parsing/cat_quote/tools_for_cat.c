@@ -6,11 +6,11 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 12:02:15 by laubry            #+#    #+#             */
-/*   Updated: 2024/08/13 16:20:35 by laubry           ###   ########.fr       */
+/*   Updated: 2024/08/19 18:42:12 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../includes/parsing.h"
 
 char	**malloc_tab(t_token **token)
 {
@@ -47,4 +47,3 @@ void	cat_quote(char **tab_token, t_token **token)
 			j = 0;
 	}
 }
-
