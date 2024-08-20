@@ -151,7 +151,7 @@ int main(int argc, char **argv, char **envp)
         printf("MiniSnail is supposed to work by typing './minishell'\n");
         return (0);
     }
-
+    print_snail();
     // Setup signal handlers
     signals();
 
