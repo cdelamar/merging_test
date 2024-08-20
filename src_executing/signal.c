@@ -90,7 +90,7 @@ void sigint_handler(int sig)
     if (sig == SIGINT)
 	{
         g_var = 1;
-        printf ("appel de signal\n");
+        //printf ("appel de signal\n");
         rl_replace_line("", 0);
         printf("\n");
         rl_on_new_line();

@@ -76,7 +76,7 @@ void	print_free_tab(char **final_token)
 	i = 0;
 	while (final_token[i])
 	{
-		printf("tab == %s\n", final_token[i]);
+		//printf("tab == %s\n", final_token[i]);
 		free(final_token[i]);
 		i++;
 	}

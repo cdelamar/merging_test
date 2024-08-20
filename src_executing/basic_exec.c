@@ -69,7 +69,7 @@ int basic_parent_process(pid_t pid, char **split_line) // TODO free cmd->path_sp
     }
     if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE) // cest la que ca peche ft_peche
     {
-        printf("(line %d)\n", __LINE__);
+        //printf("(line %d)\n", __LINE__);
         if (split_line)
           ft_freetab(split_line);
         return EXIT_FAILURE;
