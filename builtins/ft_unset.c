@@ -42,6 +42,5 @@ int ft_unset(char **split_line, t_cmd *cmd)
     }
 
     // ft_freetab(split_line);
-    printf("oskour\n");
     return (EXIT_SUCCESS);
 }

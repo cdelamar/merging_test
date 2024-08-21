@@ -52,7 +52,7 @@ int	execute(char *line, t_cmd *cmd)
 
 	if (line[0] == '\0')
 	{
-		printf("free : nothing outputed (exec.c : line 43)\n");
+		//printf("free : nothing outputed (exec.c : line 43)\n");
 		return (0);
 	}
 
@@ -62,7 +62,7 @@ int	execute(char *line, t_cmd *cmd)
 		return (pipe_execute(line, cmd));
 	else if (ft_builtin(line, cmd) == EXIT_SUCCESS)
 	{
-		printf("builtins succeed (exec.c line 52)\n");
+		//printf("builtins succeed (exec.c line 52)\n");
 		return (EXIT_SUCCESS);
 	}
 	/*else if (ft_strcmp(line, "exit") == 0)

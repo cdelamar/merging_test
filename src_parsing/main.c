@@ -110,6 +110,7 @@ int parse_input(char *line, char **envp, t_token **token_list)
 void shell_exec_loop(char **envp)
 {
     char *line;
+    char ** final_tab;
     t_cmd *cmd;
     t_token *token_list;
 
@@ -129,15 +130,15 @@ void shell_exec_loop(char **envp)
         token_list = NULL;
         if (parse_input(line, envp, &token_list))
         {
-            char **final_tab = main_cat(&token_list);
+            final_tab = main_cat(&token_list);
             print_free_tab(final_tab); // Exemple a ajuster
+            // print_node(token_list);
 
             // Executing
             process_input(line, cmd);
 
             token_lstclear(&token_list, free);
         }
-
         cleanup(line, cmd);
     }
 }

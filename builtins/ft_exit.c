@@ -33,7 +33,7 @@ int ft_exit(char **split_line, t_cmd *cmd)
 {
     (void)cmd;
     int exit_code = 0;
-    printf("ft_exit called with argument: %s\n", split_line[1] ? split_line[1] : "NULL"); // test ??
+    //printf("ft_exit called with argument: %s\n", split_line[1] ? split_line[1] : "NULL"); // test ??
 
     if (split_line[1] != NULL)
     {

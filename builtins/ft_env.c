@@ -17,7 +17,7 @@ int	ft_env(t_cmd *cmd)
 	int	i;
 
 	i = 0;
-	printf ("je passe bien dans mon env\n");
+	// printf ("je passe bien dans mon env\n");
 	while (cmd->env[i])
 	{
 		ft_putstr_fd(cmd->env[i], 1);
