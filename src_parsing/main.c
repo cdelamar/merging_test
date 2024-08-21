@@ -1,8 +1,20 @@
 #include "../includes/parsing.h"
-
 #include "executing.h"
 
 volatile int g_var;
+
+static void print_tab(char **tab)
+{
+    int i;
+
+    i = 0;
+    while(tab[i])
+    {
+        printf("tab %d : %s\n", i, tab[i]);
+        i++;
+    }
+    return ;
+}
 
 int	add_node(t_token **token_list, char **strs, int i)
 {
@@ -110,7 +122,7 @@ int parse_input(char *line, char **envp, t_token **token_list)
 void shell_exec_loop(char **envp)
 {
     char *line;
-    char ** final_tab;
+    char ** parsed_line;
     t_cmd *cmd;
     t_token *token_list;
 
@@ -130,9 +142,12 @@ void shell_exec_loop(char **envp)
         token_list = NULL;
         if (parse_input(line, envp, &token_list))
         {
-            final_tab = main_cat(&token_list);
-            print_free_tab(final_tab); // Exemple a ajuster
-            // print_node(token_list);
+            parsed_line = main_cat(&token_list);
+            //-----
+            print_tab(parsed_line);
+            //-----
+            print_free_tab(parsed_line); // Exemple a ajuster
+            print_node(token_list);
 
             // Executing
             process_input(line, cmd);
