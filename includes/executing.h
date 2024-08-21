@@ -81,10 +81,10 @@ typedef struct s_cmd
 }	t_cmd;
 
 // excecuting
-void 				shell_exec_loop(char **envp); // WIP
+void 				shell_loop(char **envp); // WIP
 void				initialize_cmd(t_cmd *cmd, char *line);
 void				handle_error(char *msg, t_cmd *cmd, int *fd);
-int					execute(char *line, t_cmd *cmd);
+int					execute(char *line, char **line_parsed, t_cmd *cmd);
 
 // memory
 int					malloc_structs(t_cmd **cmd);

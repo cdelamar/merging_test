@@ -74,7 +74,7 @@ static int init_shell_exec(t_cmd **cmd, char **envp)
 }
 
 
-static void process_input(char *line, t_cmd *cmd)
+static void process_input(char *line, char** line_parsed, t_cmd *cmd)
 {
     if (line == NULL)
     {
@@ -86,11 +86,12 @@ static void process_input(char *line, t_cmd *cmd)
     if (*line)
         add_history(line);
 
-    if (execute(line, cmd) == EXIT_COMMAND)
+    if (execute(line, line_parsed, cmd) == EXIT_COMMAND)
     {
         printf("FREE by EXIT COMMAND (shell_loop)\n");
         free_structs(cmd);
         free(line);
+        //ft_freetab(line_parsed) //pas sur de celle ci mais je note
         exit(0); // Handle explicit exit command
     }
 }
@@ -119,10 +120,10 @@ int parse_input(char *line, char **envp, t_token **token_list)
     return 1;
 }
 
-void shell_exec_loop(char **envp)
+void shell_loop(char **envp)
 {
     char *line;
-    char ** parsed_line;
+    char ** line_parsed;
     t_cmd *cmd;
     t_token *token_list;
 
@@ -142,15 +143,15 @@ void shell_exec_loop(char **envp)
         token_list = NULL;
         if (parse_input(line, envp, &token_list))
         {
-            parsed_line = main_cat(&token_list);
+            line_parsed = main_cat(&token_list);
             //-----
-            print_tab(parsed_line);
+            print_tab(line_parsed);
             //-----
-            print_free_tab(parsed_line); // Exemple a ajuster
+           //print_free_tab(line_parsed); // Exemple a ajuster
             print_node(token_list);
 
             // Executing
-            process_input(line, cmd);
+            process_input(line, line_parsed, cmd);
 
             token_lstclear(&token_list, free);
         }
@@ -168,11 +169,9 @@ int main(int argc, char **argv, char **envp)
         return (0);
     }
     print_snail();
-    // Setup signal handlers
     signals();
-
     // Start shell loop
-    shell_exec_loop(envp);
+    shell_loop(envp);
 
     return 0;
 }

@@ -41,12 +41,12 @@ int handle_exit_command(char *line)
     return 0;
 }*/
 
-int	execute(char *line, t_cmd *cmd)
+int	execute(char *line, char **line_parsed, t_cmd *cmd)
 {
 	// printf ("** execute **\n");
-	if (ft_strcmp(line, "|") == 0)
+	if (ft_strcmp(line_parsed[0], "|") == 0)
 	{
-		printf("synthax error : expected arguments with '|'\n");
+		printf("line parsed >> synthax error : expected arguments with '|'\n");
 		return (0);
 	}
 

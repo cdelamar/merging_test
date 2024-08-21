@@ -98,7 +98,7 @@ static void process_input(char *line, t_cmd *cmd)
 
 
 
-void shell_exec_loop(char **envp)
+void shell_loop(char **envp)
 {
     char *line;
     t_cmd *cmd;
@@ -128,7 +128,7 @@ int main(int argc, char **argv, char **envp)
     signals();
 
     // Start shell loop
-    shell_exec_loop(envp);
+    shell_loop(envp);
 
     return 0;
 }
