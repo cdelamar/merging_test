@@ -86,7 +86,7 @@ static void process_input(char *line, char** line_parsed, t_cmd *cmd)
     if (*line)
         add_history(line);
 
-    if (execute(line, line_parsed, cmd) == EXIT_COMMAND)
+    if (execute(line_parsed, cmd) == EXIT_COMMAND)
     {
         printf("FREE by EXIT COMMAND (shell_loop)\n");
         free_structs(cmd);

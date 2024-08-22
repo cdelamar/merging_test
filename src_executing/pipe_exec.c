@@ -40,7 +40,7 @@ static int child_process(t_cmd *cmd, int *fd, int i)
     }
 
     // If not 'exit', execute normally
-    if (basic_execute(cmd->path_command[i], cmd) == EXIT_FAILURE)
+    if (basic_execute(cmd->path_command, cmd) == EXIT_FAILURE)
     {
         ft_freetab(split_line);
         exit(EXIT_FAILURE);
@@ -48,18 +48,6 @@ static int child_process(t_cmd *cmd, int *fd, int i)
     ft_freetab(split_line);
     exit(EXIT_SUCCESS);
 }
-
-/*
-static int child_process(t_cmd *cmd, int *fd, int i)
-{
-    setup_child_pipes(cmd, fd, i);
-    if (basic_execute(cmd->path_command[i], cmd) == EXIT_FAILURE)
-    {
-        ft_freetab(cmd->path_command);
-        exit(EXIT_FAILURE);
-    }
-    exit(EXIT_SUCCESS);
-}*/
 
 static void parent_process(t_cmd *cmd, int *fd, int *i)
 {
@@ -83,18 +71,20 @@ static int create_and_fork(t_cmd *cmd, int *fd)
     return cmd->pid1;
 }
 
-int pipe_execute(char *line, t_cmd *cmd)
+int pipe_execute(char **line_parsed, t_cmd *cmd)
 {
     int i = 0;
 
-    initialize_cmd(cmd, line);
+    // Initialize command using the parsed lines (this could be further modularized)
+    initialize_cmd(cmd, line_parsed);
 
     while (cmd->path_command[i])
-	{
+    {
         if (create_and_fork(cmd, cmd->fd) == 0)
             child_process(cmd, cmd->fd, i);
-    	else
+        else
             parent_process(cmd, cmd->fd, &i);
+        i++;
     }
 
     close(cmd->fd_in);
@@ -102,3 +92,23 @@ int pipe_execute(char *line, t_cmd *cmd)
         ft_freetab(cmd->path_command);
     return (EXIT_SUCCESS);
 }
+
+// int pipe_execute(char *line, t_cmd *cmd)
+// {
+//     int i = 0;
+
+//     initialize_cmd(cmd, line);
+
+//     while (cmd->path_command[i])
+// 	{
+//         if (create_and_fork(cmd, cmd->fd) == 0)
+//             child_process(cmd, cmd->fd, i);
+//     	else
+//             parent_process(cmd, cmd->fd, &i);
+//     }
+
+//     close(cmd->fd_in);
+//     if (cmd->path_command)
+//         ft_freetab(cmd->path_command);
+//     return (EXIT_SUCCESS);
+// }

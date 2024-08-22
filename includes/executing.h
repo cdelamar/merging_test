@@ -82,9 +82,9 @@ typedef struct s_cmd
 
 // excecuting
 void 				shell_loop(char **envp); // WIP
-void				initialize_cmd(t_cmd *cmd, char *line);
+void				initialize_cmd(t_cmd *cmd, char **line_parsed);
 void				handle_error(char *msg, t_cmd *cmd, int *fd);
-int					execute(char *line, char **line_parsed, t_cmd *cmd);
+int					execute(char **line_parsed, t_cmd *cmd);
 
 // memory
 int					malloc_structs(t_cmd **cmd);
@@ -104,7 +104,7 @@ void				ft_path(t_cmd *cmd);
 // builtins
 int					ft_unset(char **split_line, t_cmd *cmd);
 int					ft_exit(char **split_line, t_cmd *cmd);
-int					ft_builtin(char *line, t_cmd *cmd);
+int					ft_builtin(char **line_parsed, t_cmd *cmd);
 int					ft_export(char **args, t_cmd *cmd);
 int					ft_echo(char **split_line);
 int					ft_env(t_cmd *cmd);
@@ -132,16 +132,16 @@ int					open_heredoc_file(void);
 //basic executing
 int					handle_exit_command(char *line);
 int					set_command_path(t_cmd *cmd);
-int					basic_child_process(char *line, t_cmd *cmd);
+int					basic_child_process(char **line_parsed, t_cmd *cmd);
 int					basic_parent_process(pid_t pid, char **split_line);
-int					basic_execute(char *line, t_cmd *cmd);
+int					basic_execute(char **line_parsed, t_cmd *cmd);
 
 //pipe executing
 void	handle_pipe_error(t_cmd *cmd, int *fd);
 void	handle_fork_error(t_cmd *cmd, int *fd);
 void	execute_child_process(t_cmd *cmd, int *fd, int i);
 void	init_cmd(t_cmd *cmd, char *line);
-int		pipe_execute(char *line, t_cmd *cmd);
+int		pipe_execute(char **line_parsed, t_cmd *cmd);
 
 //WIP
 int		handle_path(t_cmd *cmd);
