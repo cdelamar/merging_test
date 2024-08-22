@@ -3,6 +3,7 @@
 
 volatile int g_var;
 
+/*
 static void print_tab(char **tab)
 {
     int i;
@@ -14,7 +15,7 @@ static void print_tab(char **tab)
         i++;
     }
     return ;
-}
+}*/
 
 int	add_node(t_token **token_list, char **strs, int i)
 {
@@ -145,10 +146,10 @@ void shell_loop(char **envp)
         {
             line_parsed = main_cat(&token_list);
             //-----
-            print_tab(line_parsed);
+            //print_tab(line_parsed);
             //-----
            //print_free_tab(line_parsed); // Exemple a ajuster
-            print_node(token_list);
+            //print_node(token_list);
 
             // Executing
             process_input(line, line_parsed, cmd);
@@ -168,7 +169,7 @@ int main(int argc, char **argv, char **envp)
         printf("MiniSnail is supposed to work by typing './minishell'\n");
         return (0);
     }
-    print_snail();
+    //print_snail();
     signals();
     // Start shell loop
     shell_loop(envp);

@@ -43,8 +43,11 @@ int basic_child_process(char **line_parsed, t_cmd *cmd)
 
     command = cmd_finder(line_parsed, cmd);
     if (command)
+    {
+        //printf ("execve ?\n");
         execve(command, line_parsed, cmd->env);
-
+    }
+    printf("apres execve\n");
     printf("command not found: %s\n", line_parsed[0]);
     free_structs(cmd);
     return EXIT_FAILURE;

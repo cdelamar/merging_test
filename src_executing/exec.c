@@ -37,13 +37,6 @@ void initialize_cmd(t_cmd *cmd, char **line_parsed)
     cmd->path_command = line_parsed; // Direct assignment since it's already an array of commands
 }
 
-/*
-void initialize_cmd(t_cmd *cmd, char *line)
-{
-    cmd->fd_in = 0; // Initialize the input for the first commad
-    cmd->path_command = ft_split(line, '|'); // maybe the issue of '|' = ctrl + d.
-}*/
-
 void handle_error(char *msg, t_cmd *cmd, int *fd)
 {
     printf("ERROR (%s)\n", msg);
