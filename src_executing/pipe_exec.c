@@ -25,29 +25,6 @@ static void setup_child_pipes(t_cmd *cmd, int *fd, int i)
     close_fds(fd);
     close(cmd->fd_in);
 }
-/*
-static int child_process(t_cmd *cmd, int *fd, int i)
-{
-    setup_child_pipes(cmd, fd, i);
-
-    char **split_line = ft_split(cmd->path_command[i], ' ');
-
-    if (ft_strcmp(split_line[0], "exit") == 0)
-    {
-        int exit_code = ft_exit(split_line, cmd);
-        ft_freetab(split_line);
-        exit(exit_code);
-    }
-
-    // If not 'exit', execute normally
-    if (basic_execute(cmd->path_command, cmd) == EXIT_FAILURE)
-    {
-        ft_freetab(split_line);
-        exit(EXIT_FAILURE);
-    }
-    ft_freetab(split_line);
-    exit(EXIT_SUCCESS);
-}*/
 
 static int child_process(t_cmd *cmd, int *fd, int i)
 {
@@ -124,28 +101,18 @@ int pipe_execute(char **line_parsed, t_cmd *cmd)
         ft_freetab(cmd->path_command);
     return (EXIT_SUCCESS);
 }
-/*
-int pipe_execute(char **line_parsed, t_cmd *cmd)
+/*int pipe_execute(char **line_parsed, t_cmd *cmd)
 {
     int i = 0;
 
-    // Initialize command using the parsed lines (this could be further modularized)
     initialize_cmd(cmd, line_parsed);
 
     while (cmd->path_command[i])
     {
-        printf("** cmd->path_command[%d] = %s **\n", i, cmd->path_command[i]);
         if (create_and_fork(cmd, cmd->fd) == 0)
-        {
-            printf("into child_process\n");
             child_process(cmd, cmd->fd, i);
-        }
         else
-        {
-            printf("into parent_process\n");
             parent_process(cmd, cmd->fd, &i);
-        }
-        i++;
     }
 
     close(cmd->fd_in);

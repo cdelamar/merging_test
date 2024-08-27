@@ -71,32 +71,22 @@ int	execute(char **line_parsed, t_cmd *cmd)
 	return (basic_execute(line_parsed, cmd));
 }
 
+/*int execute(char **line_parsed, t_cmd *cmd)
+{
+    if (line_parsed == NULL || line_parsed[0] == NULL)
+        return 0;
 
-// int	execute(char *line, char **line_parsed, t_cmd *cmd)
-// {
-// 	// printf ("** execute **\n");
-// 	if (ft_strcmp(line_parsed[0], "|") == 0)
-// 	{
-// 		printf("line parsed >> synthax error : expected arguments with '|'\n");
-// 		return (0);
-// 	}
+    if (ft_strcmp(line_parsed[0], "|") == 0)
+    {
+        printf("Syntax error: expected arguments with '|'\n");
+        return 0;
+    }
 
-// 	if (line[0] == '\0')
-// 	{
-// 		//printf("free : nothing outputed (exec.c : line 43)\n");
-// 		return (0);
-// 	}
+    if (contains_pipe(line_parsed))
+        return pipe_execute(line_parsed, cmd);
 
-// 	//if (handle_exit_command(line) == EXIT_COMMAND)
-// 	//	return (EXIT_COMMAND);
-// 	if (ft_strchr(line, '|'))
-// 		return (pipe_execute(line, cmd));
-// 	else if (ft_builtin(line, cmd) == EXIT_SUCCESS)
-// 	{
-// 		//printf("builtins succeed (exec.c line 52)\n");
-// 		return (EXIT_SUCCESS);
-// 	}
-// 	/*else if (ft_strcmp(line, "exit") == 0)
-// 		return (EXIT_COMMAND);*/
-// 	return (basic_execute(line, cmd));
-// }
+    if (ft_builtin(line_parsed, cmd) == EXIT_SUCCESS)
+        return EXIT_SUCCESS;
+
+    return basic_execute(line_parsed, cmd);
+}*/

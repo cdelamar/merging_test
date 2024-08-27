@@ -79,6 +79,36 @@ int basic_execute(char **line_parsed, t_cmd *cmd)
 {
     int exit_code;
 
+    exit_code = set_command_path(cmd);
+    if (exit_code != EXIT_SUCCESS)
+    {
+        ft_freetab(line_parsed);
+        free_structs(cmd);
+        return exit_code;
+    }
+
+    cmd->pid1 = fork();
+    if (cmd->pid1 < 0)
+    {
+        printf("Error forking\n");
+        return EXIT_FAILURE;
+    }
+    else if (cmd->pid1 == 0)
+    {
+        exit_code = basic_child_process(line_parsed, cmd);
+        ft_freetab(line_parsed);
+        exit(exit_code);
+    }
+    else
+        return basic_parent_process(cmd->pid1, line_parsed);
+
+    return EXIT_SUCCESS;
+}
+/*
+int basic_execute(char **line_parsed, t_cmd *cmd)
+{
+    int exit_code;
+
     // Set command path from parsed input
     exit_code = set_command_path(cmd);
     if (exit_code != EXIT_SUCCESS)
@@ -104,4 +134,4 @@ int basic_execute(char **line_parsed, t_cmd *cmd)
         return basic_parent_process(cmd->pid1, line_parsed);
     }
     return EXIT_SUCCESS;
-}
+}*/
