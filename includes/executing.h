@@ -82,7 +82,8 @@ typedef struct s_cmd
 
 // excecuting
 void 				shell_loop(char **envp); // WIP
-void				initialize_cmd(t_cmd *cmd, char **line_parsed);
+// void				initialize_cmd(t_cmd *cmd, char **line_parsed);
+void				initialize_cmd(t_cmd *cmd, char *line);
 void				handle_error(char *msg, t_cmd *cmd, int *fd);
 int					execute(char **line_parsed, t_cmd *cmd);
 

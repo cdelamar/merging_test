@@ -31,10 +31,15 @@ void cleanup(char *line, t_cmd *cmd)
     free(line);
 }
 
-void initialize_cmd(t_cmd *cmd, char **line_parsed)
-{
-    cmd->fd_in = 0; // Initialize the input for the first command
-    cmd->path_command = line_parsed; // Direct assignment since it's already an array of commands
+// void initialize_cmd(t_cmd *cmd, char **line_parsed)
+// {
+//     cmd->fd_in = 0; // Initialize the input for the first command
+//     cmd->path_command = line_parsed; // Direct assignment since it's already an array of commands
+// }
+
+void initialize_cmd(t_cmd *cmd, char *line) {
+    cmd->fd_in = 0; // Set initial input
+    cmd->path_command = ft_split(line, '|'); // Split line by pipe '|'
 }
 
 void handle_error(char *msg, t_cmd *cmd, int *fd)
