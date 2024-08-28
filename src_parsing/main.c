@@ -140,6 +140,7 @@ void shell_loop(char **envp)
             break;
         }
 
+        cmd->saved_line = line; // TODO FIX
         // Parsing
         token_list = NULL;
         if (parse_input(line, envp, &token_list))

@@ -75,6 +75,7 @@ typedef struct s_cmd
 	char	*path;
 	char	**path_split;
 	char	**path_command;
+	char	*saved_line; // TODO : potential solution
 	char	**env;
 	int		export_added;
 	char	*line; //WIP

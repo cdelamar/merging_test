@@ -77,8 +77,9 @@ int pipe_execute(char **line_parsed, t_cmd *cmd)
 {
     int i = 0;
 
+    printf("hey : %s\n", line_parsed[0]);
     // Initialize command using the parsed lines
-    initialize_cmd(cmd, line_parsed);
+    initialize_cmd(cmd, cmd->saved_line);
 
     while (cmd->path_command[i])
     {
@@ -93,7 +94,7 @@ int pipe_execute(char **line_parsed, t_cmd *cmd)
             //printf("into parent_process\n");
             parent_process(cmd, cmd->fd, &i);
         }
-        i++; // This was previously incremented twice; now it should only be incremented here
+        //i++; // This was previously incremented twice; now it should only be incremented here
     }
 
     close(cmd->fd_in);
