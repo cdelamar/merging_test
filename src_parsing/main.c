@@ -133,7 +133,7 @@ void shell_loop(char **envp)
         if (init_shell_exec(&cmd, envp) != 0)
             return;
 
-        line = readline("MINISHELL>");
+        line = readline("$ ");
         if (line == NULL)
         {
             free_structs(cmd);
@@ -167,9 +167,11 @@ int main(int argc, char **argv, char **envp)
 
     if (argc != 1)
     {
-        printf("MiniSnail is supposed to work by typing './minishell'\n");
+        printf("incorrect arguments\n");
         return (0);
     }
+
+    rl_outstream = stderr;
     //print_snail();
     signals();
     // Start shell loop

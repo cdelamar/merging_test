@@ -113,7 +113,7 @@ int handle_redirections(char **args, int status, t_cmd *cmd)
             cmd->fd_in = open("/tmp/heredoc_tmp", O_RDONLY);
             if (cmd->fd_in < 0)
             {
-                perror("ERROR opening heredoc temp file");
+                printf("ERROR opening heredoc temp file");
                 return -1;
             }
 

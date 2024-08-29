@@ -37,7 +37,7 @@ int basic_child_process(char **line_parsed, t_cmd *cmd)
 
     if (handle_redirections(line_parsed, HEREDOC_ON, cmd) != 0)
     {
-        printf("ERROR (basic_exec.c line 25)\n");
+        //printf("ERROR (basic_exec.c line 25)\n");
         return EXIT_FAILURE;
     }
 
@@ -47,7 +47,7 @@ int basic_child_process(char **line_parsed, t_cmd *cmd)
         //printf ("execve ?\n");
         execve(command, line_parsed, cmd->env);
     }
-    printf("apres execve\n");
+    //printf("apres execve\n");
     printf("command not found: %s\n", line_parsed[0]);
     free_structs(cmd);
     return EXIT_FAILURE;
@@ -59,7 +59,7 @@ int basic_parent_process(pid_t pid, char **split_line) // TODO free cmd->path_sp
 
     if (waitpid(pid, &status, 0) == -1)
     {
-        printf("waitpid -1\n");
+        //printf("waitpid -1\n");
         if (split_line)
             ft_freetab(split_line);
         return EXIT_FAILURE;

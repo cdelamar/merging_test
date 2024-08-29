@@ -38,7 +38,7 @@ int add_env_var(char *var, t_cmd *cmd)
 
     if (!name_end || !is_valid_var_name(var))
     {
-        printf ("return line 43\n");
+        //printf ("return line 43\n");
         return (1);
     }
     while (env[i])

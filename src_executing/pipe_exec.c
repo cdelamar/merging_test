@@ -128,10 +128,9 @@ int pipe_execute(char **line_parsed, t_cmd *cmd)
     if (pipe_synthax(line_parsed) == false)
     {
         //free
-        printf ("synthax issues with '|' characters\n");
+        printf ("synthax error with symbol '|'\n");
         return (EXIT_SUCCESS);
     }
-    printf("its true\n");
 
     // Initialize command using the parsed lines
     initialize_cmd(cmd, cmd->saved_line);
@@ -157,23 +156,4 @@ int pipe_execute(char **line_parsed, t_cmd *cmd)
         ft_freetab(cmd->path_command);
     return (EXIT_SUCCESS);
 }
-/*int pipe_execute(char **line_parsed, t_cmd *cmd)
-{
-    int i = 0;
-
-    initialize_cmd(cmd, line_parsed);
-
-    while (cmd->path_command[i])
-    {
-        if (create_and_fork(cmd, cmd->fd) == 0)
-            child_process(cmd, cmd->fd, i);
-        else
-            parent_process(cmd, cmd->fd, &i);
-    }
-
-    close(cmd->fd_in);
-    if (cmd->path_command)
-        ft_freetab(cmd->path_command);
-    return (EXIT_SUCCESS);
-}*/
 

@@ -52,7 +52,7 @@ static int env_lines_copy(char **envp, int count, t_cmd *cmd)
 		cmd->env[i] = strdup(envp[i]);
 		if (!cmd->env[i])
 		{
-			printf("malloc issues at memory.c (line 76)\n");
+			//printf("malloc issues at memory.c (line 76)\n");
 			while (i > 0)
 			{
 				free(cmd->env[i - 1]);

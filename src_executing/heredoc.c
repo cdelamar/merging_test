@@ -23,7 +23,7 @@ extern volatile int	g_var;
 int ft_heredoc(char *limit)
 {
 
-    printf ("HEREDOC : \n");
+    //printf ("HEREDOC : \n");
     char *line;
     int heredoc_fd;
 
@@ -62,12 +62,12 @@ int ft_heredoc(char *limit)
 
         if (ft_strcmp(line, limit) == 0)
         {
-            printf ("free line\n");
+            //printf ("free line\n");
             free(line);
             break;
         }
 
-        printf ("write heredoc\n");
+        //printf ("write heredoc\n");
         write(heredoc_fd, line, ft_strlen(line));
         write(heredoc_fd, "\n", 1);
         free(line);
