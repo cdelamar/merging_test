@@ -73,11 +73,66 @@ static int create_and_fork(t_cmd *cmd, int *fd)
 }
 
 
+static bool pipe_synthax(char **line_parsed)
+{
+    int i;
+
+    i = 0;
+
+    // Check if the first token is a pipe or empty
+    if (line_parsed[i][0] == '|' || line_parsed[i][0] == '\0')
+    {
+        printf("Syntax error: command cannot start with '|'\n");
+        return (false);
+    }
+
+    // Check the rest of the tokens
+    while (line_parsed[i])
+    {
+        // Check if the current token is a pipe
+        if (ft_strcmp(line_parsed[i], "|") == 0)
+        {
+            // If the next token is NULL or another pipe, it's an error
+            if (!line_parsed[i + 1] || ft_strcmp(line_parsed[i + 1], "|") == 0)
+            {
+                printf("Syntax error: unexpected '|'\n");
+                return (false);
+            }
+        }
+        else if (line_parsed[i][0] == '|')
+        {
+            // Check for invalid cases like '|i'
+            if (line_parsed[i][1] != '\0')
+            {
+                printf("Syntax error: invalid pipe usage '%s'\n", line_parsed[i]);
+                return (false);
+            }
+        }
+        i++;
+    }
+
+    // Check if the last token is a pipe
+    if (ft_strcmp(line_parsed[i - 1], "|") == 0)
+    {
+        printf("Syntax error: command cannot end with '|'\n");
+        return (false);
+    }
+
+    return (true);
+}
+
 int pipe_execute(char **line_parsed, t_cmd *cmd)
 {
     int i = 0;
 
-    printf("hey : %s\n", line_parsed[0]);
+    if (pipe_synthax(line_parsed) == false)
+    {
+        //free
+        printf ("synthax issues with '|' characters\n");
+        return (EXIT_SUCCESS);
+    }
+    printf("its true\n");
+
     // Initialize command using the parsed lines
     initialize_cmd(cmd, cmd->saved_line);
 
