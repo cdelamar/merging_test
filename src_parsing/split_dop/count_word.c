@@ -15,7 +15,7 @@
 int	is_char(char s)
 {
 	if (s == ' ' || s == '"' || s == '\''
-		|| s == '|' || s == '<' || s == '>' || s == '\0')
+		|| s == '|' || s == '<' || s == '>' || s == '\0' || s == '$')
 		return (0);
 	else
 		return (1);
@@ -57,7 +57,7 @@ int	word_plus(char *s, int i, int *tab)
 		word++;
 	}
 	else if (s[i] == '|' || s[i] == '>' || s[i] == '<' || s[i] == '\''
-		|| s[i] == '"')
+		|| s[i] == '"' || s[i] == '$')
 	{
 		word++;
 		i++;
