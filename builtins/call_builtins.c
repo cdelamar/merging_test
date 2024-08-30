@@ -14,8 +14,6 @@
 
 #include "../includes/executing.h"
 
-// TODO implement exit through builtins
-
 static int builtin_commands(char **line_parsed, t_cmd *cmd, int saved_in, int saved_out)
 {
     int ret;

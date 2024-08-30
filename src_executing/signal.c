@@ -14,8 +14,6 @@
 
 // CTRL + C interaction
 
-// TODO handle exit codes
-
 /*
 
     SIGINT (Interrupt Signal)

@@ -12,12 +12,6 @@
 
 #include "../includes/executing.h"
 
-// TODO : handle "sort << "" "
-// handle empty delimiter
-
-// TODO ; handle "exit [un argument]" return " too many arguments"
-
-// extern sig_atomic_t g_signal;
 extern volatile int	g_var;
 
 int ft_heredoc(char *limit)

@@ -12,10 +12,6 @@
 
 #include "../includes/executing.h"
 
-// TODO : handle '< test.txt cat' (*)
-// TODO : handle 'cat <test.txt'
-// TODO : handle ctrl+c in heredocs
-
 extern volatile int	g_var;
 
 int ft_output_redirect(char **args, int i, int append)
