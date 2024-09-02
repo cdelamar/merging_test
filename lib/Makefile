@@ -6,7 +6,7 @@
 #    By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/19 15:13:39 by cdelamar          #+#    #+#              #
-#    Updated: 2023/10/27 22:22:05 by cdelamar         ###   ########.fr        #
+#    Updated: 2024/09/02 15:28:00 by cdelamar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,8 @@ FILES = ft_atoi \
 	ft_strmapi \
 	ft_striteri \
 	ft_strncmp \
+	ft_strcmp \
+	ft_freetab \
 	ft_strlen \
 	ft_memcpy \
 	ft_memchr \
