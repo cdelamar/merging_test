@@ -3,8 +3,8 @@
 
 volatile int g_var;
 
-/*
-static void print_tab(char **tab)
+
+void print_tab(char **tab)
 {
     int i;
 
@@ -15,7 +15,7 @@ static void print_tab(char **tab)
         i++;
     }
     return ;
-}*/
+}
 
 int	add_node(t_token **token_list, char **strs, int i)
 {
@@ -117,6 +117,7 @@ int parse_input(char *line, char **envp, t_token **token_list)
         return 0;
     }
 
+    free(split_line);
     path_main(*token_list, envp);
     return 1;
 }
@@ -153,9 +154,15 @@ void shell_loop(char **envp)
             //print_node(token_list);
 
             // Executing
+            printf("process input\n");
             process_input(line, line_parsed, cmd);
 
+            // print_free_tab(line_parsed);
+            // print_node(token_list);
+            // free(line);
+
             token_lstclear(&token_list, free);
+            //ft_freetab(line_parsed);
         }
         cleanup(line, cmd);
     }
@@ -175,6 +182,7 @@ int main(int argc, char **argv, char **envp)
     //print_snail();
     signals();
     // Start shell loop
+    printf("shell loop\n");
     shell_loop(envp);
 
     return 0;

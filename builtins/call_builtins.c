@@ -16,6 +16,7 @@
 
 static int builtin_commands(char **line_parsed, t_cmd *cmd, int saved_in, int saved_out)
 {
+    printf("AAAAAAAAAA AAAAAAAAAA\n");
     int ret;
 
 	ret = EXIT_FAILURE;
@@ -78,7 +79,16 @@ int ft_builtin(char **line_parsed, t_cmd *cmd)
     int ret;
 
     if (backup_manager(line_parsed, &saved_in, &saved_out, cmd) == EXIT_SUCCESS)
+    {
+        printf("ou ca plante \n");
+        printf("ou ca plante \n");
+        printf("ou ca plante \n");
+        printf("ou ca plante \n");
+        printf("ou ca plante \n");
+        printf("ou ca plante \n");
+        printf("ou ca plante \n");
         ret = builtin_commands(line_parsed, cmd, saved_in, saved_out);
+    }
     else
         ret = EXIT_FAILURE;
     return ret;

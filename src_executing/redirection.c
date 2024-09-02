@@ -6,19 +6,21 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 19:01:29 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/08/07 20:31:50 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/09/02 19:06:55 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/executing.h"
 
 extern volatile int	g_var;
-
+/*
 int ft_output_redirect(char **args, int i, int append)
 {
     int fd;
 	int flags;
 
+    printf("2good2go\n");
+    print_tab(args);
     // (*) maybe need to merge with parsing for it
     if (!args[i + 1])
     {
@@ -37,7 +39,49 @@ int ft_output_redirect(char **args, int i, int append)
         printf("ERROR opening file (line 40)\n");
         return (EXIT_FAILURE);
     }
+    printf("avant le drame\n");
     dup2(fd, STDOUT_FILENO);
+    printf("OK CA PASSE \n\n(titre)\n");
+    close(fd);
+    args[i] = NULL;
+    return (EXIT_SUCCESS);
+}*/
+
+int ft_output_redirect(char **args, int i, int append)
+{
+    int fd;
+    int flags;
+
+    printf("2good2go\n");
+    print_tab(args);
+    
+    if (!args[i + 1])
+    {
+        printf("Syntax error: expected file after redirection\n");
+        return (EXIT_FAILURE);
+    }
+
+    if (append)
+        flags = O_WRONLY | O_CREAT | O_APPEND;
+    else
+        flags = O_WRONLY | O_CREAT | O_TRUNC;
+
+    fd = open(args[i + 1], flags, 0644);
+    if (fd < 0)
+    {
+        printf("ERROR opening file (line 40)\n");
+        return (EXIT_FAILURE);
+    }
+    printf("avant le drame\n");
+
+    if (dup2(fd, STDOUT_FILENO) < 0)
+    {
+        printf("ERROR redirecting output (line 48)\n");
+        close(fd);
+        return (EXIT_FAILURE);
+    }
+
+    printf("OK CA PASSE \n\n(titre)\n");
     close(fd);
     args[i] = NULL;
     return (EXIT_SUCCESS);
@@ -78,6 +122,7 @@ int handle_redirections(char **args, int status, t_cmd *cmd)
 {
     int i = 0;
 
+    printf ("grand fou\n");
     while (args[i])
 	{
         if (ft_strcmp(args[i], ">") == 0)
@@ -87,6 +132,7 @@ int handle_redirections(char **args, int status, t_cmd *cmd)
         }
 		else if (ft_strcmp(args[i], ">>") == 0)
 		{
+            printf("jsuis pas medecin\n");
             if (ft_output_redirect(args, i, 1) != EXIT_SUCCESS)
 				return (EXIT_FAILURE);
         }
