@@ -31,7 +31,7 @@ char	*cmd_cat(const char *path_split, char *slash, char *command)
 	return (res);
 }
 
-char	*cmd_finder(char **split_line, t_cmd *cmd)
+char	*cmd_finder(char **split_line, t_cmd *cmd) // maybe add line_parsed here
 {
 	int		i;
 	char	*command = NULL;

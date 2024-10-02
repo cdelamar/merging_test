@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:13:15 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/08/08 13:50:01 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/09/06 00:07:09 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,20 @@ int ft_isnumber(char *str)
     return 1;
 }
 
-int ft_exit(char **split_line, t_cmd *cmd)
+int ft_exit(t_cmd *cmd)
 {
     (void)cmd;
     int exit_code = 0;
-    //printf("ft_exit called with argument: %s\n", split_line[1] ? split_line[1] : "NULL"); // test ??
 
-    if (split_line[1] != NULL)
+    if (cmd->line_parsed[1] != NULL)
     {
-        if (ft_isnumber(split_line[1]))
+        if (ft_isnumber(cmd->line_parsed[1]))
         {
-            exit_code = ft_atoi(split_line[1]);
+            exit_code = ft_atoi(cmd->line_parsed[1]);
         }
         else
         {
-            printf("exit: %s: numbers required\n", split_line[1]);
+            printf("exit: %s: numbers required\n", cmd->line_parsed[1]);
             exit_code = 255;
         }
     }

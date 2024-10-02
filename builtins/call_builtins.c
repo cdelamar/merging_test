@@ -14,36 +14,36 @@
 
 #include "../includes/executing.h"
 
-static int builtin_commands(char **line_parsed, t_cmd *cmd, int saved_in, int saved_out)
+static int builtin_commands(char **split_line, t_cmd *cmd, int saved_in, int saved_out)
 {
-    printf("AAAAAAAAAA AAAAAAAAAA\n");
     int ret;
 
 	ret = EXIT_FAILURE;
-    if (ft_strcmp(line_parsed[0], "unset") == 0)
-        ret = ft_unset(line_parsed, cmd);
-    else if (ft_strcmp(line_parsed[0], "echo") == 0)
-        ret = ft_echo(line_parsed);
-    else if (ft_strcmp(line_parsed[0], "cd") == 0)
-        ret = ft_cd(line_parsed[1]);
-    else if (ft_strcmp(line_parsed[0], "export") == 0)
-        ret = ft_export(line_parsed, cmd);
-    else if (ft_strcmp(line_parsed[0], "env") == 0)
+
+    if (ft_strcmp(split_line[0], "unset") == 0)
+        ret = ft_unset(cmd);
+    else if (ft_strcmp(split_line[0], "echo") == 0)
+        ret = ft_echo(cmd);
+    else if (ft_strcmp(split_line[0], "cd") == 0)
+        ret = ft_cd(split_line[1]);
+    else if (ft_strcmp(split_line[0], "export") == 0)
+        ret = ft_export(cmd);
+    else if (ft_strcmp(split_line[0], "env") == 0)
         ret = ft_env(cmd);
-    else if (ft_strcmp(line_parsed[0], "pwd") == 0)
+    else if (ft_strcmp(split_line[0], "pwd") == 0)
         ret = ft_pwd();
-    else if (ft_strcmp(line_parsed[0], "exit") == 0)
+    else if (ft_strcmp(split_line[0], "exit") == 0)
     {
-        int exit_code = ft_exit(line_parsed, cmd);
-
-        // If child process, directly exit
+        int exit_code = ft_exit(cmd);
         if (cmd->pid1 == 0)
+        {
+            ft_freetab(split_line);
+            free(cmd);
+            restore_fd(saved_in, saved_out); //fd test
             exit(exit_code);
-
-        // If parent process, return the exit code
+        }
         ret = exit_code;
     }
-
     restore_fd(saved_in, saved_out);
     return (ret);
 }
@@ -53,7 +53,6 @@ static int redirect_manager(char **split_line, int saved_stdin, int saved_stdout
     if (handle_redirections(split_line, 0, cmd) == EXIT_FAILURE)
 	{
         restore_fd(saved_stdin, saved_stdout);
-        //ft_freetab(split_line); obsolete ?
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
@@ -72,25 +71,22 @@ static int backup_manager(char **split_line, int *saved_stdin, int *saved_stdout
     return EXIT_SUCCESS;
 }
 
-int ft_builtin(char **line_parsed, t_cmd *cmd)
+int ft_builtin(char *line, t_cmd *cmd)
 {
-    int saved_in;
-    int saved_out;
-    int ret;
+	char **split_line;
+	int saved_in;
+	int saved_out;
+	int ret;
 
-    if (backup_manager(line_parsed, &saved_in, &saved_out, cmd) == EXIT_SUCCESS)
-    {
-        printf("ou ca plante \n");
-        printf("ou ca plante \n");
-        printf("ou ca plante \n");
-        printf("ou ca plante \n");
-        printf("ou ca plante \n");
-        printf("ou ca plante \n");
-        printf("ou ca plante \n");
-        ret = builtin_commands(line_parsed, cmd, saved_in, saved_out);
-    }
-    else
-        ret = EXIT_FAILURE;
-    return ret;
+	split_line = ft_split(line, ' ');
+	if (!split_line)
+		return EXIT_FAILURE;
+
+	if (backup_manager(split_line, &saved_in, &saved_out, cmd) == EXIT_SUCCESS)
+		ret = builtin_commands(split_line, cmd, saved_in, saved_out);
+	else
+		ret = EXIT_FAILURE;
+	ft_freetab(split_line);
+	return ret;
 }
 

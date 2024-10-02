@@ -75,5 +75,6 @@ char	**main_cat(t_token **token)
 	if (have_quote == 1)
 		cat_quote(tab_token, token);
 	tab_token = delet_space_to_tab(tab_token);
+	print_tab(tab_token);
 	return (tab_token);
 }

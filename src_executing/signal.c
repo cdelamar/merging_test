@@ -6,13 +6,11 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 19:01:33 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/08/07 20:31:59 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/01 19:31:26 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/executing.h"
-
-// CTRL + C interaction
 
 /*
 
@@ -79,15 +77,69 @@ Additional Considerations
 
 */
 
-extern volatile int	g_var;
+extern sig_atomic_t g_signal;
 
 // MAIN SIGNAL
+
+void sigint_heredoc(int sig)
+{
+    if (sig == SIGINT)
+    {
+        g_signal = 1;
+        // Close stdin to break readline
+        close(STDIN_FILENO);
+    }
+}
 
 void sigint_handler(int sig)
 {
     if (sig == SIGINT)
 	{
-        g_var = 1;
+        g_signal = 1;
+        //printf ("appel de signal\n");
+        rl_replace_line("", 0);
+        printf("\n");
+        rl_on_new_line();
+        rl_redisplay();
+    }
+}
+
+void    heredoc_signals(void)
+{
+	signal(SIGINT, sigint_heredoc);
+	signal(SIGQUIT, SIG_IGN); // CTRL + \ interaction
+
+}
+
+void setup_signal_handler(int signum, void (*handler)(int))
+{
+    struct sigaction sa;
+    sa.sa_handler = handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = SA_RESTART; // Automatically restart interrupted system calls
+    sigaction(signum, &sa, NULL);
+}
+
+void signals(void)
+{
+    setup_signal_handler(SIGINT, sigint_handler);
+    setup_signal_handler(SIGQUIT, SIG_IGN); // Ignore CTRL+'\'
+    setup_signal_handler(SIGPIPE, SIG_IGN);
+}
+
+void reset_signals(void)
+{
+    setup_signal_handler(SIGINT, SIG_DFL);
+    setup_signal_handler(SIGQUIT, SIG_DFL);
+}
+
+
+/*
+void sigint_handler(int sig)
+{
+    if (sig == SIGINT)
+	{
+        g_signal = 1;
         //printf ("appel de signal\n");
         rl_replace_line("", 0);
         printf("\n");
@@ -108,7 +160,7 @@ void sigint_heredoc(int sig)
 {
     if (sig == SIGINT)
     {
-        g_var = 1;
+        g_signal = 1;
         printf("\n");
     }
 }
@@ -126,4 +178,4 @@ void    reset_signals(void)
 {
     signal(SIGINT, SIG_DFL);
     signal(SIGQUIT, SIG_DFL); // DFL ????
-}
+}*/

@@ -1,8 +1,23 @@
 #include "../includes/parsing.h"
 #include "executing.h"
 
-volatile int g_var;
+volatile sig_atomic_t  g_signal;
 
+// __________________________________
+// _________________ EXECUTING
+// __________________________________
+/*
+static int init_shell_exec(t_cmd **cmd, char **envp)
+{
+    if (malloc_structs(cmd) != 0)
+    {
+        ft_putendl_fd(MALLOC_FAILURE, 2);
+        return 1;
+    }
+    (*cmd)->env = envp;
+    (*cmd)->heredoc_processed = FALSE;
+    return 0;
+}*/
 
 void print_tab(char **tab)
 {
@@ -16,6 +31,41 @@ void print_tab(char **tab)
     }
     return ;
 }
+
+static void process_input(char *line, t_cmd *cmd)
+{
+	if (line == NULL)
+	{
+		//printf("CTRL + D from shell_loop\n");
+		ft_freetab(cmd->env);
+		free_structs(cmd);
+		exit(0); // Handle exit on EOF (CTRL + D)
+	}
+
+	if (space_only(line) == true)
+	{
+		//free_structs(cmd);
+		return;
+	}
+
+	if (*line)
+		add_history(line);
+
+	execute(line,cmd); // execute retourne un int mais je men sert pas
+}
+
+char **cpy_tab(char **dest, char **src)
+{
+	int len = -1;
+	while (src[++len])
+		dest[len] = ft_strdup(src[len]);
+	dest[len] = NULL;
+	return dest;
+}
+
+// __________________________________
+// _________________ PARSING
+// __________________________________
 
 int	add_node(t_token **token_list, char **strs, int i)
 {
@@ -62,41 +112,6 @@ void free_split_line(char **split_line)
 	free(split_line);
 }
 
-static int init_shell_exec(t_cmd **cmd, char **envp)
-{
-    if (malloc_structs(cmd) != 0)
-    {
-        ft_putendl_fd(MALLOC_FAILURE, 2);
-        return 1;
-    }
-    (*cmd)->env = envp;
-    (*cmd)->heredoc_processed = FALSE;
-    return 0;
-}
-
-
-static void process_input(char *line, char** line_parsed, t_cmd *cmd)
-{
-    if (line == NULL)
-    {
-        printf("CTRL + D from shell_loop\n");
-        free_structs(cmd);
-        exit(0); // Handle exit on EOF (CTRL + D)
-    }
-
-    if (*line)
-        add_history(line);
-
-    if (execute(line_parsed, cmd) == EXIT_COMMAND)
-    {
-        printf("FREE by EXIT COMMAND (shell_loop)\n");
-        free_structs(cmd);
-        free(line);
-        //ft_freetab(line_parsed) //pas sur de celle ci mais je note
-        exit(0); // Handle explicit exit command
-    }
-}
-
 int parse_input(char *line, char **envp, t_token **token_list)
 {
     char **split_line;
@@ -121,55 +136,62 @@ int parse_input(char *line, char **envp, t_token **token_list)
     path_main(*token_list, envp);
     return 1;
 }
+// __________________________________
+// _________________ MERGE
+// __________________________________
 
-void shell_loop(char **envp)
+void shell_loop(char **envp)    // should implement 'shell_exec_loop'
+                                // in a more efficient way
 {
     char *line;
-    char ** line_parsed;
+    //char ** line_parsed;
     t_cmd *cmd;
     t_token *token_list;
+    int		len = -1;
 
+	while (envp[++len]) {}
+	char **tab = malloc(sizeof(char *) * (len + 1)); // allocate memory to copy envp
+	cpy_tab(tab, envp); // copy envp to cmd->env
+
+    cmd = NULL;
     while (1)
     {
-        if (init_shell_exec(&cmd, envp) != 0)
-            return;
-
+        printf("whille loop here\n");
+        if (malloc_structs(&cmd) != 0)
+		{
+			ft_putendl_fd(MALLOC_FAILURE, 2);
+			return ;
+		}
+		cmd->heredoc_processed = FALSE;
+		cmd->env = tab;
         line = readline("$ ");
-        if (line == NULL)
+        /*if (line == NULL)
         {
             free_structs(cmd);
             break;
-        }
+        }*/ //first thing to put on if something went wrong
 
-        cmd->saved_line = line; // TODO FIX
-        // Parsing
         token_list = NULL;
         if (parse_input(line, envp, &token_list))
         {
-            line_parsed = main_cat(&token_list);
-            //-----
-            //print_tab(line_parsed);
-            //-----
-           //print_free_tab(line_parsed); // Exemple a ajuster
-            //print_node(token_list);
+            cmd->line_parsed = main_cat(&token_list);
+        // Executing
 
-            // Executing
             printf("process input\n");
-            process_input(line, line_parsed, cmd);
-
-            // print_free_tab(line_parsed);
-            // print_node(token_list);
-            // free(line);
-
+            process_input(line, cmd);
             token_lstclear(&token_list, free);
             //ft_freetab(line_parsed);
         }
-        cleanup(line, cmd);
+        //cleanup(line, cmd);
+        free(line);
+        tab = cmd->env; //why do we swap up between cmd and tab ??
+                        // my guess is to avoid to loose it
     }
 }
 
 int main(int argc, char **argv, char **envp)
 {
+    g_signal = 0;
     (void)argv;
 
     if (argc != 1)
@@ -178,12 +200,11 @@ int main(int argc, char **argv, char **envp)
         return (0);
     }
 
-    rl_outstream = stderr;
-    //print_snail();
+    rl_outstream = stderr; // implemented due to mstest requirements
     signals();
     // Start shell loop
     printf("shell loop\n");
-    shell_loop(envp);
+    shell_loop(envp); // function where parsing and executing are merged
 
     return 0;
 }

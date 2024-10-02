@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executing.h                                        :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:05:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/09/02 17:56:10 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/01 20:32:51 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTING_H
 # define EXECUTING_H
 
-# include "libft.h"
 # include "parsing.h"
+# include "libft.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include <signal.h>
@@ -55,13 +55,6 @@
 # define STDERR 2
 # define EXIT_COMMAND	3
 
-# define ERROR_NODE 1
-# define ERROR_ARGS 2
-# define ERROR_QUOTE 3
-
-extern volatile int	g_var;
-/* ========== ENUM ================= */
-
 typedef struct s_cmd
 {
 	int		fd[2];
@@ -75,18 +68,18 @@ typedef struct s_cmd
 	char	*path;
 	char	**path_split;
 	char	**path_command;
-	char	*saved_line; // TODO : potential solution
 	char	**env;
 	int		export_added;
-	char	*line; //WIP
+	char	**line_parsed;
 }	t_cmd;
 
+void				ft_path_command(t_cmd *cmd, char *line); 	// PATH_COMMAND ('ls -lathr' 'wc' 'cat -e'....)
+int					ft_path_split(t_cmd *cmd);					// PATH_SPLIT ('usr/local/sbin' '/sbin' 'snap/bin'....)
+
 // excecuting
-void 				shell_loop(char **envp); // WIP
-// void				initialize_cmd(t_cmd *cmd, char **line_parsed);
-void				initialize_cmd(t_cmd *cmd, char *line);
+void 				shell_exec_loop(char **envp); // WIP
 void				handle_error(char *msg, t_cmd *cmd, int *fd);
-int					execute(char **line_parsed, t_cmd *cmd);
+int					execute(char *line, t_cmd *cmd);
 
 // memory
 int					malloc_structs(t_cmd **cmd);
@@ -104,11 +97,11 @@ char				*path_finder(t_cmd *cmd, char *path, int size);
 void				ft_path(t_cmd *cmd);
 
 // builtins
-int					ft_unset(char **split_line, t_cmd *cmd);
-int					ft_exit(char **split_line, t_cmd *cmd);
-int					ft_builtin(char **line_parsed, t_cmd *cmd);
-int					ft_export(char **args, t_cmd *cmd);
-int					ft_echo(char **split_line);
+int					ft_unset(t_cmd *cmd);
+int					ft_exit(t_cmd *cmd);
+int					ft_builtin(char *line, t_cmd *cmd);
+int					ft_export(t_cmd *cmd);
+int					ft_echo(t_cmd *cmd);
 int					ft_env(t_cmd *cmd);
 int					ft_cd(char *path);
 int					ft_pwd(void);
@@ -118,11 +111,12 @@ void				sigint_handler(int sig);
 void				signals(void);
 
 //redirections
-int					handle_redirections(char **args, int status, t_cmd *cmd);
+int					handle_redirections(char **split_line, int status, t_cmd *cmd);
 int					ft_heredoc_redirect(char *delim);
-int					ft_input_redirect(char **args, int i);
-int					ft_output_redirect(char **args, int i, int append);
+int					ft_input_redirect(char **split_line, int i);
+int					ft_output_redirect(char **split_line, int i, int append);
 int					ft_heredoc(char *limit);
+
 
 //fd
 void				close_fds(int *fd);
@@ -131,19 +125,24 @@ void				restore_fd(int saved_stdin, int saved_stdout);
 int					open_file(char *filename, int flags, int mode);
 int					open_heredoc_file(void);
 
+
 //basic executing
 int					handle_exit_command(char *line);
-int					set_command_path(t_cmd *cmd);
-int					basic_child_process(char **line_parsed, t_cmd *cmd);
-int					basic_parent_process(pid_t pid, char **split_line);
-int					basic_execute(char **line_parsed, t_cmd *cmd);
+int					basic_child_process(char **free_line, char *line, t_cmd *cmd);
+int					basic_parent_process(pid_t pid);
+int					basic_execute(char *line, t_cmd *cmd);
 
 //pipe executing
 void	handle_pipe_error(t_cmd *cmd, int *fd);
 void	handle_fork_error(t_cmd *cmd, int *fd);
 void	execute_child_process(t_cmd *cmd, int *fd, int i);
 void	init_cmd(t_cmd *cmd, char *line);
-int		pipe_execute(char **line_parsed, t_cmd *cmd);
+int		pipe_execute(char *line, t_cmd *cmd);
+
+//safety
+
+bool space_only (char *line);
+void print_tab(char **tab);
 
 //WIP
 int		handle_path(t_cmd *cmd);
@@ -153,7 +152,12 @@ void    heredoc_signals(void);
 void sigint_heredoc(int sig);
 
 int ft_isnumber(char *str);
+bool syntax_redirect(char *line);
 
-void print_tab(char **tab);
+void setup_signal_handler(int signum, void (*handler)(int));
+bool freeable_tab (char **tab);
+void free_cmd(t_cmd *cmd);
+
+char **cpy_tab(char **dest, char **src);
 
 #endif
