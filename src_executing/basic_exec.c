@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:07 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/01 21:12:34 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/02 20:22:24 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int ft_path_split(t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-int basic_child_process(char **free_line, char *line, t_cmd *cmd)
+int basic_child_process(char *line, t_cmd *cmd)
 {
 	char *command;
 
@@ -66,7 +66,7 @@ int basic_child_process(char **free_line, char *line, t_cmd *cmd)
 	}
 	printf("%s : command not found\n", line);
 	ft_freetab(cmd->line_parsed);
-	ft_freetab(free_line);
+	//ft_freetab(free_line);
 	if (cmd->path_split)
 		ft_freetab(cmd->path_split);
 	if (cmd->path_command)
@@ -116,7 +116,7 @@ int basic_execute(char *line, t_cmd *cmd)
 	else if (cmd->pid1 == 0)
 	{
 		// Child process
-		exit_code = basic_child_process(cmd->line_parsed, line, cmd);
+		exit_code = basic_child_process(line, cmd);
 		//ft_freetab(cmd->line_parsed); // Free split in child process
 		exit(exit_code);        // Avoid duplicate execution
 	}
