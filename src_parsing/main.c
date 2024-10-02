@@ -142,7 +142,6 @@ void shell_loop(char **envp)
 	cmd = NULL;
 	while (1)
 	{
-		printf("whille loop here\n");
 		if (malloc_structs(&cmd) != 0)
 		{
 			ft_putendl_fd(MALLOC_FAILURE, 2);
@@ -170,9 +169,7 @@ void shell_loop(char **envp)
 			printf("process input\n");
 			process_input(line, cmd);
 			token_lstclear(&token_list, free);
-			//ft_freetab(line_parsed);
 		}
-		//cleanup(line, cmd);
 		free(line);
 		tab = cmd->env;
 	}
