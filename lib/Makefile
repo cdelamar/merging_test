@@ -6,7 +6,7 @@
 #    By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/19 15:13:39 by cdelamar          #+#    #+#              #
-#    Updated: 2024/09/02 15:28:00 by cdelamar         ###   ########.fr        #
+#    Updated: 2024/10/03 03:07:46 by cdelamar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,8 @@ FILES = ft_atoi \
 	ft_putendl_fd \
 	ft_binary \
 	ft_error_message \
+	ft_strcat \
+	ft_realloc_string \
 	ft_flood_fill
 
 BONUS =	ft_lstnew \

@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 05:09:06 by clement           #+#    #+#             */
-/*   Updated: 2024/07/16 17:31:21 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/03 03:12:23 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,8 @@ char				*get_next_line(int fd);
 char				*ft_trim_storage(char *storage);
 char				*ft_getline(char *storage);
 char				*ft_readline(int fd, char *storage);
+
+char *ft_realloc_string(char *str, int size);
+char    *ft_strcat(char *dest, char *src);
 
 #endif

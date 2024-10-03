@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 05:09:06 by clement           #+#    #+#             */
-/*   Updated: 2024/06/14 16:04:42 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/03 03:08:18 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,8 @@ void				ft_lstclear(t_list **lst, void (*del)(void*));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void*),
 						void (*del)(void *));
+
+char *ft_realloc_string(char *str, int size);
+char    *ft_strcat(char *dest, char *src);
 
 #endif

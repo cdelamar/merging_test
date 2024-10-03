@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:11:04 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/03 02:17:21 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/03 03:53:24 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,20 @@
 #include <unistd.h>
 
 volatile int	g_signal = 0;
+
+char *tab_to_str(char **tab)
+{
+    int i = -1;
+    char *str = malloc(1);
+    str[0] = 0;
+    while(tab[++i])
+    {
+        str = ft_realloc_string(str, strlen(tab[i]) + 2);
+        ft_strcat(str, tab[i]);
+        ft_strcat(str, " ");
+    }
+    return str;
+}
 
 int	add_node(t_token **token_list, char **strs, int i)
 {
@@ -66,12 +80,12 @@ int	main(int argc, char **argv, char **envp)
 	char	*line;
 	char	**split_line;
 	char	**final_tab;
+	char	*final_line;
 	t_token	*token_list;
 
 	token_list = NULL;
 	(void)argv;
 	signals();
-///// ==============
 
 
 ///// cdelamar : init
@@ -81,7 +95,6 @@ int	main(int argc, char **argv, char **envp)
 	while (envp[++len]) {}
 	char **tab = malloc(sizeof(char *) * (len + 1));
 	cpy_tab(tab, envp);
-///// ==============
 
 	if (argc > 1)
 		return (check_error(ERROR_ARGS));
@@ -98,16 +111,11 @@ int	main(int argc, char **argv, char **envp)
 		}
 		cmd->heredoc_processed = FALSE;
 		cmd->env = tab;
-		///// ==============
-
-
 		line = readline("$ ");
-
-		///// laubry : parsing loop
 		split_line = ft_split_boosted(line);
 		if (split_line == NULL)
 			return (0);
- 		if (solo_quote(split_line) || badchar(split_line))
+		if (solo_quote(split_line) || badchar(split_line))
 		{
 			free_split_line(split_line);
 			return (0);
@@ -125,20 +133,15 @@ int	main(int argc, char **argv, char **envp)
 		}
 		path_main(token_list, envp);
 		final_tab = main_cat(&token_list);
-		///// ==============
-
-		///// cdelamar : executing loop
-		process_input(line, cmd);
-		tab = cmd->env;
-		///// ==============
-
-		///// leaks management
-		//print_free_tab(final_tab);
-		//print_node(token_list);
-	//	free_split_line(split_line);
-		free(split_line);
-		free(line);
+		final_line = tab_to_str(final_tab);
 		token_lstclear(&token_list, free);
+
+		free(line);
+		free(split_line);
+		process_input(final_line, cmd);
+
+		free(final_line);
+		tab = cmd->env;
 	}
 	return (0);
 }

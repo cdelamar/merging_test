@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:02:11 by lucasaubry        #+#    #+#             */
-/*   Updated: 2024/10/03 01:06:50 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/03 03:11:03 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,4 +162,7 @@ int			solo_quote(char **split_line);
 
 void		signals(void);
 void		sigint_handler(int sig);
+
+char *tab_to_str(char **tab);
+
 #endif
