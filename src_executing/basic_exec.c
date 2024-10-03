@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:07 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/03 03:10:13 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/03 11:29:05 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,9 @@ int basic_child_process(char **free_line, char *line, t_cmd *cmd)
 	printf("%s : command not found\n", line);
 	ft_freetab(split_line);
 	ft_freetab(free_line);
+	ft_freetab(cmd->env);
 	free_cmd(cmd);
+	free(line);
 	// token_lstclear(&token_list, free);
 	exit (EXIT_FAILURE);
 }

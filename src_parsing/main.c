@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:11:04 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/03 03:53:24 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/03 11:37:06 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,11 @@ int	main(int argc, char **argv, char **envp)
 		line = readline("$ ");
 		split_line = ft_split_boosted(line);
 		if (split_line == NULL)
+		{
+			printf("je sors ici\n");
+			ft_freetab(cmd->env);
 			return (0);
+		}
 		if (solo_quote(split_line) || badchar(split_line))
 		{
 			free_split_line(split_line);
@@ -123,6 +127,7 @@ int	main(int argc, char **argv, char **envp)
 		//print_split(split_line);	
 		if (line == NULL)
 		{
+			printf("je sors plutot la\n");
 			free_split_line(split_line);
 			return (0);
 		}
@@ -134,6 +139,7 @@ int	main(int argc, char **argv, char **envp)
 		path_main(token_list, envp);
 		final_tab = main_cat(&token_list);
 		final_line = tab_to_str(final_tab);
+		printf ("the line = %s \n", final_line);
 		token_lstclear(&token_list, free);
 
 		free(line);
