@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/executing.h"
+#include "../includes/minishell.h"
 
 int ft_isnumber(char *str)
 {
@@ -29,20 +29,21 @@ int ft_isnumber(char *str)
     return 1;
 }
 
-int ft_exit(t_cmd *cmd)
+int ft_exit(char **split_line, t_cmd *cmd)
 {
     (void)cmd;
     int exit_code = 0;
+    printf("ft_exit called with argument: %s\n", split_line[1] ? split_line[1] : "NULL"); // test ??
 
-    if (cmd->line_parsed[1] != NULL)
+    if (split_line[1] != NULL)
     {
-        if (ft_isnumber(cmd->line_parsed[1]))
+        if (ft_isnumber(split_line[1]))
         {
-            exit_code = ft_atoi(cmd->line_parsed[1]);
+            exit_code = ft_atoi(split_line[1]);
         }
         else
         {
-            printf("exit: %s: numbers required\n", cmd->line_parsed[1]);
+            printf("exit: %s: numbers required\n", split_line[1]);
             exit_code = 255;
         }
     }

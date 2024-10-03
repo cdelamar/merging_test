@@ -6,11 +6,11 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:07 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/02 20:22:24 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/03 02:21:03 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/executing.h"
+#include "../includes/minishell.h"
 
 bool syntax_redirect(char *line)
 {
@@ -45,35 +45,38 @@ int ft_path_split(t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-int basic_child_process(char *line, t_cmd *cmd)
+int basic_child_process(char **free_line, char *line, t_cmd *cmd)
 {
+	char **split_line;
 	char *command;
 
-	if (!cmd->line_parsed)
+	split_line = ft_split(line, ' ');
+	//print_tab(split_line);
+	if (!split_line)
 		return (EXIT_FAILURE);
 
-	if (handle_redirections(cmd->line_parsed, HEREDOC_ON, cmd) != 0)
+	if (handle_redirections(split_line, HEREDOC_ON, cmd) != 0)
 	{
-		ft_freetab(cmd->line_parsed);
+		ft_freetab(split_line);
 		return (EXIT_FAILURE);
 	}
 
-	command = cmd_finder(cmd->line_parsed, cmd);
+	command = cmd_finder(split_line, cmd);
 	if (command)
 	{
 		//printf("execve\n");
-		execve(command, cmd->line_parsed, cmd->env); // exit
+		execve(command, split_line, cmd->env); // exit
 	}
 	printf("%s : command not found\n", line);
-	ft_freetab(cmd->line_parsed);
-	//ft_freetab(free_line);
+	ft_freetab(split_line);
+	ft_freetab(free_line);
 	if (cmd->path_split)
 		ft_freetab(cmd->path_split);
 	if (cmd->path_command)
 		ft_freetab(cmd->path_command);
 	ft_freetab(cmd->env);
 	free(cmd);
-
+	// token_lstclear(&token_list, free);
 	exit (EXIT_FAILURE);
 }
 
@@ -91,18 +94,19 @@ int basic_parent_process(pid_t pid) // TODO free cmd->path_split
 	return EXIT_SUCCESS;
 }
 
-
-
 int basic_execute(char *line, t_cmd *cmd)
 {
 	int exit_code;
+	char **split_line = NULL;
 
+	split_line = ft_split(line, ' ');
+	//print_tab(split_line);
 	exit_code = ft_path_split(cmd); // Find command path
 
 	if (exit_code != EXIT_SUCCESS)
 	{
 		printf("Command not found: %s\n", line);
-		//ft_freetab(cmd->line_parsed); // Free command split
+		ft_freetab(split_line); // Free command split
 		return exit_code;
 	}
 
@@ -110,21 +114,21 @@ int basic_execute(char *line, t_cmd *cmd)
 	if (cmd->pid1 < 0)
 	{
 		printf("Fork error\n");
-		//ft_freetab(cmd->line_parsed);
+		ft_freetab(split_line);
 		return EXIT_FAILURE;
 	}
 	else if (cmd->pid1 == 0)
 	{
 		// Child process
-		exit_code = basic_child_process(line, cmd);
-		//ft_freetab(cmd->line_parsed); // Free split in child process
+		exit_code = basic_child_process(split_line, line, cmd);
+		ft_freetab(split_line); // Free split in child process
 		exit(exit_code);        // Avoid duplicate execution
 	}
 	else
 	{
 		// Parent process
 		exit_code = basic_parent_process(cmd->pid1);
-		//ft_freetab(split_line); // Free split in parent process
+		ft_freetab(split_line); // Free split in parent process
 		return exit_code;       // Return success or failure
 	}
 }

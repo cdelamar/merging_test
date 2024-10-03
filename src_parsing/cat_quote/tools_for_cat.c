@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "minishell.h"
 
 char	**malloc_tab(t_token **token)
 {

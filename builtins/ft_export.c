@@ -10,7 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/executing.h"
+#include "../includes/minishell.h"
+
+
 
 // Function to check if a variable name is valid
 int is_valid_var_name(char *name)
@@ -74,13 +76,13 @@ void print_env(t_cmd *cmd)
 	}
 }
 
-int ft_export(t_cmd *cmd)
+int ft_export(char **args, t_cmd *cmd)
 {
 	//printf("ft_export\n");
-	if (!cmd->line_parsed[1])
+	if (!args[1])
 	{
 		print_env(cmd);
 		return (EXIT_SUCCESS);
 	}
-	return (add_env_var(cmd->line_parsed[1], cmd));
+	return (add_env_var(args[1], cmd));
 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "minishell.h"
 
 void print_node(t_token *token)
 {
@@ -19,11 +19,11 @@ void print_node(t_token *token)
     {
         if (temp->content)
         {
-           printf("temp: %p, index: %d, content: %s, type: %d\n", temp, temp->index, temp->content, temp->type);
+            printf("temp: %p, index: %d, content: %s, type: %d\n", temp, temp->index, temp->content, temp->type);
         }
         else
         {
-			printf("temp: %p, index: %d, content: (null), type: %d\n", temp, temp->index, temp->type);
+            printf("temp: %p, index: %d, content: (null), type: %d\n", temp, temp->index, temp->type);
         }
         temp = temp->next;
     }
@@ -76,7 +76,7 @@ void	print_free_tab(char **final_token)
 	i = 0;
 	while (final_token[i])
 	{
-		// printf("tab == %s\n", final_token[i]);
+		printf("tab == %s\n", final_token[i]);
 		free(final_token[i]);
 		i++;
 	}

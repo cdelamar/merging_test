@@ -6,14 +6,14 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:05:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/02 20:22:31 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/03 02:05:51 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTING_H
 # define EXECUTING_H
 
-# include "parsing.h"
+# include "minishell.h"
 # include "libft.h"
 # include <fcntl.h>
 # include <stdio.h>
@@ -70,7 +70,6 @@ typedef struct s_cmd
 	char	**path_command;
 	char	**env;
 	int		export_added;
-	char	**line_parsed;
 }	t_cmd;
 
 void				ft_path_command(t_cmd *cmd, char *line); 	// PATH_COMMAND ('ls -lathr' 'wc' 'cat -e'....)
@@ -97,11 +96,11 @@ char				*path_finder(t_cmd *cmd, char *path, int size);
 void				ft_path(t_cmd *cmd);
 
 // builtins
-int					ft_unset(t_cmd *cmd);
-int					ft_exit(t_cmd *cmd);
+int					ft_unset(char **split_line, t_cmd *cmd);
+int					ft_exit(char **split_line, t_cmd *cmd);
 int					ft_builtin(char *line, t_cmd *cmd);
-int					ft_export(t_cmd *cmd);
-int					ft_echo(t_cmd *cmd);
+int					ft_export(char **args, t_cmd *cmd);
+int					ft_echo(char **split_line);
 int					ft_env(t_cmd *cmd);
 int					ft_cd(char *path);
 int					ft_pwd(void);
@@ -128,7 +127,7 @@ int					open_heredoc_file(void);
 
 //basic executing
 int					handle_exit_command(char *line);
-int					basic_child_process(char *line, t_cmd *cmd);
+int					basic_child_process(char **free_line, char *line, t_cmd *cmd);
 int					basic_parent_process(pid_t pid);
 int					basic_execute(char *line, t_cmd *cmd);
 
@@ -159,5 +158,12 @@ bool freeable_tab (char **tab);
 void free_cmd(t_cmd *cmd);
 
 char **cpy_tab(char **dest, char **src);
+
+void shell_exec_loop(char **envp);
+char **cpy_tab(char **dest, char **src);
+bool syntax_redirect(char *line);
+void process_input(char *line, t_cmd *cmd);
+
+
 
 #endif

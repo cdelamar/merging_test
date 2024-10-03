@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "minishell.h"
 
 t_token	*token_lstnew(void *content)
 {

@@ -6,12 +6,12 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:23:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/01 21:18:43 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/03 02:21:45 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "../includes/executing.h"
+#include "../includes/minishell.h"
 
 static void setup_child_pipes(t_cmd *cmd, int *fd, int i)
 {
@@ -40,7 +40,7 @@ static int child_process(t_cmd *cmd, int *fd, int i)
 	if(cmd->env)
 		ft_freetab(cmd->env);
 	free(cmd);
-
+	//token_lstclear(&token_list, free);
 	// ft_freetab(cmd->env);
 	// free_cmd(cmd);
 	exit(EXIT_SUCCESS);
@@ -48,19 +48,16 @@ static int child_process(t_cmd *cmd, int *fd, int i)
 
 static void parent_process(t_cmd *cmd, int *fd)
 {
-	// Don't wait here; defer waiting to after the loop in pipe_execute
 	close(fd[1]);
 	if (cmd->fd_in)
 		close(cmd->fd_in);
-	cmd->fd_in = fd[0]; // save input for next command
-	//(*i)++;             // (indexing increment)
+	cmd->fd_in = fd[0]; // save input pour la prochaine commande
 }
 
 static int create_and_fork(t_cmd *cmd, int *fd)
 {
 	if (pipe(fd) < 0)
 		handle_error("exec.c line 49", cmd, fd);
-	//printf("-- ca fork dans le pipe --\n");
 	cmd->pid1 = fork();
 	if (cmd->pid1 < 0)
 		handle_error("exec.c line 57", cmd, fd);
@@ -74,40 +71,32 @@ int pipe_execute(char *line, t_cmd *cmd)
 
 	ft_path_command(cmd, line); // Split command by pipe '|'
 
-	while (cmd->path_command[i]) // YA UN MONDE
+	while (cmd->path_command[i])
 	{
 		if (create_and_fork(cmd, cmd->fd) == 0)
-		{
-			// Child process
 			child_process(cmd, cmd->fd, i);
-		}
 		else
 		{
-			// Parent process
-			last_pid = cmd->pid1; // Store last child's PID
+			last_pid = cmd->pid1; // save le dernier child pid
 			parent_process(cmd, cmd->fd);
 		}
-		i++; // le sauveur ou pas
+		i++;
 	}
 
-	// Wait for the last command in the pipeline
+	// Wait for last comsmand in the pipeline
 	int status;
 	if (last_pid > 0)
 		waitpid(last_pid, &status, 0);
 
-	// Wait for any remaining child processes
-	while (waitpid(-1, NULL, WNOHANG) > 0); // avoid zombie process, a apprendre
+	// Wait for any remaining zombie child processes
+	while (waitpid(-1, NULL, WNOHANG) > 0);
 
 	close(cmd->fd_in); // Close the last file descriptor
 
 	if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
-	{
 		return (EXIT_SUCCESS);
-	}
 	else
-	{
-		return (EXIT_FAILURE); //jessdaiuntruc
-	}
+		return (EXIT_FAILURE);
 }
 
 

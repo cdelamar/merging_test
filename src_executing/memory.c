@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/executing.h"
+#include "../includes/minishell.h"
 
 int malloc_structs(t_cmd **cmd)
 {

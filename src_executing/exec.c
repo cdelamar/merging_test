@@ -6,11 +6,11 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 18:32:50 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/09/30 13:12:47 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/03 02:11:27 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/executing.h"
+#include "../includes/minishell.h"
 
 void cleanup(char *line, t_cmd *cmd)
 {
@@ -23,7 +23,7 @@ void cleanup(char *line, t_cmd *cmd)
 void ft_path_command(t_cmd *cmd, char *line)
 {
     cmd->fd_in = 0; // Initialize the input for the first commad
-    cmd->path_command = ft_split(line, '|');
+    cmd->path_command = ft_split(line, '|'); 
 	//printf ("CREATED path_command\n");
 	// print_tab(cmd->path_command);
 }
@@ -52,9 +52,7 @@ int	execute(char *line, t_cmd *cmd)
 		return (0);
 
 	if (ft_strchr(line, '|'))
-	{
 		return (pipe_execute(line, cmd));
-	}
 	else if (ft_builtin(line, cmd) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	else

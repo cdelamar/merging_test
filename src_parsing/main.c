@@ -1,59 +1,19 @@
-#include "../includes/parsing.h"
-#include "executing.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/13 13:11:04 by laubry            #+#    #+#             */
+/*   Updated: 2024/10/03 02:17:21 by cdelamar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-volatile sig_atomic_t  g_signal;
+#include "minishell.h"
+#include <unistd.h>
 
-// __________________________________
-// _________________ EXECUTING
-// __________________________________
-
-void print_tab(char **tab)
-{
-	int i;
-
-	i = 0;
-	while(tab[i])
-	{
-		printf("tab %d : %s\n", i, tab[i]);
-		i++;
-	}
-	return ;
-}
-
-static void process_input(char *line, t_cmd *cmd)
-{
-	if (line == NULL)
-	{
-		printf("CTRL + D from shell_loop\n");
-		ft_freetab(cmd->env);
-		free_structs(cmd);
-		exit(0); // Handle exit on EOF (CTRL + D)
-	}
-
-	if (space_only(line) == true)
-	{
-		//free_structs(cmd);
-		return;
-	}
-
-	if (*line)
-		add_history(line);
-
-	execute(line,cmd); // execute retourne un int mais je men sert pas
-}
-
-char **cpy_tab(char **dest, char **src)
-{
-	int len = -1;
-	while (src[++len])
-		dest[len] = ft_strdup(src[len]);
-	dest[len] = NULL;
-	return dest;
-}
-
-// __________________________________
-// _________________ PARSING
-// __________________________________
+volatile int	g_signal = 0;
 
 int	add_node(t_token **token_list, char **strs, int i)
 {
@@ -100,97 +60,85 @@ void free_split_line(char **split_line)
 	free(split_line);
 }
 
-int parse_input(char *line, char **envp, t_token **token_list)
+int	main(int argc, char **argv, char **envp)
 {
-	char **split_line;
+///// laubry : init
+	char	*line;
+	char	**split_line;
+	char	**final_tab;
+	t_token	*token_list;
 
-	split_line = ft_split_boosted(line);
-	if (split_line == NULL)
-		return 0;
+	token_list = NULL;
+	(void)argv;
+	signals();
+///// ==============
 
-	if (solo_quote(split_line) || badchar(split_line))
-	{
-		free_split_line(split_line);
-		return 0;
-	}
 
-	if (!make_token(split_line, token_list))
-	{
-		free_split_line(split_line);
-		return 0;
-	}
-
-	free(split_line);
-	path_main(*token_list, envp);
-	return 1;
-}
-// __________________________________
-// _________________ MERGE
-// __________________________________
-
-void shell_loop(char **envp)
-{
-	char *line;
-	t_cmd *cmd;
-	t_token *token_list;
-	int	len = -1;
+///// cdelamar : init
+	t_cmd	*cmd = NULL;
+	int		len = -1;
 
 	while (envp[++len]) {}
-	char **tab = malloc(sizeof(char *) * (len + 1)); // allocate memory to copy envp
-	cpy_tab(tab, envp); // copy envp to cmd->env
+	char **tab = malloc(sizeof(char *) * (len + 1));
+	cpy_tab(tab, envp);
+///// ==============
 
-	cmd = NULL;
+	if (argc > 1)
+		return (check_error(ERROR_ARGS));
+
+
 	while (1)
 	{
+
+		///// cdelamar : init loop
 		if (malloc_structs(&cmd) != 0)
 		{
 			ft_putendl_fd(MALLOC_FAILURE, 2);
-			return ;
+			return (0);
 		}
 		cmd->heredoc_processed = FALSE;
 		cmd->env = tab;
+		///// ==============
+
+
 		line = readline("$ ");
 
-		if (line == NULL) // ctrl + D
+		///// laubry : parsing loop
+		split_line = ft_split_boosted(line);
+		if (split_line == NULL)
+			return (0);
+ 		if (solo_quote(split_line) || badchar(split_line))
 		{
-			printf("CTRL + D from shell_loop\n");
-			ft_freetab(cmd->env);
-			free_structs(cmd);
-			exit(0); // Handle exit on EOF (CTRL + D)
+			free_split_line(split_line);
+			return (0);
 		}
-
-
-	token_list = NULL;
-		if (parse_input(line, envp, &token_list))
+		//print_split(split_line);	
+		if (line == NULL)
 		{
-			cmd->line_parsed = main_cat(&token_list);
-		// Executing
-
-			printf("process input\n");
-			process_input(line, cmd);
-			token_lstclear(&token_list, free);
+			free_split_line(split_line);
+			return (0);
 		}
-		free(line);
+		if (!make_token(split_line, &token_list))
+		{
+			free_split_line(split_line);
+			return (0);
+		}
+		path_main(token_list, envp);
+		final_tab = main_cat(&token_list);
+		///// ==============
+
+		///// cdelamar : executing loop
+		process_input(line, cmd);
 		tab = cmd->env;
+		///// ==============
+
+		///// leaks management
+		//print_free_tab(final_tab);
+		//print_node(token_list);
+	//	free_split_line(split_line);
+		free(split_line);
+		free(line);
+		token_lstclear(&token_list, free);
 	}
-}
-
-int main(int argc, char **argv, char **envp)
-{
-	g_signal = 0;
-	(void)argv;
-
-	if (argc != 1)
-	{
-		printf("incorrect arguments\n");
-		return (0);
-	}
-
-	rl_outstream = stderr; // implemented due to mstest requirements
-	signals();
-	// Start shell loop
-	printf("shell loop\n");
-	shell_loop(envp); // function where parsing and executing are merged
-
-	return 0;
+	return (0);
 }

@@ -6,11 +6,11 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:34:31 by laubry            #+#    #+#             */
-/*   Updated: 2024/08/19 19:11:39 by laubry           ###   ########.fr       */
+/*   Updated: 2024/08/30 10:37:09 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "minishell.h"
 
 int	is_char(char s)
 {

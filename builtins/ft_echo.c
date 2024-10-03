@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/executing.h"
+#include "../includes/minishell.h"
 
 static void	echo_output(char **split_line, int i)
 {
@@ -27,7 +27,7 @@ static void	echo_output(char **split_line, int i)
 	return ;
 }
 
-int	ft_echo(t_cmd *cmd)
+int	ft_echo(char **split_line)
 {
     int		i;
     int		j;
@@ -37,17 +37,17 @@ int	ft_echo(t_cmd *cmd)
     newline = true;
 
 	// printf ("** echo **\n");
-    while (cmd->line_parsed[i] && cmd->line_parsed[i][0] == '-')
+    while (split_line[i] && split_line[i][0] == '-')
     {
         j = 1;
-        while (cmd->line_parsed[i][j] == 'n')
+        while (split_line[i][j] == 'n')
             j++;
-        if (cmd->line_parsed[i][j] != '\0')
+        if (split_line[i][j] != '\0')
             break;
         newline = false;
         i++;
     }
-    echo_output(cmd->line_parsed, i);
+    echo_output(split_line, i);
     if (newline)
         ft_putchar_fd('\n', 1);
     return (EXIT_SUCCESS);

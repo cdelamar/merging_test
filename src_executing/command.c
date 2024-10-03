@@ -6,11 +6,11 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 18:31:18 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/07/22 16:12:06 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/03 02:12:08 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/executing.h"
+#include "../includes/minishell.h"
 
 char	*cmd_cat(const char *path_split, char *slash, char *command)
 {
@@ -31,7 +31,7 @@ char	*cmd_cat(const char *path_split, char *slash, char *command)
 	return (res);
 }
 
-char	*cmd_finder(char **split_line, t_cmd *cmd) // maybe add line_parsed here
+char	*cmd_finder(char **split_line, t_cmd *cmd)
 {
 	int		i;
 	char	*command = NULL;

@@ -12,7 +12,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/executing.h"
+#include "../includes/minishell.h"
 
 static int builtin_commands(char **split_line, t_cmd *cmd, int saved_in, int saved_out)
 {
@@ -21,20 +21,20 @@ static int builtin_commands(char **split_line, t_cmd *cmd, int saved_in, int sav
 	ret = EXIT_FAILURE;
 
     if (ft_strcmp(split_line[0], "unset") == 0)
-        ret = ft_unset(cmd);
+        ret = ft_unset(split_line, cmd);
     else if (ft_strcmp(split_line[0], "echo") == 0)
-        ret = ft_echo(cmd);
+        ret = ft_echo(split_line);
     else if (ft_strcmp(split_line[0], "cd") == 0)
         ret = ft_cd(split_line[1]);
     else if (ft_strcmp(split_line[0], "export") == 0)
-        ret = ft_export(cmd);
+        ret = ft_export(split_line, cmd);
     else if (ft_strcmp(split_line[0], "env") == 0)
         ret = ft_env(cmd);
     else if (ft_strcmp(split_line[0], "pwd") == 0)
         ret = ft_pwd();
     else if (ft_strcmp(split_line[0], "exit") == 0)
     {
-        int exit_code = ft_exit(cmd);
+        int exit_code = ft_exit(split_line, cmd);
         if (cmd->pid1 == 0)
         {
             ft_freetab(split_line);

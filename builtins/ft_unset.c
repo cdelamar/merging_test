@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/executing.h"
+#include "../includes/minishell.h"
 
 static bool valid_charact(char *str)
 {
@@ -28,16 +28,16 @@ static bool valid_charact(char *str)
 }
 
 
-int ft_unset(t_cmd *cmd)
+int ft_unset(char **split_line, t_cmd *cmd)
 {
 	int i;
 	int len;
 
-	if (!cmd->line_parsed[1] || valid_charact(cmd->line_parsed[1]) == false)
+	if (!split_line[1] || valid_charact(split_line[1]) == false)
 		return (EXIT_FAILURE);
 	i = 0;
-	len = ft_strlen(cmd->line_parsed[1]);
-	while (cmd->env[i] && !(strncmp(cmd->env[i], cmd->line_parsed[1], len) == 0 && cmd->env[i][len] == '='))
+	len = ft_strlen(split_line[1]);
+	while (cmd->env[i] && !(strncmp(cmd->env[i], split_line[1], len) == 0 && cmd->env[i][len] == '='))
 		i++;
 	if (!cmd->env[i])
 		return (EXIT_FAILURE);

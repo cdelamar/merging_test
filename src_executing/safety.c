@@ -1,4 +1,4 @@
-#include "../includes/executing.h"
+#include "../includes/minishell.h"
 
 bool space_only (char *line)
 {
@@ -13,7 +13,7 @@ bool space_only (char *line)
 	}
 	return (true);
 }
-/*
+
 void print_tab(char **tab)
 {
 	int i = 0;
@@ -24,7 +24,7 @@ void print_tab(char **tab)
 		i++;
 	}
 	printf("END OF PRINT TAB\n");
-}*/
+}
 
 bool freeable_tab (char **tab)
 {
@@ -42,11 +42,18 @@ bool freeable_tab (char **tab)
 void free_cmd(t_cmd *cmd)
 {
 	if (cmd->path_command)
+	{
+		// printf("\n\n\n\n ________________FREEING PATH_COMD\n");
+		// print_tab(cmd->path_command);
 		ft_freetab(cmd->path_command);
+	}
 	if (cmd->path_split)
+	{
+		// printf("\n\n\n\n ________________FREEING PATH_SPLIT\n");
+		// print_tab(cmd->path_split);
 		ft_freetab(cmd->path_split);
-	if (cmd->line_parsed)
-		ft_freetab(cmd->line_parsed);
+	}
+
 	free(cmd);
 	//cmd = NULL;
 }
