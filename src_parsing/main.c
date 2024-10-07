@@ -15,6 +15,39 @@
 
 volatile int	g_signal = 0;
 
+/*
+char *ft_realloc_string(char *str, int size)
+{
+	char *res = malloc(size);
+	int i = -1;
+	while(str[++i])
+		res[i] = str[i];
+	res[i] = 0;
+	free(str);
+	return res;
+}*/
+
+char *ft_realloc_string(char *str, int new_size)
+{
+    char *res;
+    int old_len = strlen(str);
+
+    res = malloc(old_len + new_size);
+    if (!res)
+        return NULL;
+
+    // Copy the original string to the new buffer
+    int i = 0;
+    while (str[i])
+    {
+        res[i] = str[i];
+        i++;
+    }
+    res[i] = '\0'; // Null-terminate the new string
+
+    free(str); // Free the old string
+    return res;
+}
 char *tab_to_str(char **tab)
 {
 	print_tab(tab);
@@ -29,6 +62,8 @@ char *tab_to_str(char **tab)
 			ft_strcat(str, " ");
     }
 	printf("str : ..%s..\n", str);
+	// peut etre freetab ici aussi
+	//ft_freetab(tab)
     return str;
 }
 
@@ -149,7 +184,9 @@ int	main(int argc, char **argv, char **envp)
 		free(split_line);
 		process_input(final_line, cmd);
 
+		//printf("before free : %s\n", final_line);
 		free(final_line);
+		//printf("after free : %s\n", final_line);
 		tab = cmd->env;
 	}
 	return (0);

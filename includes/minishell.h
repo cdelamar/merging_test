@@ -164,5 +164,7 @@ void		signals(void);
 void		sigint_handler(int sig);
 
 char *tab_to_str(char **tab);
+char *ft_realloc_string(char *str, int new_size);
+
 
 #endif

@@ -12,14 +12,22 @@
 
 #include "libft.h"
 
-char    *ft_strcat(char *dest, char *src)
+char *ft_strcat(char *dest, char *src)
 {
-	int i = -1;
-	int j = -1;
+    int i = 0;
+    int j = 0;
 
-	while(dest[++i]) {}
-	while(src[++j])
-		dest[i + j] = src[j];
-	dest[i + j] = 0;
-	return dest;
+    // Find the end of dest string
+    while (dest[i])
+        i++;
+
+    // Append src to dest
+    while (src[j])
+    {
+        dest[i + j] = src[j];
+        j++;
+    }
+
+    dest[i + j] = '\0'; // Null-terminate the concatenated string
+    return dest;
 }

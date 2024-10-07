@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-
+/*
 char *ft_realloc_string(char *str, int size)
 {
 	char *res = malloc(size);
@@ -21,4 +21,4 @@ char *ft_realloc_string(char *str, int size)
 	res[i] = 0;
 	free(str);
 	return res;
-}
+}*/
