@@ -1,9 +1,0 @@
-$ echo "$""$"
-$$
-array NUMBER 0 : echo
-
-array NUMBER 1 : $$
-
-END OF PRINT TAB
-str : ..echo $$..
-$ je sors ici

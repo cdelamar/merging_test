@@ -14,23 +14,11 @@
 #include <unistd.h>
 
 volatile int	g_signal = 0;
-
 /*
-char *ft_realloc_string(char *str, int size)
-{
-	char *res = malloc(size);
-	int i = -1;
-	while(str[++i])
-		res[i] = str[i];
-	res[i] = 0;
-	free(str);
-	return res;
-}*/
-
 char *ft_realloc_string(char *str, int new_size)
 {
     char *res;
-    int old_len = strlen(str);
+    int old_len = ft_strlen(str);
 
     res = malloc(old_len + new_size + 1);
     if (!res)
@@ -47,7 +35,33 @@ char *ft_realloc_string(char *str, int new_size)
 
     free(str); // Free the old string
     return res;
+}*/
+
+char *ft_realloc_string(char *str, int new_size)
+{
+    char *res;
+    int old_len;
+
+    if (!str)
+        return (NULL);
+
+    old_len = ft_strlen(str);
+    res = malloc(old_len + new_size + 1); // Allocate new memory
+    if (!res)
+    {
+        free(str); // Ensure no memory leak
+        return (NULL);
+    }
+
+    // Copy the old string into the new memory
+    ft_memcpy(res, str, old_len);
+    res[old_len] = '\0'; // Null-terminate the new string
+
+    free(str); // Free the old string after copying
+    return (res);
 }
+
+/*
 char *tab_to_str(char **tab)
 {
 	print_tab(tab);
@@ -56,7 +70,7 @@ char *tab_to_str(char **tab)
     str[0] = 0;
     while(tab[++i])
     {
-        str = ft_realloc_string(str, strlen(tab[i]) + 2);
+        str = ft_realloc_string(str, ft_strlen(tab[i]) + 2);
         ft_strcat(str, tab[i]);
         if(tab[i + 1])			//major fix
 			ft_strcat(str, " ");
@@ -65,6 +79,30 @@ char *tab_to_str(char **tab)
 	// peut etre freetab ici aussi
 	//ft_freetab(tab)
     return str;
+}*/
+
+char *tab_to_str(char **tab)
+{
+    char *str = malloc(1);
+    int i = -1;
+
+    if (!str)
+        return (NULL);
+    str[0] = 0;
+
+    while (tab[++i])
+    {
+        str = ft_realloc_string(str, ft_strlen(tab[i]) + 2);
+        if (!str)
+            return (NULL); // Free resources here if realloc fails
+        ft_strcat(str, tab[i]);
+        if (tab[i + 1])
+            ft_strcat(str, " ");
+    }
+
+    // Optionally free the input `tab` if it's no longer needed
+    ft_freetab(tab); // Ensure this only frees if it's dynamically allocated
+    return (str);
 }
 
 int	add_node(t_token **token_list, char **strs, int i)
@@ -118,7 +156,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*line;
 	char	**split_line;
 	char	**final_tab;
-	char	*final_line;
+	//char	*final_line;
 	t_token	*token_list;
 
 	token_list = NULL;
@@ -176,14 +214,14 @@ int	main(int argc, char **argv, char **envp)
 		}
 		path_main(token_list, envp);
 		final_tab = main_cat(&token_list);
-		final_line = tab_to_str(final_tab);
+		cmd->final_line = tab_to_str(final_tab);
 		//printf ("the line = %s \n", final_line);
-		ft_freetab(final_tab);
+		//ft_freetab(final_tab);
 		token_lstclear(&token_list, free);
 		free(split_line);
 		free(line);
-		process_input(final_line, cmd);
-		free(final_line);
+		process_input(cmd->final_line, cmd);
+		free(cmd->final_line);
 		tab = cmd->env;
 	}
 	return (0);

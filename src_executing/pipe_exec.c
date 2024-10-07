@@ -40,6 +40,7 @@ static int child_process(t_cmd *cmd, int *fd, int i)
 	if(cmd->env)
 		ft_freetab(cmd->env);
 	free(cmd);
+	printf("ca leak ici nan\n");
 	//token_lstclear(&token_list, free);
 	// ft_freetab(cmd->env);
 	// free_cmd(cmd);

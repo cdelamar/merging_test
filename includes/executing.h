@@ -70,6 +70,7 @@ typedef struct s_cmd
 	char	**path_command;
 	char	**env;
 	int		export_added;
+	char	*final_line;
 }	t_cmd;
 
 void				ft_path_command(t_cmd *cmd, char *line); 	// PATH_COMMAND ('ls -lathr' 'wc' 'cat -e'....)
