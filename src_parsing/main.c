@@ -32,7 +32,7 @@ char *ft_realloc_string(char *str, int new_size)
     char *res;
     int old_len = strlen(str);
 
-    res = malloc(old_len + new_size);
+    res = malloc(old_len + new_size + 1);
     if (!res)
         return NULL;
 
@@ -165,7 +165,7 @@ int	main(int argc, char **argv, char **envp)
 		//print_split(split_line);
 		if (line == NULL)
 		{
-			printf("je sors plutot la\n");
+			printf("je sors plutot la, checker leak de sortie\n");
 			free_split_line(split_line);
 			return (0);
 		}
@@ -178,15 +178,12 @@ int	main(int argc, char **argv, char **envp)
 		final_tab = main_cat(&token_list);
 		final_line = tab_to_str(final_tab);
 		//printf ("the line = %s \n", final_line);
+		ft_freetab(final_tab);
 		token_lstclear(&token_list, free);
-
-		free(line);
 		free(split_line);
+		free(line);
 		process_input(final_line, cmd);
-
-		//printf("before free : %s\n", final_line);
 		free(final_line);
-		//printf("after free : %s\n", final_line);
 		tab = cmd->env;
 	}
 	return (0);
