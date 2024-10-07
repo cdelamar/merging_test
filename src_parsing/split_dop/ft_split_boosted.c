@@ -46,16 +46,16 @@ void	split_in_tab(char *s, char **lst)
 {
 	int	i;
 	int	j;
-	int	start;
-	int	word_len;
+	// int	start;
+	//int	word_len;
 
 	i = 0;
 	j = 0;
-	word_len = 0;
-	start = 0;
+	//word_len = 0;
+	// start = 0;
 	while (s[i])
 	{
-		start = i;
+		// start = i;
 		if (skip_space(s, i) != i)
 			skip_sub(lst, s, &i, &j);
 		else if (check_char(s, i, lst, j) != i)

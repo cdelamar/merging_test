@@ -17,6 +17,7 @@ volatile int	g_signal = 0;
 
 char *tab_to_str(char **tab)
 {
+	print_tab(tab);
     int i = -1;
     char *str = malloc(1);
     str[0] = 0;
@@ -24,8 +25,10 @@ char *tab_to_str(char **tab)
     {
         str = ft_realloc_string(str, strlen(tab[i]) + 2);
         ft_strcat(str, tab[i]);
-        ft_strcat(str, " ");
+        if(tab[i + 1])			//major fix
+			ft_strcat(str, " ");
     }
+	printf("str : ..%s..\n", str);
     return str;
 }
 
@@ -124,7 +127,7 @@ int	main(int argc, char **argv, char **envp)
 			free_split_line(split_line);
 			return (0);
 		}
-		//print_split(split_line);	
+		//print_split(split_line);
 		if (line == NULL)
 		{
 			printf("je sors plutot la\n");
@@ -139,7 +142,7 @@ int	main(int argc, char **argv, char **envp)
 		path_main(token_list, envp);
 		final_tab = main_cat(&token_list);
 		final_line = tab_to_str(final_tab);
-		printf ("the line = %s \n", final_line);
+		//printf ("the line = %s \n", final_line);
 		token_lstclear(&token_list, free);
 
 		free(line);
