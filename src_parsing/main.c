@@ -37,6 +37,26 @@ char *ft_realloc_string(char *str, int new_size)
     return res;
 }*/
 
+/*
+char *tab_to_str(char **tab)
+{
+	print_tab(tab);
+    int i = -1;
+    char *str = malloc(1);
+    str[0] = 0;
+    while(tab[++i])
+    {
+        str = ft_realloc_string(str, ft_strlen(tab[i]) + 2);
+        ft_strcat(str, tab[i]);
+        if(tab[i + 1])			//major fix
+			ft_strcat(str, " ");
+    }
+	printf("str : ..%s..\n", str);
+	// peut etre freetab ici aussi
+	//ft_freetab(tab)
+    return str;
+}*/
+
 char *ft_realloc_string(char *str, int new_size)
 {
     char *res;
@@ -61,25 +81,6 @@ char *ft_realloc_string(char *str, int new_size)
     return (res);
 }
 
-/*
-char *tab_to_str(char **tab)
-{
-	print_tab(tab);
-    int i = -1;
-    char *str = malloc(1);
-    str[0] = 0;
-    while(tab[++i])
-    {
-        str = ft_realloc_string(str, ft_strlen(tab[i]) + 2);
-        ft_strcat(str, tab[i]);
-        if(tab[i + 1])			//major fix
-			ft_strcat(str, " ");
-    }
-	printf("str : ..%s..\n", str);
-	// peut etre freetab ici aussi
-	//ft_freetab(tab)
-    return str;
-}*/
 
 char *tab_to_str(char **tab)
 {
@@ -192,6 +193,7 @@ int	main(int argc, char **argv, char **envp)
 		if (split_line == NULL)
 		{
 			printf("je sors ici\n");
+			free_cmd(cmd);
 			ft_freetab(cmd->env);
 			return (0);
 		}
