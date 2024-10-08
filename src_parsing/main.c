@@ -14,48 +14,6 @@
 #include <unistd.h>
 
 volatile int	g_signal = 0;
-/*
-char *ft_realloc_string(char *str, int new_size)
-{
-    char *res;
-    int old_len = ft_strlen(str);
-
-    res = malloc(old_len + new_size + 1);
-    if (!res)
-        return NULL;
-
-    // Copy the original string to the new buffer
-    int i = 0;
-    while (str[i])
-    {
-        res[i] = str[i];
-        i++;
-    }
-    res[i] = '\0'; // Null-terminate the new string
-
-    free(str); // Free the old string
-    return res;
-}*/
-
-/*
-char *tab_to_str(char **tab)
-{
-	print_tab(tab);
-    int i = -1;
-    char *str = malloc(1);
-    str[0] = 0;
-    while(tab[++i])
-    {
-        str = ft_realloc_string(str, ft_strlen(tab[i]) + 2);
-        ft_strcat(str, tab[i]);
-        if(tab[i + 1])			//major fix
-			ft_strcat(str, " ");
-    }
-	printf("str : ..%s..\n", str);
-	// peut etre freetab ici aussi
-	//ft_freetab(tab)
-    return str;
-}*/
 
 char *ft_realloc_string(char *str, int new_size)
 {
@@ -66,18 +24,18 @@ char *ft_realloc_string(char *str, int new_size)
         return (NULL);
 
     old_len = ft_strlen(str);
-    res = malloc(old_len + new_size + 1); // Allocate new memory
+    res = malloc(old_len + new_size + 1); // dont forget +1
     if (!res)
     {
-        free(str); // Ensure no memory leak
+        free(str); // gotta free just in case, but seems to never happen ??
         return (NULL);
     }
 
-    // Copy the old string into the new memory
-    ft_memcpy(res, str, old_len);
-    res[old_len] = '\0'; // Null-terminate the new string
+    // good ol' memcpy to realloc, maybe better option but i like it
+    ft_memcpy(res, str, old_len); // ca fait vrai dev ou pas la
+    res[old_len] = '\0'; // LA SECURITAIRE
 
-    free(str); // Free the old string after copying
+    free(str);
     return (res);
 }
 
@@ -95,14 +53,14 @@ char *tab_to_str(char **tab)
     {
         str = ft_realloc_string(str, ft_strlen(tab[i]) + 2);
         if (!str)
-            return (NULL); // Free resources here if realloc fails
+            return (NULL); //safe ?
         ft_strcat(str, tab[i]);
-        if (tab[i + 1])
+        if (tab[i + 1])		// IMPORTANT : SANS CA GROS LEAKS
             ft_strcat(str, " ");
     }
 
-    // Optionally free the input `tab` if it's no longer needed
-    ft_freetab(tab); // Ensure this only frees if it's dynamically allocated
+	if (tab)
+    	ft_freetab(tab);
     return (str);
 }
 
