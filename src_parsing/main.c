@@ -59,8 +59,8 @@ char *tab_to_str(char **tab)
             ft_strcat(str, " ");
     }
 
-	if (tab)
-    	ft_freetab(tab);
+	//if (tab)
+    //	ft_freetab(tab);
     return (str);
 }
 
@@ -114,7 +114,7 @@ int	main(int argc, char **argv, char **envp)
 ///// laubry : init
 	char	*line;
 	char	**split_line;
-	char	**final_tab;
+	// char	**final_tab;
 	//char	*final_line;
 	t_token	*token_list;
 
@@ -173,14 +173,14 @@ int	main(int argc, char **argv, char **envp)
 			return (0);
 		}
 		path_main(token_list, envp);
-		final_tab = main_cat(&token_list);
-		cmd->final_line = tab_to_str(final_tab);
+		cmd->final_tab = main_cat(&token_list);
+		cmd->final_line = tab_to_str(cmd->final_tab);
 		//printf ("the line = %s \n", final_line);
 		//ft_freetab(final_tab);
+		process_input(cmd->final_line, cmd);
 		token_lstclear(&token_list, free);
 		free(split_line);
 		free(line);
-		process_input(cmd->final_line, cmd);
 		free(cmd->final_line);
 		tab = cmd->env;
 	}

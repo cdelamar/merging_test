@@ -61,11 +61,11 @@ int basic_child_process(char **free_line, char *line, t_cmd *cmd)
 		return (EXIT_FAILURE);
 	}
 
-	command = cmd_finder(split_line, cmd);
+	command = cmd_finder(cmd->final_tab, cmd);
 	if (command)
 	{
 		//printf("execve\n");
-		execve(command, split_line, cmd->env); // exit
+		execve(command, cmd->final_tab, cmd->env); // exit
 	}
 	printf("%s : command not found\n", line);
 	ft_freetab(split_line);
