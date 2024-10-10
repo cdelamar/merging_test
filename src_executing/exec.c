@@ -20,14 +20,6 @@ void cleanup(char *line, t_cmd *cmd)
 		free(line);
 }
 
-void ft_path_command(t_cmd *cmd, char *line)
-{
-    cmd->fd_in = 0; // Initialize the input for the first commad
-    cmd->path_command = ft_split(line, '|'); 
-	//printf ("CREATED path_command\n");
-	// print_tab(cmd->path_command);
-}
-
 void handle_error(char *msg, t_cmd *cmd, int *fd)
 {
     printf("ERROR (%s)\n", msg);
@@ -37,28 +29,28 @@ void handle_error(char *msg, t_cmd *cmd, int *fd)
 	exit(EXIT_FAILURE);
 }
 
-int	execute(char *line, t_cmd *cmd)
+int	execute(t_cmd *cmd)
 {
-	if (ft_strcmp(line, "|") == 0)
+	if (ft_strcmp(cmd->final_line, "|") == 0)
 	{
 		printf("synthax error : expected arguments with '|'\n");
 		return (0);
 	}
 
-	if (syntax_redirect(line) == false)
+	if (syntax_redirect(cmd->final_line) == false)
 		return (0);
 
-	if (line[0] == '\0')
+	if (cmd->final_line[0] == '\0')
 		return (0);
 
-	if (ft_strchr(line, '|'))
-		return (pipe_execute(line, cmd));
-	else if (ft_builtin(line, cmd) == EXIT_SUCCESS)
+	if (ft_strchr(cmd->final_line, '|'))
+		return (pipe_execute(cmd));
+	else if (ft_builtin(cmd) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	else
 	{
 		//printf("basic through exec\n\n");
 		// ca leak en cas de commande invalide, pourquoi pas liberer ici jsp
-		return (basic_execute(line, cmd)); // EXIT_SUCCESS OR EXIT_FAILURE
+		return (basic_execute(cmd, BASIC_EXEC, 0)); // EXIT_SUCCESS OR EXIT_FAILURE
 	}
 }

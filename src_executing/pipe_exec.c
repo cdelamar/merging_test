@@ -26,7 +26,7 @@ static int child_process(t_cmd *cmd, int *fd, int i)
 {
 	setup_child_pipes(cmd, fd, i);
 
-	if (basic_execute(cmd->path_command[i], cmd) == EXIT_FAILURE) // EXIT SUCCES OR EXIT FAILURE
+	if (basic_execute(cmd, PIPE_EXEC, i) == EXIT_FAILURE) // EXIT SUCCES OR EXIT FAILURE
 	{
 		ft_freetab(cmd->path_command);
 		ft_freetab(cmd->path_split);
@@ -42,7 +42,7 @@ static int child_process(t_cmd *cmd, int *fd, int i)
 	if (cmd->final_line)
 		free(cmd->final_line);
 	free(cmd);
-	printf("ca leak ici nan\n");
+	//printf("ca leak ici nan\n");
 	//token_lstclear(&token_list, free);
 	// ft_freetab(cmd->env);
 	// free_cmd(cmd);
@@ -67,17 +67,21 @@ static int create_and_fork(t_cmd *cmd, int *fd)
 	return cmd->pid1;
 }
 
-int pipe_execute(char *line, t_cmd *cmd)
+int pipe_execute(t_cmd *cmd)
 {
 	int i = 0;
 	pid_t last_pid = -1;
 
-	ft_path_command(cmd, line); // Split command by pipe '|'
+	ft_path_command(cmd); // Split command by pipe '|'
 
 	while (cmd->path_command[i])
 	{
+		//printf ("path_command %d = %s\n", i, cmd->path_command[i]);
 		if (create_and_fork(cmd, cmd->fd) == 0)
+		{
+			// Child process
 			child_process(cmd, cmd->fd, i);
+		}
 		else
 		{
 			last_pid = cmd->pid1; // save le dernier child pid

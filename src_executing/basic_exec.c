@@ -45,13 +45,17 @@ int ft_path_split(t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-int basic_child_process(char **free_line, char *line, t_cmd *cmd)
+int basic_child_process(t_cmd *cmd, int mode, int i)
 {
 	char **split_line;
 	char *command;
 
-	split_line = ft_split(line, ' ');
-	//print_tab(split_line);
+	if (mode == BASIC_EXEC)
+		split_line = cmd->final_tab; // temporary, adding parsing right sooner
+
+	else if (mode == PIPE_EXEC)
+		split_line = ft_split(cmd->path_command[i], ' '); // la magie a l'oeuvre
+
 	if (!split_line)
 		return (EXIT_FAILURE);
 
@@ -61,18 +65,22 @@ int basic_child_process(char **free_line, char *line, t_cmd *cmd)
 		return (EXIT_FAILURE);
 	}
 
-	command = cmd_finder(cmd->final_tab, cmd);
+	command = cmd_finder(split_line, cmd);
+
+	//printf("executing : %s +\n", command);
+	//print_tab(split_line);
+
 	if (command)
 	{
-		//printf("execve\n");
-		execve(command, cmd->final_tab, cmd->env); // exit
+	//	printf("execve\n");
+		execve(command, split_line, cmd->env); // exit
 	}
-	printf("%s : command not found\n", line);
+	//printf("%s : command not found\n", cmd->final_line); TODO FIX
 	ft_freetab(split_line);
-	ft_freetab(free_line);
+	//ft_freetab(free_line);
 	ft_freetab(cmd->env);
 	free_cmd(cmd);
-	free(line);
+	//free(line);
 	// token_lstclear(&token_list, free);
 	exit (EXIT_FAILURE);
 }
@@ -91,18 +99,17 @@ int basic_parent_process(pid_t pid) // TODO free cmd->path_split
 	return EXIT_SUCCESS;
 }
 
-int basic_execute(char *line, t_cmd *cmd)
+int basic_execute(t_cmd *cmd, int mode, int i)
 {
 	int exit_code;
 	char **split_line = NULL;
 
-	split_line = ft_split(line, ' ');
 	//print_tab(split_line);
 	exit_code = ft_path_split(cmd); // Find command path
 
 	if (exit_code != EXIT_SUCCESS)
 	{
-		printf("Command not found: %s\n", line);
+		printf("Command not found: %s\n", cmd->final_line);
 		ft_freetab(split_line); // Free command split
 		return exit_code;
 	}
@@ -117,7 +124,7 @@ int basic_execute(char *line, t_cmd *cmd)
 	else if (cmd->pid1 == 0)
 	{
 		// Child process
-		exit_code = basic_child_process(split_line, line, cmd);
+		exit_code = basic_child_process(cmd, mode, i);
 		ft_freetab(split_line); // Free split in child process
 		exit(exit_code);        // Avoid duplicate execution
 	}
@@ -125,7 +132,7 @@ int basic_execute(char *line, t_cmd *cmd)
 	{
 		// Parent process
 		exit_code = basic_parent_process(cmd->pid1);
-		ft_freetab(split_line); // Free split in parent process
+		//ft_freetab(split_line); // Free split in parent process
 		return exit_code;       // Return success or failure
 	}
 }

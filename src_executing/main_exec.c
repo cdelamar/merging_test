@@ -12,9 +12,9 @@
 
 #include "../includes/minishell.h"
 
-void process_input(char *line, t_cmd *cmd)
+void process_input(t_cmd *cmd)
 {
-	if (line == NULL)
+	if (cmd->final_line == NULL)
 	{
 		//printf("CTRL + D from shell_loop\n");
 		ft_freetab(cmd->env);
@@ -22,16 +22,16 @@ void process_input(char *line, t_cmd *cmd)
 		exit(0); // Handle exit on EOF (CTRL + D)
 	}
 
-	if (space_only(line) == true)
+	if (space_only(cmd->final_line) == true)
 	{
 		//free_structs(cmd);
 		return;
 	}
 
-	if (*line)
-		add_history(line);
+	if (cmd->final_line)
+		add_history(cmd->final_line);
 
-	execute(line,cmd); // execute retourne un int mais je men sert pas
+	execute(cmd); // execute retourne un int mais je men sert pas
 }
 
 char **cpy_tab(char **dest, char **src)
@@ -42,7 +42,7 @@ char **cpy_tab(char **dest, char **src)
 	dest[len] = NULL;
 	return dest;
 }
-
+/*
 void shell_exec_loop(char **envp)
 {
 	char	*line;
@@ -62,11 +62,11 @@ void shell_exec_loop(char **envp)
 		cmd->heredoc_processed = FALSE;
 		cmd->env = tab;
 		line = readline("$ ");
-		process_input(line, cmd);
+		process_input(cmd);
 		free(line); // LEAK
 		tab = cmd->env;
 	}
-}
+}*/
 /*
 int main(int argc, char **argv, char **envp)
 {

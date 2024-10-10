@@ -177,7 +177,7 @@ int	main(int argc, char **argv, char **envp)
 		cmd->final_line = tab_to_str(cmd->final_tab);
 		//printf ("the line = %s \n", final_line);
 		//ft_freetab(final_tab);
-		process_input(cmd->final_line, cmd);
+		process_input(cmd);
 		token_lstclear(&token_list, free);
 		free(split_line);
 		free(line);

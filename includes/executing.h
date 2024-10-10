@@ -42,6 +42,8 @@
 # define OUT_FAILURE	"outfile failure\n"
 # define ENV_FAILURE	"environnement failure\n"
 # define BUFFER_SIZE	5000
+# define PIPE_EXEC			1
+# define BASIC_EXEC			0
 
 # define HEREDOC_ON		1
 # define HEREDOC_OFF	0
@@ -74,13 +76,13 @@ typedef struct s_cmd
 	char	**final_tab;
 }	t_cmd;
 
-void				ft_path_command(t_cmd *cmd, char *line); 	// PATH_COMMAND ('ls -lathr' 'wc' 'cat -e'....)
+void				ft_path_command(t_cmd *cmd); 	// PATH_COMMAND ('ls -lathr' 'wc' 'cat -e'....)
 int					ft_path_split(t_cmd *cmd);					// PATH_SPLIT ('usr/local/sbin' '/sbin' 'snap/bin'....)
 
 // excecuting
 void 				shell_exec_loop(char **envp); // WIP
 void				handle_error(char *msg, t_cmd *cmd, int *fd);
-int					execute(char *line, t_cmd *cmd);
+int					execute(t_cmd *cmd);
 
 // memory
 int					malloc_structs(t_cmd **cmd);
@@ -100,7 +102,7 @@ void				ft_path(t_cmd *cmd);
 // builtins
 int					ft_unset(char **split_line, t_cmd *cmd);
 int					ft_exit(char **split_line, t_cmd *cmd);
-int					ft_builtin(char *line, t_cmd *cmd);
+int					ft_builtin(t_cmd *cmd);
 int					ft_export(char **args, t_cmd *cmd);
 int					ft_echo(char **split_line);
 int					ft_env(t_cmd *cmd);
@@ -129,16 +131,16 @@ int					open_heredoc_file(void);
 
 //basic executing
 int					handle_exit_command(char *line);
-int					basic_child_process(char **free_line, char *line, t_cmd *cmd);
+int					basic_child_process(t_cmd *cmd, int mode, int i);
 int					basic_parent_process(pid_t pid);
-int					basic_execute(char *line, t_cmd *cmd);
+int					basic_execute(t_cmd *cmd, int mode, int i);
 
 //pipe executing
 void	handle_pipe_error(t_cmd *cmd, int *fd);
 void	handle_fork_error(t_cmd *cmd, int *fd);
 void	execute_child_process(t_cmd *cmd, int *fd, int i);
 void	init_cmd(t_cmd *cmd, char *line);
-int		pipe_execute(char *line, t_cmd *cmd);
+int		pipe_execute(t_cmd *cmd);
 
 //safety
 
@@ -150,22 +152,23 @@ int		handle_path(t_cmd *cmd);
 void	cleanup(char *line, t_cmd *cmd);
 void    reset_signals(void);
 void    heredoc_signals(void);
-void sigint_heredoc(int sig);
+void	sigint_heredoc(int sig);
 
-int ft_isnumber(char *str);
-bool syntax_redirect(char *line);
+int		ft_isnumber(char *str);
+bool	syntax_redirect(char *line);
 
-void setup_signal_handler(int signum, void (*handler)(int));
-bool freeable_tab (char **tab);
-void free_cmd(t_cmd *cmd);
+void	setup_signal_handler(int signum, void (*handler)(int));
+bool	freeable_tab (char **tab);
+void	free_cmd(t_cmd *cmd);
 
-char **cpy_tab(char **dest, char **src);
+char	**cpy_tab(char **dest, char **src);
 
-void shell_exec_loop(char **envp);
-char **cpy_tab(char **dest, char **src);
-bool syntax_redirect(char *line);
-void process_input(char *line, t_cmd *cmd);
+void	shell_exec_loop(char **envp);
+char	**cpy_tab(char **dest, char **src);
+bool	syntax_redirect(char *line);
+void	process_input(t_cmd *cmd);
 
-
+char	**split_commands(t_cmd *cmd);
+int		count_commands(t_cmd *cmd);
 
 #endif

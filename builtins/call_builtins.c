@@ -71,14 +71,14 @@ static int backup_manager(char **split_line, int *saved_stdin, int *saved_stdout
     return EXIT_SUCCESS;
 }
 
-int ft_builtin(char *line, t_cmd *cmd)
+int ft_builtin(t_cmd *cmd)
 {
 	char **split_line;
 	int saved_in;
 	int saved_out;
 	int ret;
 
-	split_line = ft_split(line, ' ');
+	split_line = ft_split(cmd->final_line, ' ');
 	if (!split_line)
 		return EXIT_FAILURE;
 
