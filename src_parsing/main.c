@@ -175,12 +175,10 @@ int	main(int argc, char **argv, char **envp)
 		path_main(token_list, envp);
 		cmd->final_tab = main_cat(&token_list);
 		cmd->final_line = tab_to_str(cmd->final_tab);
-		//printf ("the line = %s \n", final_line);
-		//ft_freetab(final_tab);
-		process_input(cmd);
 		token_lstclear(&token_list, free);
 		free(split_line);
 		free(line);
+		process_input(cmd);
 		free(cmd->final_line);
 		tab = cmd->env;
 	}

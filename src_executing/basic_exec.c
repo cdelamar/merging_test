@@ -75,12 +75,14 @@ int basic_child_process(t_cmd *cmd, int mode, int i)
 	//	printf("execve\n");
 		execve(command, split_line, cmd->env); // exit
 	}
-	printf("%s : command not found\n", cmd->path_command[i]);
-	ft_freetab(split_line);
-	//ft_freetab(free_line);
+	printf("%s : command not found\n", split_line[0]);
+	ft_freetab(cmd->final_tab);
 	ft_freetab(cmd->env);
-	free_cmd(cmd);
-	//free(line);
+	ft_freetab(cmd->path_split);
+	free(cmd->final_line);
+	free(cmd);
+	//free_cmd(cmd);
+	// ft_freetab(split_line);
 	// token_lstclear(&token_list, free);
 	exit (EXIT_FAILURE);
 }

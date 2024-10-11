@@ -45,5 +45,11 @@ void free_cmd(t_cmd *cmd)
 		ft_freetab(cmd->path_command);
 	if (cmd->path_split)
 		ft_freetab(cmd->path_split);
+	if (cmd->final_tab)
+		ft_freetab(cmd->final_tab);
+	//if (cmd->final_line)
+	//	free(cmd->final_line);
+	//if (cmd->env)
+	//	free(cmd->env);
 	free(cmd);
 }
