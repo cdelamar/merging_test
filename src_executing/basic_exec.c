@@ -75,7 +75,7 @@ int basic_child_process(t_cmd *cmd, int mode, int i)
 	//	printf("execve\n");
 		execve(command, split_line, cmd->env); // exit
 	}
-	//printf("%s : command not found\n", cmd->final_line); TODO FIX
+	printf("%s : command not found\n", cmd->path_command[i]);
 	ft_freetab(split_line);
 	//ft_freetab(free_line);
 	ft_freetab(cmd->env);
