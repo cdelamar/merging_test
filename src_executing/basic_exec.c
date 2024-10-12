@@ -67,24 +67,21 @@ int basic_child_process(t_cmd *cmd, int mode, int i)
 
 	command = cmd_finder(split_line, cmd);
 
-	//printf("executing : %s +\n", command);
-	//print_tab(split_line);
-
 	if (command)
-	{
-	//	printf("execve\n");
 		execve(command, split_line, cmd->env); // exit
-	}
+
 	printf("%s : command not found\n", split_line[0]);
-	ft_freetab(cmd->final_tab);
 	ft_freetab(cmd->env);
-	ft_freetab(cmd->path_split);
 	free(cmd->final_line);
+	ft_freetab(cmd->final_tab);
+	ft_freetab(cmd->path_split);
+	if (mode == PIPE_EXEC)
+	{
+		ft_freetab(split_line);
+		ft_freetab(cmd->path_command); // a virer si segfault
+	}
 	free(cmd);
-	//free_cmd(cmd);
-	// ft_freetab(split_line);
-	// token_lstclear(&token_list, free);
-	exit (EXIT_FAILURE);
+	exit (EXIT_FAILURE); // peut etre que d'exit maintenant c'est ce qui cause le broken pipe
 }
 
 int basic_parent_process(pid_t pid) // TODO free cmd->path_split

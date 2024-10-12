@@ -28,6 +28,8 @@ static int child_process(t_cmd *cmd, int *fd, int i)
 
 	if (basic_execute(cmd, PIPE_EXEC, i) == EXIT_FAILURE) // EXIT SUCCES OR EXIT FAILURE
 	{
+		ft_freetab(cmd->final_tab);
+		free(cmd->final_line);
 		ft_freetab(cmd->path_command);
 		ft_freetab(cmd->path_split);
 		if(cmd->env)
