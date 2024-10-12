@@ -153,6 +153,7 @@ int	main(int argc, char **argv, char **envp)
 			printf("je sors ici\n");
 			free_cmd(cmd);
 			ft_freetab(cmd->env);
+			free(cmd);
 			return (0);
 		}
 		if (solo_quote(split_line) || badchar(split_line))
