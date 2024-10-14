@@ -12,14 +12,6 @@
 
 #include "../includes/minishell.h"
 
-void cleanup(char *line, t_cmd *cmd)
-{
-	if(cmd)
-    	free_structs(cmd);
-    if(line)
-		free(line);
-}
-
 void handle_error(char *msg, t_cmd *cmd, int *fd)
 {
     printf("ERROR (%s)\n", msg);

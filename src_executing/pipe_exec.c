@@ -46,10 +46,6 @@ static int child_process(t_cmd *cmd, int *fd, int i)
 	if(cmd->final_tab)
 		ft_freetab(cmd->final_tab);
 	free(cmd);
-	//printf("ca leak ici nan\n");
-	//token_lstclear(&token_list, free);
-	// ft_freetab(cmd->env);
-	// free_cmd(cmd);
 	exit(EXIT_SUCCESS);
 }
 
@@ -78,12 +74,15 @@ int pipe_execute(t_cmd *cmd)
 
 	ft_path_command(cmd); // Split command by pipe '|'
 
+	printf ("pipe exec\n");
+
 	while (cmd->path_command[i])
 	{
 		//printf ("path_command %d = %s\n", i, cmd->path_command[i]);
 		if (create_and_fork(cmd, cmd->fd) == 0)
 		{
 			// Child process
+			printf("processing child %d command : %s\n\n", i, cmd->path_command[i]);
 			child_process(cmd, cmd->fd, i);
 		}
 		else
@@ -107,7 +106,10 @@ int pipe_execute(t_cmd *cmd)
 	if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	else
+	{
+		printf("exit failure\n");
 		return (EXIT_FAILURE);
+	}
 }
 
 

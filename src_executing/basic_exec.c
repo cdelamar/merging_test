@@ -68,8 +68,10 @@ int basic_child_process(t_cmd *cmd, int mode, int i)
 	command = cmd_finder(split_line, cmd);
 
 	if (command)
+	{
+		printf("execve\n");
 		execve(command, split_line, cmd->env); // exit
-
+	}
 	printf("%s : command not found\n", split_line[0]);
 	ft_freetab(cmd->env);
 	free(cmd->final_line);

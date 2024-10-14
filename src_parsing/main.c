@@ -143,7 +143,6 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 
-		///// cdelamar : init loop
 		if (malloc_structs(&cmd) != 0)
 		{
 			ft_putendl_fd(MALLOC_FAILURE, 2);
@@ -153,6 +152,7 @@ int	main(int argc, char **argv, char **envp)
 		cmd->env = tab;
 		line = readline("$ ");
 		split_line = ft_split_boosted(line);
+
 		if (split_line == NULL)
 		{
 			printf("je sors ici\n");
@@ -160,18 +160,20 @@ int	main(int argc, char **argv, char **envp)
 			free_cmd(cmd);
 			return (0);
 		}
+
 		if (solo_quote(split_line) || badchar(split_line))
 		{
 			free_split_line(split_line);
 			return (0);
 		}
-		//print_split(split_line);
+
 		if (line == NULL)
 		{
 			printf("je sors plutot la, checker leak de sortie\n");
 			free_split_line(split_line);
 			return (0);
 		}
+
 		if (!make_token(split_line, &token_list))
 		{
 			free_split_line(split_line);

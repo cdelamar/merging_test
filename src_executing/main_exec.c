@@ -31,7 +31,8 @@ void process_input(t_cmd *cmd)
 	if (cmd->final_line)
 		add_history(cmd->final_line);
 
-	execute(cmd); // execute retourne un int mais je men sert pas
+	printf ("execute = %d\n", execute(cmd));
+	//execute(cmd); // execute retourne un int mais je men sert pas
 }
 
 char **cpy_tab(char **dest, char **src)

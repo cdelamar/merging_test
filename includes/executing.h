@@ -149,7 +149,6 @@ void print_tab(char **tab);
 
 //WIP
 int		handle_path(t_cmd *cmd);
-void	cleanup(char *line, t_cmd *cmd);
 void    reset_signals(void);
 void    heredoc_signals(void);
 void	sigint_heredoc(int sig);
