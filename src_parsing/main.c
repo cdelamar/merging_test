@@ -13,6 +13,11 @@
 #include "minishell.h"
 #include <unistd.h>
 
+// ls | wqdwqdqw : broken pipe issue
+// double free core dumped exit
+// heredoc message
+// mstest m : exit numbers
+
 volatile int	g_signal = 0;
 
 char *ft_realloc_string(char *str, int new_size)
@@ -151,9 +156,8 @@ int	main(int argc, char **argv, char **envp)
 		if (split_line == NULL)
 		{
 			printf("je sors ici\n");
-			free_cmd(cmd);
 			ft_freetab(cmd->env);
-			free(cmd);
+			free_cmd(cmd);
 			return (0);
 		}
 		if (solo_quote(split_line) || badchar(split_line))
