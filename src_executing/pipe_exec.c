@@ -28,6 +28,10 @@ static int child_process(t_cmd *cmd, int *fd, int i)
 
 	if (basic_execute(cmd, PIPE_EXEC, i) == EXIT_FAILURE) // EXIT SUCCES OR EXIT FAILURE
 	{
+
+		close(fd[0]);
+		close(fd[1]); //close fd + ignore_sigpipe = plus de
+
 		ft_freetab(cmd->final_tab);
 		free(cmd->final_line);
 		ft_freetab(cmd->path_command);
@@ -37,6 +41,9 @@ static int child_process(t_cmd *cmd, int *fd, int i)
 		free(cmd);
 		exit(EXIT_FAILURE); // MAJOR success OR failure
 	}
+
+	close(fd[0]);
+	close(fd[1]);
 	ft_freetab(cmd->path_command);
 	ft_freetab(cmd->path_split);
 	if(cmd->env)
@@ -52,7 +59,7 @@ static int child_process(t_cmd *cmd, int *fd, int i)
 static void parent_process(t_cmd *cmd, int *fd)
 {
 	close(fd[1]);
-	if (cmd->fd_in)
+	if (cmd->fd_in != 0)
 		close(cmd->fd_in);
 	cmd->fd_in = fd[0]; // save input pour la prochaine commande
 }
@@ -74,15 +81,13 @@ int pipe_execute(t_cmd *cmd)
 
 	ft_path_command(cmd); // Split command by pipe '|'
 
-	printf ("pipe exec\n");
+	ignore_sigpipe();
 
 	while (cmd->path_command[i])
 	{
-		//printf ("path_command %d = %s\n", i, cmd->path_command[i]);
 		if (create_and_fork(cmd, cmd->fd) == 0)
 		{
-			// Child process
-			printf("processing child %d command : %s\n\n", i, cmd->path_command[i]);
+			//printf("processing child %d command : %s\n\n", i, cmd->path_command[i]);
 			child_process(cmd, cmd->fd, i);
 		}
 		else
@@ -93,14 +98,11 @@ int pipe_execute(t_cmd *cmd)
 		i++;
 	}
 
-	// Wait for last comsmand in the pipeline
 	int status;
 	if (last_pid > 0)
 		waitpid(last_pid, &status, 0);
 
-	// Wait for any remaining zombie child processes
 	while (waitpid(-1, NULL, WNOHANG) > 0);
-
 	close(cmd->fd_in); // Close the last file descriptor
 
 	if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)

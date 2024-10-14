@@ -20,10 +20,9 @@ void print_tab(char **tab)
 
 	while(tab[i])
 	{
-		printf("array NUMBER %d : %s\n\n",i , tab[i]);
+		printf("array %d : %s\n",i , tab[i]);
 		i++;
 	}
-	printf("END OF PRINT TAB\n");
 }
 
 bool freeable_tab (char **tab)

@@ -170,4 +170,8 @@ void	process_input(t_cmd *cmd);
 char	**split_commands(t_cmd *cmd);
 int		count_commands(t_cmd *cmd);
 
+
+void ignore_sigpipe(void);
+
+
 #endif

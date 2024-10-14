@@ -1,1 +1,1 @@
-' : command not found
+cat lol.c << cat

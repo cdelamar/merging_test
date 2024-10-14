@@ -81,6 +81,11 @@ extern sig_atomic_t g_signal;
 
 // MAIN SIGNAL
 
+void ignore_sigpipe(void)
+{
+    signal(SIGPIPE, SIG_IGN);
+}
+
 void sigint_heredoc(int sig)
 {
     if (sig == SIGINT)
@@ -132,50 +137,3 @@ void reset_signals(void)
     setup_signal_handler(SIGINT, SIG_DFL);
     setup_signal_handler(SIGQUIT, SIG_DFL);
 }
-
-
-/*
-void sigint_handler(int sig)
-{
-    if (sig == SIGINT)
-	{
-        g_signal = 1;
-        //printf ("appel de signal\n");
-        rl_replace_line("", 0);
-        printf("\n");
-        rl_on_new_line();
-        rl_redisplay();
-    }
-}
-
-void	signals(void)
-{
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN); // CTRL + \ interaction
-}
-
-// HEREDOC SIGNAL
-
-void sigint_heredoc(int sig)
-{
-    if (sig == SIGINT)
-    {
-        g_signal = 1;
-        printf("\n");
-    }
-}
-
-void    heredoc_signals(void)
-{
-	signal(SIGINT, sigint_heredoc);
-	signal(SIGQUIT, SIG_IGN); // CTRL + \ interaction
-
-}
-
-// RESET SIGNAL
-
-void    reset_signals(void)
-{
-    signal(SIGINT, SIG_DFL);
-    signal(SIGQUIT, SIG_DFL); // DFL ????
-}*/

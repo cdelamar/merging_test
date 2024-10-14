@@ -31,8 +31,8 @@ void process_input(t_cmd *cmd)
 	if (cmd->final_line)
 		add_history(cmd->final_line);
 
-	printf ("execute = %d\n", execute(cmd));
-	//execute(cmd); // execute retourne un int mais je men sert pas
+	//printf ("execute = %d\n", execute(cmd));
+	execute(cmd); // execute retourne un int mais je men sert pas
 }
 
 char **cpy_tab(char **dest, char **src)
@@ -43,47 +43,5 @@ char **cpy_tab(char **dest, char **src)
 	dest[len] = NULL;
 	return dest;
 }
-/*
-void shell_exec_loop(char **envp)
-{
-	char	*line;
-	t_cmd	*cmd = NULL;
-	int		len = -1;
 
-	while (envp[++len]) {}
-	char **tab = malloc(sizeof(char *) * (len + 1));
-	cpy_tab(tab, envp);
-	while (1)
-	{
-		if (malloc_structs(&cmd) != 0)
-		{
-			ft_putendl_fd(MALLOC_FAILURE, 2);
-			return ;
-		}
-		cmd->heredoc_processed = FALSE;
-		cmd->env = tab;
-		line = readline("$ ");
-		process_input(cmd);
-		free(line); // LEAK
-		tab = cmd->env;
-	}
-}*/
-/*
-int main(int argc, char **argv, char **envp)
-{
-	// g_signal = 0;
-	(void)argv;
-
-	if (argc != 1)
-	{
-		printf("invalid argument.\n");
-		return (0);
-	}
-	rl_outstream = stderr;
-
-	signals();
-
-	shell_exec_loop(envp);
-	return 0;
-}*/
 

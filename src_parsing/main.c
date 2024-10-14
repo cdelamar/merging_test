@@ -13,8 +13,8 @@
 #include "minishell.h"
 #include <unistd.h>
 
-// ls | wqdwqdqw : broken pipe issue
-// double free core dumped exit
+// ls | wqdwqdqw : broken pipe issue > OK
+// double free core dumped exit		> OK
 // heredoc message
 // mstest m : exit numbers
 
@@ -143,6 +143,8 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 
+		//ignore_sigpipe();
+
 		if (malloc_structs(&cmd) != 0)
 		{
 			ft_putendl_fd(MALLOC_FAILURE, 2);
@@ -189,5 +191,6 @@ int	main(int argc, char **argv, char **envp)
 		free(cmd->final_line);
 		tab = cmd->env;
 	}
+	printf("sortie de loop\n");
 	return (0);
 }
