@@ -155,12 +155,19 @@ int	main(int argc, char **argv, char **envp)
 		line = readline("$ ");
 		split_line = ft_split_boosted(line);
 
-		if (split_line == NULL)
+
+		if (line == NULL)
 		{
 			printf("je sors ici\n");
 			ft_freetab(cmd->env);
 			free_cmd(cmd);
 			return (0);
+		}
+
+		if (line[0] == '\0')
+		{
+			free (line);
+			continue;
 		}
 
 		if (solo_quote(split_line) || badchar(split_line))
