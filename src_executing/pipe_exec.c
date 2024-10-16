@@ -77,6 +77,7 @@ static int create_and_fork(t_cmd *cmd, int *fd)
 int pipe_execute(t_cmd *cmd)
 {
 	int i = 0;
+	int status = 0;
 	pid_t last_pid = -1;
 
 	ft_path_command(cmd); // Split command by pipe '|'
@@ -98,7 +99,6 @@ int pipe_execute(t_cmd *cmd)
 		i++;
 	}
 
-	int status;
 	if (last_pid > 0)
 		waitpid(last_pid, &status, 0);
 

@@ -52,7 +52,7 @@ char *tab_to_str(char **tab)
 
     if (!str)
         return (NULL);
-    str[0] = 0;
+    str[0] = '\0'; // jsuis con ouuu
 
     while (tab[++i])
     {
@@ -155,20 +155,39 @@ int	main(int argc, char **argv, char **envp)
 		line = readline("$ ");
 		split_line = ft_split_boosted(line);
 
-
 		if (line == NULL)
 		{
 			printf("je sors ici\n");
 			ft_freetab(cmd->env);
 			free_cmd(cmd);
+			//ft_freetab(split_line);
 			return (0);
 		}
 
-		if (line[0] == '\0')
+		if (space_only(line) == true)
 		{
+			printf("faut fix quand ya juste un espace\n");
 			free (line);
 			continue;
 		}
+
+
+		if(ft_strcmp(split_line[0], "|") == 0)
+		{
+			printf("erreur synthaxe du au symbole ' | '\n");
+			free(line);
+			//ft_freetab(split_line);
+			continue;
+		}
+
+
+		/*
+		if (line[0] == '\0')
+		{
+			printf("je casse\n");
+			free (line);
+			continue;
+		}*/
 
 		if (solo_quote(split_line) || badchar(split_line))
 		{
@@ -195,6 +214,8 @@ int	main(int argc, char **argv, char **envp)
 		free(split_line);
 		free(line);
 		process_input(cmd);
+		//if(cmd->path_command)
+		//	ft_freetab(cmd->path_command);
 		free(cmd->final_line);
 		tab = cmd->env;
 	}

@@ -21,6 +21,7 @@ char **split_commands(t_cmd *cmd)
     int j = 0;
     char **commands = malloc((count_commands(cmd) + 1) * sizeof(char *));
     char *temp = NULL;
+    char *tmp = NULL;
 
     while (cmd->final_tab[i])
     {
@@ -32,10 +33,10 @@ char **split_commands(t_cmd *cmd)
         else
         {
             if (!temp)
-                temp = strdup(cmd->final_tab[i]);
+                temp = ft_strdup(cmd->final_tab[i]);
             else
             {
-                char *tmp = malloc(strlen(temp) + strlen(cmd->final_tab[i]) + 2);
+                tmp = malloc(strlen(temp) + ft_strlen(cmd->final_tab[i]) + 2);
                 strcpy(tmp, temp);
                 strcat(tmp, " ");
                 strcat(tmp, cmd->final_tab[i]);
