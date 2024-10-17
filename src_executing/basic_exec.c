@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:07 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/03 11:29:05 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/17 10:31:03 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ int basic_child_process(t_cmd *cmd, int mode, int i)
 {
 	char **split_line;
 	char *command;
+
+	split_line = NULL;
 
 	if (mode == BASIC_EXEC)
 		split_line = cmd->final_tab; // temporary, adding parsing right sooner
