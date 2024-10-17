@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:23:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/03 02:21:45 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/17 19:42:15 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,14 @@ int pipe_execute(t_cmd *cmd)
 	close(cmd->fd_in); // Close the last file descriptor
 
 	if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
+	{
+		g_signal = WEXITESTATUS(status);
 		return (EXIT_SUCCESS);
+	}
 	else
 	{
 		printf("exit failure\n");
+		g_signal = 1;
 		return (EXIT_FAILURE);
 	}
 }

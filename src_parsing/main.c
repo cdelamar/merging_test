@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:11:04 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/03 11:37:06 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/17 19:44:13 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,10 @@ int	main(int argc, char **argv, char **envp)
 	cpy_tab(tab, envp);
 
 	if (argc > 1)
+	{
+		g_signal = 0;
 		return (check_error(ERROR_ARGS));
+	}
 
 
 	while (1)
@@ -148,6 +151,7 @@ int	main(int argc, char **argv, char **envp)
 		if (malloc_structs(&cmd) != 0)
 		{
 			ft_putendl_fd(MALLOC_FAILURE, 2);
+			g_signal = 1;
 			return (0);
 		}
 		cmd->heredoc_processed = FALSE;
@@ -161,6 +165,7 @@ int	main(int argc, char **argv, char **envp)
 			ft_freetab(cmd->env);
 			free_cmd(cmd);
 			//ft_freetab(split_line);
+			g_signal = 0;
 			return (0);
 		}
 
@@ -192,6 +197,7 @@ int	main(int argc, char **argv, char **envp)
 		if (solo_quote(split_line) || badchar(split_line))
 		{
 			free_split_line(split_line);
+			g_signal = 127;
 			return (0);
 		}
 
@@ -199,12 +205,14 @@ int	main(int argc, char **argv, char **envp)
 		{
 			printf("je sors plutot la, checker leak de sortie\n");
 			free_split_line(split_line);
+			g_signal = 0;
 			return (0);
 		}
 
 		if (!make_token(split_line, &token_list))
 		{
 			free_split_line(split_line);
+			g_signal = 0;
 			return (0);
 		}
 		path_main(token_list, envp);
