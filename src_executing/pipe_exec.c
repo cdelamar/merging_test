@@ -6,12 +6,14 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:23:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/17 19:42:15 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/18 12:58:45 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../includes/minishell.h"
+
+extern sig_atomic_t g_signal;
 
 static void setup_child_pipes(t_cmd *cmd, int *fd, int i)
 {
@@ -107,7 +109,7 @@ int pipe_execute(t_cmd *cmd)
 
 	if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
 	{
-		g_signal = WEXITESTATUS(status);
+		g_signal = WEXITSTATUS(status);
 		return (EXIT_SUCCESS);
 	}
 	else
