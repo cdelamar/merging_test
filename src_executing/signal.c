@@ -129,7 +129,7 @@ void signals(void)
 {
     setup_signal_handler(SIGINT, sigint_handler);
     setup_signal_handler(SIGQUIT, SIG_IGN); // Ignore CTRL+'\'
-    setup_signal_handler(SIGPIPE, SIG_IGN);
+    setup_signal_handler(SIGPIPE, SIG_IGN); //ignore sigpipe dans parent
 }
 
 void reset_signals(void)

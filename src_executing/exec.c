@@ -43,6 +43,6 @@ int	execute(t_cmd *cmd)
 	{
 		//printf("basic through exec\n\n");
 		// ca leak en cas de commande invalide, pourquoi pas liberer ici jsp
-		return (basic_execute(cmd, BASIC_EXEC, 0)); // EXIT_SUCCESS OR EXIT_FAILURE
+		return (basic_execute(cmd)); // EXIT_SUCCESS OR EXIT_FAILURE
 	}
 }

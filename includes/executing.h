@@ -42,8 +42,6 @@
 # define OUT_FAILURE	"outfile failure\n"
 # define ENV_FAILURE	"environnement failure\n"
 # define BUFFER_SIZE	5000
-# define PIPE_EXEC			1
-# define BASIC_EXEC			0
 
 # define HEREDOC_ON		1
 # define HEREDOC_OFF	0
@@ -131,9 +129,9 @@ int					open_heredoc_file(void);
 
 //basic executing
 int					handle_exit_command(char *line);
-int					basic_child_process(t_cmd *cmd, int mode, int i);
+int					basic_child_process(t_cmd *cmd);
 int					basic_parent_process(pid_t pid);
-int					basic_execute(t_cmd *cmd, int mode, int i);
+int					basic_execute(t_cmd *cmd);
 
 //pipe executing
 void	handle_pipe_error(t_cmd *cmd, int *fd);

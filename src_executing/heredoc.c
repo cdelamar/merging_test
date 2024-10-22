@@ -33,6 +33,7 @@ int ft_heredoc(char *limit)
     {
         if (g_signal == 1) // Check if SIGINT was triggered
         {
+            printf("ctrl +d\n");
             close(heredoc_fd);
             unlink("/tmp/heredoc_tmp");
             reset_signals();
@@ -43,6 +44,7 @@ int ft_heredoc(char *limit)
         // ctrl + c
         if (!line)
         {
+            printf("ctrl + c\n");
             close(heredoc_fd);
             reset_signals();
             return 0; // 0 ou -1

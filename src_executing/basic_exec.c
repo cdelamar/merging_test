@@ -45,18 +45,18 @@ int ft_path_split(t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-int basic_child_process(t_cmd *cmd, int mode, int i)
+int basic_child_process(t_cmd *cmd)
 {
 	char **split_line;
 	char *command;
 
 	split_line = NULL;
 
-	if (mode == BASIC_EXEC)
-		split_line = cmd->final_tab; // temporary, adding parsing right sooner
+	// if (mode == BASIC_EXEC)
+	split_line = cmd->final_tab;
 
-	else if (mode == PIPE_EXEC)
-		split_line = ft_split(cmd->path_command[i], ' '); // la magie a l'oeuvre
+	// else if (mode == PIPE_EXEC)
+		// split_line = ft_split(cmd->path_command[i], ' ');
 
 	if (!split_line)
 		return (EXIT_FAILURE);
@@ -87,12 +87,13 @@ int basic_child_process(t_cmd *cmd, int mode, int i)
 	//ft_freetab(cmd->path_split);
 	//if (mode == PIPE_EXEC)
 	//{
-	//	ft_freetab(split_line);
+	//ft_freetab(split_line);
+	free(command);
 	//	ft_freetab(cmd->path_command); // a virer si segfault
 	//}
 	//free(cmd);
 	close(cmd->fd_in);
-	return (EXIT_FAILURE); // peut etre que d'exit maintenant c'est ce qui cause le broken pipe
+	return (EXIT_FAILURE); // peut etre que d'exit maintenant c'est ce qui cause le broken pipe : FIXED avec nouvelle version
 }
 
 int basic_parent_process(pid_t pid) // TODO free cmd->path_split
@@ -109,13 +110,13 @@ int basic_parent_process(pid_t pid) // TODO free cmd->path_split
 	return EXIT_SUCCESS;
 }
 
-int basic_execute(t_cmd *cmd, int mode, int i)
+int basic_execute(t_cmd *cmd)
 {
 	int exit_code;
 	char **split_line = NULL;
 
 	//print_tab(split_line);
-	exit_code = ft_path_split(cmd); // Find command path
+	exit_code = ft_path_split(cmd);
 
 	if (exit_code != EXIT_SUCCESS)
 	{
@@ -134,15 +135,20 @@ int basic_execute(t_cmd *cmd, int mode, int i)
 	else if (cmd->pid1 == 0)
 	{
 		// Child process
-		exit_code = basic_child_process(cmd, mode, i);
-		ft_freetab(split_line); // Free split in child process
-		exit(exit_code);        // Avoid duplicate execution
+		exit_code = basic_child_process(cmd);
+		free(cmd->final_line);
+		ft_freetab(cmd->final_tab);
+		ft_freetab(cmd->env);
+		ft_freetab(cmd->path_split);
+		free(cmd);
+		//ft_freetab(split_line);
+		exit(exit_code);        // essentiel pour pas s'emmerder avec des childs qui continuent de tourner
 	}
 	else
 	{
 		// Parent process
 		exit_code = basic_parent_process(cmd->pid1);
-		//ft_freetab(split_line); // Free split in parent process
-		return exit_code;       // Return success or failure
+		//ft_freetab(split_line);
+		return exit_code;       // pour parent on return
 	}
 }
