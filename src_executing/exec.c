@@ -34,6 +34,16 @@ int	execute(t_cmd *cmd)
 
 	if (cmd->final_line[0] == '\0')
 		return (0);
+	int i = 0;
+	while(cmd->final_tab[i])
+	{
+		if (space_only(cmd->final_tab[i]))
+		{
+			printf("%s : command not found\n", cmd->final_tab[i]);
+			return (EXIT_SUCCESS); // a voir si on retourne pas autre chose
+		}
+		i++;
+	}
 
 	if (ft_strchr(cmd->final_line, '|'))
 		return (pipe_execute(cmd));

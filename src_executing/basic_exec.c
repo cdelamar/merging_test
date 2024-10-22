@@ -121,7 +121,8 @@ int basic_execute(t_cmd *cmd)
 	if (exit_code != EXIT_SUCCESS)
 	{
 		printf("Command not found: %s\n", cmd->final_line);
-		ft_freetab(split_line); // Free command split
+		if(split_line)
+			ft_freetab(split_line); // Free command split
 		return exit_code;
 	}
 
