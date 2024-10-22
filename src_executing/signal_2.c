@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_exec.c                                        :+:      :+:    :+:   */
+/*   signal_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 18:06:47 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/22 16:10:27 by laubry           ###   ########.fr       */
+/*   Created: 2024/10/22 16:53:57 by laubry            #+#    #+#             */
+/*   Updated: 2024/10/22 16:54:48 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	process_input(t_cmd *cmd)
+void	signals(void)
 {
-	if (cmd->final_line)
-		add_history(cmd->final_line);
-	execute(cmd);
+	setup_signal_handler(SIGINT, sigint_handler);
+	setup_signal_handler(SIGQUIT, SIG_IGN);
+	setup_signal_handler(SIGPIPE, SIG_IGN);
 }
 
-char	**cpy_tab(char **dest, char **src)
+void	reset_signals(void)
 {
-	int	len;
-
-	len = -1;
-	while (src[++len])
-		dest[len] = ft_strdup(src[len]);
-	dest[len] = NULL;
-	return (dest);
+	setup_signal_handler(SIGINT, SIG_DFL);
+	setup_signal_handler(SIGQUIT, SIG_DFL);
 }

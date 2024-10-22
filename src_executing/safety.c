@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   safety.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/22 16:48:35 by laubry            #+#    #+#             */
+/*   Updated: 2024/10/22 16:49:54 by laubry           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-bool space_only (char *line)
+bool	space_only(char *line)
 {
 	int	i;
 
@@ -14,31 +26,31 @@ bool space_only (char *line)
 	return (true);
 }
 
-void print_tab(char **tab)
+void	print_tab(char **tab)
 {
-	int i = 0;
+	int	i;
 
-	while(tab[i])
+	i = 0;
+	while (tab[i])
 	{
-		printf("array %d : %s\n",i , tab[i]);
+		printf("array %d : %s\n", i, tab[i]);
 		i++;
 	}
 }
 
-bool freeable_tab (char **tab)
+bool	freeable_tab(char **tab)
 {
 	size_t	i;
 
 	i = 0;
-	while(tab[i])
+	while (tab[i])
 		i++;
-
 	if (i <= 1)
 		return (false);
-	return(true);
+	return (true);
 }
 
-void free_cmd(t_cmd *cmd)
+void	free_cmd(t_cmd *cmd)
 {
 	if (cmd->path_command)
 		ft_freetab(cmd->path_command);
@@ -46,9 +58,5 @@ void free_cmd(t_cmd *cmd)
 		ft_freetab(cmd->path_split);
 	if (cmd->final_tab)
 		ft_freetab(cmd->final_tab);
-	//if (cmd->final_line)
-	//	free(cmd->final_line);
-	//if (cmd->env)
-	//	free(cmd->env);
 	free(cmd);
 }

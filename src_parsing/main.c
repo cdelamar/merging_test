@@ -6,67 +6,55 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:11:04 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/17 19:44:13 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/22 17:22:07 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <unistd.h>
-
-// ls | wqdwqdqw : broken pipe issue > OK
-// double free core dumped exit		> OK
-// heredoc message
-// mstest m : exit numbers
 
 volatile int	g_signal = 0;
 
-char *ft_realloc_string(char *str, int new_size)
+char	*ft_realloc_string(char *str, int new_size)
 {
-    char *res;
-    int old_len;
+	char	*res;
+	int		old_len;
 
-    if (!str)
-        return (NULL);
-
-    old_len = ft_strlen(str);
-    res = malloc(old_len + new_size + 1); // dont forget +1
-    if (!res)
-    {
-        free(str); // gotta free just in case, but seems to never happen ??
-        return (NULL);
-    }
-
-    // good ol' memcpy to realloc, maybe better option but i like it
-    ft_memcpy(res, str, old_len); // ca fait vrai dev ou pas la
-    res[old_len] = '\0'; // LA SECURITAIRE
-
-    free(str);
-    return (res);
+	if (!str)
+		return (NULL);
+	old_len = ft_strlen(str);
+	res = malloc(old_len + new_size + 1);
+	if (!res)
+	{
+		free(str);
+		return (NULL);
+	}
+	ft_memcpy(res, str, old_len);
+	res[old_len] = '\0';
+	free(str);
+	return (res);
 }
 
-
-char *tab_to_str(char **tab)
+char	*tab_to_str(char **tab)
 {
-    char *str = malloc(1);
-    int i = -1;
+	char	*str;
+	int		i;
 
-    if (!str)
-        return (NULL);
-    str[0] = '\0'; // jsuis con ouuu
+	str = malloc(1);
+	i = -1;
+	if (!str)
+		return (NULL);
+	str[0] = '\0';
 
-    while (tab[++i])
-    {
-        str = ft_realloc_string(str, ft_strlen(tab[i]) + 2);
-        if (!str)
-            return (NULL); //safe ?
-        ft_strcat(str, tab[i]);
-        if (tab[i + 1])		// IMPORTANT : SANS CA GROS LEAKS
-            ft_strcat(str, " ");
-    }
-
-	//if (tab)
-    //	ft_freetab(tab);
-    return (str);
+	while (tab[++i])
+	{
+		str = ft_realloc_string(str, ft_strlen(tab[i]) + 2);
+		if (!str)
+			return (NULL);
+		ft_strcat(str, tab[i]);
+		if (tab[i + 1])
+			ft_strcat(str, " ");
+	}
+	return (str);
 }
 
 int	add_node(t_token **token_list, char **strs, int i)
@@ -90,7 +78,6 @@ int	make_token(char **split_line, t_token **token_list)
 	if (argc == 0)
 		return (0);
 	i = 0;
-
 	while (i < argc)
 	{
 		if (!add_node(token_list, split_line, i))
@@ -101,7 +88,7 @@ int	make_token(char **split_line, t_token **token_list)
 	return (1);
 }
 
-void free_split_line(char **split_line)
+void	free_split_line(char **split_line)
 {
 	int	i;
 
@@ -116,38 +103,27 @@ void free_split_line(char **split_line)
 
 int	main(int argc, char **argv, char **envp)
 {
-///// laubry : init
 	char	*line;
 	char	**split_line;
-	// char	**final_tab;
-	//char	*final_line;
 	t_token	*token_list;
+	t_cmd	*cmd;
+	int		len;
 
 	token_list = NULL;
 	(void)argv;
 	signals();
-
-
-///// cdelamar : init
-	t_cmd	*cmd = NULL;
-	int		len = -1;
-
+	cmd = NULL;
+	len = -1;
 	while (envp[++len]) {}
 	char **tab = malloc(sizeof(char *) * (len + 1));
 	cpy_tab(tab, envp);
-
 	if (argc > 1)
 	{
 		g_signal = 0;
 		return (check_error(ERROR_ARGS));
 	}
-
-
 	while (1)
 	{
-
-		//ignore_sigpipe();
-
 		if (malloc_structs(&cmd) != 0)
 		{
 			ft_putendl_fd(MALLOC_FAILURE, 2);
@@ -161,46 +137,29 @@ int	main(int argc, char **argv, char **envp)
 
 		if (line == NULL)
 		{
-			printf("je sors ici\n");
 			ft_freetab(cmd->env);
 			free_cmd(cmd);
-			//ft_freetab(split_line);
 			g_signal = 0;
 			return (0);
 		}
-
 		if (space_only(line) == true)
 		{
 			printf("faut fix quand ya juste un espace\n");
 			free (line);
 			continue;
 		}
-
-
 		if(ft_strcmp(split_line[0], "|") == 0)
 		{
 			printf("erreur synthaxe du au symbole ' | '\n");
 			free(line);
-			//ft_freetab(split_line);
 			continue;
 		}
-
-
-		/*
-		if (line[0] == '\0')
-		{
-			printf("je casse\n");
-			free (line);
-			continue;
-		}*/
-
 		if (solo_quote(split_line) || badchar(split_line))
 		{
 			free_split_line(split_line);
 			g_signal = 127;
 			return (0);
 		}
-
 		if (line == NULL)
 		{
 			printf("je sors plutot la, checker leak de sortie\n");
@@ -208,7 +167,6 @@ int	main(int argc, char **argv, char **envp)
 			g_signal = 0;
 			return (0);
 		}
-
 		if (!make_token(split_line, &token_list))
 		{
 			free_split_line(split_line);
@@ -222,8 +180,6 @@ int	main(int argc, char **argv, char **envp)
 		free(split_line);
 		free(line);
 		process_input(cmd);
-		//if(cmd->path_command)
-		//	ft_freetab(cmd->path_command);
 		free(cmd->final_line);
 		tab = cmd->env;
 	}

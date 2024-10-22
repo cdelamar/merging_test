@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:02:11 by lucasaubry        #+#    #+#             */
-/*   Updated: 2024/10/03 03:11:03 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/22 18:17:24 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include "stdio.h"
 # include "readline/readline.h"
 # include "readline/history.h"
-//# include "./../lib/include/libft.h"
 
 extern volatile int	g_var;
 /* ========== ENUM ================= */
@@ -53,21 +52,11 @@ typedef struct s_token
 	struct s_token	*next; // next
 }	t_token;
 
-//typedef struct s_list
-//{
-//	t_list_enum		type;
-//	char			*content;
-//	int				index;
-//	struct s_list	*next;
-//}	t_list;
-
 /* ========== Error =================*/
 
 # define ERROR_NODE 1
 # define ERROR_ARGS 2
 # define ERROR_QUOTE 3
-//# define RESET "\033[0m"
-//# define ORANGE "\033[38;5;208m"
 
 /* ========== FONCTION ============= */
 
@@ -80,8 +69,6 @@ int			badchar(char **split_line);
 t_token		*token_lstnew(void *content);
 void		token_lstadd_back(t_token **lst, t_token *new);
 void		token_lstclear(t_token **lst, void (*del)(void*));
-//int			ft_strcmp(char *s1, char *s2);
-//int			ft_strncmp(char *s1, char *s2, size_t n);
 size_t		ft_strlen(const char *str);
 int			ft_strlen2(char	*word);
 char		*ft_substr(const char *s, unsigned int start, size_t len);
@@ -107,7 +94,6 @@ void		print_path(char **evnp);
 void		print_snail(void);
 int			is_qte(char c);
 
-
 /*------tools of environement--------*/
 int			find_the_dollar(t_token *token);
 int			skip_prefix(char *word);
@@ -118,8 +104,6 @@ char		**minisplit_dollar(char *word);
 int			nbr_of_dollar(t_token *token_list, int place_of_dollar);
 int			which_node(int nbr_dollar, t_token *token_list);
 char		**delet_space_to_tab(char **tab_token);
-
-/*new*/
 void		path_main(t_token *token_list, char **envp);
 
 /*------------parsing----------------*/
@@ -127,7 +111,6 @@ void		lexer(t_token *token);
 void		path_main(t_token *token_list, char **envp);
 int			skip_prefix(char *word);
 int			find_the_dollar(t_token *token);
-
 
 /*------------cat_quote--------------*/
 void		before_node_cat(t_token **token, int i, int verif);
@@ -138,21 +121,21 @@ int			copy_mid_node(t_token *head, t_token *new_node, int i_content);
 int			copy_mid_after_node(t_token *head, t_token *new_node);
 void		advance_to_node(t_token **head, t_token **before, int *i);
 char		**delet_quote_inword(t_token **token, t_token *place);
+
 /*----------lstnew_with_cat---------*/
 char		**mouve_str(char **str, int i);
 int			check_is_space_node(char **str, int i);
 int			lstnew_with_cat(char **str, int i);
 char		**main_cat(t_token **token);
+
 /*----------tools_for_cat----------*/
 char		**malloc_tab(t_token **token);
 void		cat_quote(char **tab_token, t_token **token);
-
 
 /*--------------free-----------------*/
 void		free_split(char **strs);
 void		free_head(t_token *head);
 void		print_free_tab(char **final_token);
-
 
 size_t		count_word(char *s);
 int			is_char(char s);
@@ -163,8 +146,7 @@ int			solo_quote(char **split_line);
 void		signals(void);
 void		sigint_handler(int sig);
 
-char *tab_to_str(char **tab);
-char *ft_realloc_string(char *str, int new_size);
-
+char		*tab_to_str(char **tab);
+char		*ft_realloc_string(char *str, int new_size);
 
 #endif

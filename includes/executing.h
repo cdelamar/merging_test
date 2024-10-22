@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:05:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/03 03:21:05 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/10/22 18:15:16 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,11 @@ typedef struct s_cmd
 	char	**final_tab;
 }	t_cmd;
 
-void				ft_path_command(t_cmd *cmd); 	// PATH_COMMAND ('ls -lathr' 'wc' 'cat -e'....)
-int					ft_path_split(t_cmd *cmd);					// PATH_SPLIT ('usr/local/sbin' '/sbin' 'snap/bin'....)
+void				ft_path_command(t_cmd *cmd);
+int					ft_path_split(t_cmd *cmd);
 
 // excecuting
-void 				shell_exec_loop(char **envp); // WIP
+void				shell_exec_loop(char **envp);
 void				handle_error(char *msg, t_cmd *cmd, int *fd);
 int					execute(t_cmd *cmd);
 
@@ -112,12 +112,12 @@ void				sigint_handler(int sig);
 void				signals(void);
 
 //redirections
-int					handle_redirections(char **split_line, int status, t_cmd *cmd);
+int					handle_redirections(char **split_line,
+						int status, t_cmd *cmd);
 int					ft_heredoc_redirect(char *delim);
 int					ft_input_redirect(char **split_line, int i);
 int					ft_output_redirect(char **split_line, int i, int append);
 int					ft_heredoc(char *limit);
-
 
 //fd
 void				close_fds(int *fd);
@@ -126,7 +126,6 @@ void				restore_fd(int saved_stdin, int saved_stdout);
 int					open_file(char *filename, int flags, int mode);
 int					open_heredoc_file(void);
 
-
 //basic executing
 int					handle_exit_command(char *line);
 int					basic_child_process(t_cmd *cmd);
@@ -134,42 +133,39 @@ int					basic_parent_process(pid_t pid);
 int					basic_execute(t_cmd *cmd);
 
 //pipe executing
-void	handle_pipe_error(t_cmd *cmd, int *fd);
-void	handle_fork_error(t_cmd *cmd, int *fd);
-void	execute_child_process(t_cmd *cmd, int *fd, int i);
-void	init_cmd(t_cmd *cmd, char *line);
-int		pipe_execute(t_cmd *cmd);
+void				handle_pipe_error(t_cmd *cmd, int *fd);
+void				handle_fork_error(t_cmd *cmd, int *fd);
+void				execute_child_process(t_cmd *cmd, int *fd, int i);
+void				init_cmd(t_cmd *cmd, char *line);
+int					pipe_execute(t_cmd *cmd);
 
 //safety
-
-bool space_only (char *line);
-void print_tab(char **tab);
+bool				space_only(char *line);
+void				print_tab(char **tab);
 
 //WIP
-int		handle_path(t_cmd *cmd);
-void    reset_signals(void);
-void    heredoc_signals(void);
-void	sigint_heredoc(int sig);
+int					handle_path(t_cmd *cmd);
+void				reset_signals(void);
+void				heredoc_signals(void);
+void				sigint_heredoc(int sig);
 
-int		ft_isnumber(char *str);
-bool	syntax_redirect(char *line);
+int					ft_isnumber(char *str);
+bool				syntax_redirect(char *line);
 
-void	setup_signal_handler(int signum, void (*handler)(int));
-bool	freeable_tab (char **tab);
-void	free_cmd(t_cmd *cmd);
+void				setup_signal_handler(int signum, void (*handler)(int));
+bool				freeable_tab(char **tab);
+void				free_cmd(t_cmd *cmd);
 
-char	**cpy_tab(char **dest, char **src);
+char				**cpy_tab(char **dest, char **src);
 
-void	shell_exec_loop(char **envp);
-char	**cpy_tab(char **dest, char **src);
-bool	syntax_redirect(char *line);
-void	process_input(t_cmd *cmd);
+void				shell_exec_loop(char **envp);
+char				**cpy_tab(char **dest, char **src);
+bool				syntax_redirect(char *line);
+void				process_input(t_cmd *cmd);
 
-char	**split_commands(t_cmd *cmd);
-int		count_commands(t_cmd *cmd);
+char				**split_commands(t_cmd *cmd);
+int					count_commands(t_cmd *cmd);
 
-
-void ignore_sigpipe(void);
-
+void				ignore_sigpipe(void);
 
 #endif

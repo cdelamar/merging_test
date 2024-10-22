@@ -6,28 +6,11 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 18:27:38 by laubry            #+#    #+#             */
-/*   Updated: 2024/08/14 14:50:57 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/22 17:28:26 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void print_node(t_token *token)
-{
-    t_token *temp = token;
-    while (temp)
-    {
-        if (temp->content)
-        {
-            printf("temp: %p, index: %d, content: %s, type: %d\n", temp, temp->index, temp->content, temp->type);
-        }
-        else
-        {
-            printf("temp: %p, index: %d, content: (null), type: %d\n", temp, temp->index, temp->type);
-        }
-        temp = temp->next;
-    }
-}
 
 void	print_path(char **envp)
 {
@@ -73,6 +56,7 @@ int	is_qte(char c)
 void	print_free_tab(char **final_token)
 {
 	int	i;
+
 	i = 0;
 	while (final_token[i])
 	{

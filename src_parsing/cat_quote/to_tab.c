@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:36:06 by laubry            #+#    #+#             */
-/*   Updated: 2024/08/19 18:36:08 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/22 17:09:04 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,65 +41,40 @@ char	**replace_x0_to_space(char **finish_tab)
 	return (finish_tab);
 }
 
-
-/*
-char	**delet_space_to_tab(char **tab_token)
+void	copy_non_space_tokens(char **finish_tab, char **tab_token, int len)
 {
-	char	**finish_tab;
-	int		len;
-	int		i;
-	int		j;
+	int	i;
+	int	j;
 
-	init_int(&len, &i, &j);
-	while (tab_token[len])
-		len++;
-	finish_tab = malloc(sizeof(char *) * (len +1));
+	i = 0;
+	j = 0;
 	while (i < len)
 	{
 		if (tab_token[i][0] != ' ' && tab_token[i][0] != '\t')
 		{
-			finish_tab[j] = malloc(sizeof(char *) * ft_strlen(tab_token[i]));
-			ft_strcpy(finish_tab[j], tab_token[i]);
-			j++;
+			finish_tab[j] = malloc(ft_strlen(tab_token[i]) + 1);
+			if (finish_tab[j])
+			{
+				ft_strcpy(finish_tab[j], tab_token[i]);
+				j++;
+			}
 		}
 		free(tab_token[i]);
 		i++;
 	}
-	free(tab_token);
 	finish_tab[j] = NULL;
-	finish_tab = replace_x0_to_space(finish_tab);
-	return (finish_tab);
-}*/
+}
 
-
-char **delet_space_to_tab(char **tab_token)
+char	**delet_space_to_tab(char **tab_token)
 {
-    char **finish_tab;
-    int len, i, j;
+	char	**finish_tab;
+	int		len;
 
-    init_int(&len, &i, &j);
-    while (tab_token[len])
-        len++;
-    finish_tab = malloc(sizeof(char *) * (len + 1));
-    if (!finish_tab)
-        return NULL; // Check for malloc failure
-
-    while (i < len)
-    {
-        if (tab_token[i][0] != ' ' && tab_token[i][0] != '\t')
-        {
-            finish_tab[j] = malloc(ft_strlen(tab_token[i]) + 1); // Allocate proper size
-            if (finish_tab[j])
-            {
-                ft_strcpy(finish_tab[j], tab_token[i]);
-                j++;
-            }
-        }
-        free(tab_token[i]); // Free the old tab_token
-        i++;
-    }
-    free(tab_token); // Free the original tab_token array
-    finish_tab[j] = NULL;
-    finish_tab = replace_x0_to_space(finish_tab);
-    return finish_tab;
+	len = 0;
+	while (tab_token[len])
+		len++;
+	finish_tab = malloc(sizeof(char *) * (len + 1));
+	copy_non_space_tokens(finish_tab, tab_token, len);
+	free(tab_token);
+	return (replace_x0_to_space(finish_tab));
 }
