@@ -111,6 +111,8 @@ int	main(int argc, char **argv, char **envp)
 
 	token_list = NULL;
 	(void)argv;
+
+	signal(SIGPIPE, SIG_IGN);
 	signals();
 	cmd = NULL;
 	len = -1;
@@ -144,7 +146,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (space_only(line) == true)
 		{
-			printf("faut fix quand ya juste un espace\n");
+			//printf("faut fix quand ya juste un espace\n");
 			free (line);
 			continue;
 		}

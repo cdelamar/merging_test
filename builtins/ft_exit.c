@@ -33,17 +33,13 @@ int	ft_exit(char **split_line, t_cmd *cmd)
 
 	(void)cmd;
 	exit_code = 0;
-	printf("ft_exit called with argument: %s\n",
-		split_line[1] ? split_line[1] : "NULL");
 	if (split_line[1] != NULL)
 	{
 		if (ft_isnumber(split_line[1]))
 			exit_code = ft_atoi(split_line[1]);
 		else
-		{
-			printf("exit: %s: numbers required\n", split_line[1]);
 			exit_code = 255;
-		}
 	}
 	return (exit_code);
 }
+

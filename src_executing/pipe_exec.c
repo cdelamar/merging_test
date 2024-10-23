@@ -98,7 +98,7 @@ int	pipe_execute(t_cmd *cmd)
 	if (!commands)
 		return (0);
 	fd_in = 0;
-	signal(SIGPIPE, SIG_IGN);
+	//signal(SIGPIPE, SIG_IGN);
 	while (commands[i] != NULL)
 	{
 		if (pipe(fd) == -1)
@@ -141,9 +141,9 @@ int	pipe_execute(t_cmd *cmd)
 			}
 			if (execve(full_path, cmd->path_command, cmd->env) == -1)
 			{
-				printf("%s : command introuvable\n", cmd->path_command[i]);
+				printf("%s : command not found\n", cmd->path_command[0]); // 0 ou i je pige plus
 				ft_freetab(cmd->path_command);
-				exit(EXIT_FAILURE);
+				exit(127);
 			}
 		}
 		else
@@ -152,12 +152,19 @@ int	pipe_execute(t_cmd *cmd)
 			if (fd_in != 0)
 				close(fd_in);
 			fd_in = fd[0];
+
+			waitpid(pid, &cmd->status, 0);  // Wait for child process
+
+            if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
+            {
+                fprintf(stderr, "aie aie aie\n");
+            }
 		}
 		i++;
 	}
 	if (fd_in != 0)
 		close(fd_in);
-	while (waitpid(-1, NULL, 0) > 0);
+	//while (waitpid(-1, NULL, 0) > 0);
 	ft_freetab(commands);
 	return (0);
 }
