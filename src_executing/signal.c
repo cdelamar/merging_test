@@ -24,6 +24,7 @@ void	sigint_heredoc(int sig)
 	if (sig == SIGINT)
 	{
 		g_signal = 1;
+		write(STDOUT_FILENO, "\n", 1); // Print newline after ^C
 		close(STDIN_FILENO);
 	}
 }

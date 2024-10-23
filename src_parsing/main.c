@@ -112,6 +112,8 @@ int	main(int argc, char **argv, char **envp)
 	token_list = NULL;
 	(void)argv;
 
+	rl_outstream = stderr;
+
 	signal(SIGPIPE, SIG_IGN);
 	signals();
 	cmd = NULL;
@@ -164,7 +166,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (line == NULL)
 		{
-			printf("je sors plutot la, checker leak de sortie\n");
+			//printf("je sors plutot la, checker leak de sortie\n");
 			free_split_line(split_line);
 			g_signal = 0;
 			return (0);
@@ -185,6 +187,6 @@ int	main(int argc, char **argv, char **envp)
 		free(cmd->final_line);
 		tab = cmd->env;
 	}
-	printf("sortie de loop\n");
+	//printf("sortie de loop\n");
 	return (0);
 }
