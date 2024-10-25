@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:11:04 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/22 17:22:07 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/25 17:10:45 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,12 +178,17 @@ int	main(int argc, char **argv, char **envp)
 			return (0);
 		}
 		path_main(token_list, envp);
-		cmd->final_tab = main_cat(&token_list);
+		cmd->final_tab = main_cat(&token_list);//dedans ou celui dans dessou il y a un free token_list donc fais gaffe
 		cmd->final_line = tab_to_str(cmd->final_tab);
-		token_lstclear(&token_list, free);
+		token_lstclear(&token_list, free);// tu supprime ca ou tu le met en bas
 		free(split_line);
 		free(line);
-		process_input(cmd);
+		process_input(cmd);// donc tu supprime les 2 free ou tu les descant et tu envoie dedand comme ca (process_input(cmd, &token_list));
+//tu copie dans head sinon ca va poser probleme
+//donc t_token *head
+//head = *token_list;
+//et donc pour acceder a head type tu fais head->type
+//void
 		free(cmd->final_line);
 		tab = cmd->env;
 	}
