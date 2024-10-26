@@ -55,6 +55,8 @@
 # define STDERR 2
 # define EXIT_COMMAND	3
 
+typedef struct s_token t_token;
+
 typedef struct s_cmd
 {
 	int		fd[2];
@@ -72,6 +74,7 @@ typedef struct s_cmd
 	int		export_added;
 	char	*final_line;
 	char	**final_tab;
+	t_token	*tokens;
 }	t_cmd;
 
 void				ft_path_command(t_cmd *cmd);

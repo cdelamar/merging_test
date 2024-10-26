@@ -149,4 +149,9 @@ void		sigint_handler(int sig);
 char		*tab_to_str(char **tab);
 char		*ft_realloc_string(char *str, int new_size);
 
+/*--------------print-----------------*/
+char *get_token_type(t_token_enum type);
+void print_token_list(t_token *head);
+
+
 #endif

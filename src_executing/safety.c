@@ -60,3 +60,46 @@ void	free_cmd(t_cmd *cmd)
 		ft_freetab(cmd->final_tab);
 	free(cmd);
 }
+
+char *get_token_type(t_token_enum type)
+{
+	if (type == WORD)
+		return "WORD (Command)";
+	else if (type == SPACES)
+		return "SPACES";
+	else if (type == PIPE)
+		return "PIPE (|)";
+	else if (type == REDIRECTION)
+		return "REDIRECTION";
+	else if (type == VAR)
+		return "VAR ($)";
+	else if (type == DOUBLE_QUOTE)
+		return "DOUBLE_QUOTE";
+	else if (type == SIMPLE_QUOTE)
+		return "SIMPLE_QUOTE";
+	else if (type == LAST_VERIF)
+		return "LAST_VERIF";
+	else if (type == GLOBAL)
+		return "GLOBAL ($?)";
+	else if (type == ERROR)
+		return "ERROR";
+	else if (type == END)
+		return "END (\\0)";
+	else
+		return "UNKNOWN";
+}
+
+void print_token_list(t_token *head)
+{
+	t_token *current = head;
+
+	while (current != NULL)
+	{
+		printf("Index: %d\n", current->index);
+		printf("Type: %s\n", get_token_type(current->type));
+		printf("Content: %s\n", current->content);
+		printf("\n");
+
+		current = current->next; // Move to the next token
+	}
+}

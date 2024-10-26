@@ -177,13 +177,20 @@ int	main(int argc, char **argv, char **envp)
 			g_signal = 0;
 			return (0);
 		}
+
+
+		cmd->tokens = token_list;
+
+		print_token_list(token_list);
+
 		path_main(token_list, envp);
 		cmd->final_tab = main_cat(&token_list);//dedans ou celui dans dessou il y a un free token_list donc fais gaffe
 		cmd->final_line = tab_to_str(cmd->final_tab);
-		token_lstclear(&token_list, free);// tu supprime ca ou tu le met en bas
 		free(split_line);
 		free(line);
-		process_input(cmd);// donc tu supprime les 2 free ou tu les descant et tu envoie dedand comme ca (process_input(cmd, &token_list));
+		process_input(cmd);
+
+// donc tu supprime les 2 free ou tu les descant et tu envoie dedand comme ca (process_input(cmd, &token_list));
 //tu copie dans head sinon ca va poser probleme
 //donc t_token *head
 //head = *token_list;
@@ -191,6 +198,7 @@ int	main(int argc, char **argv, char **envp)
 //void
 		free(cmd->final_line);
 		tab = cmd->env;
+		token_lstclear(&token_list, free);// tu supprime ca ou tu le met en bas
 	}
 	//printf("sortie de loop\n");
 	return (0);
