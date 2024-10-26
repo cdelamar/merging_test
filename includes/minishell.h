@@ -152,6 +152,9 @@ char		*ft_realloc_string(char *str, int new_size);
 /*--------------print-----------------*/
 char *get_token_type(t_token_enum type);
 void print_token_list(t_token *head);
+bool pipe_found(t_token *token_list);
+
+t_token *copy_token_list(t_token *laubry_list);
 
 
 #endif

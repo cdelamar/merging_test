@@ -14,6 +14,41 @@
 
 volatile int	g_signal = 0;
 
+t_token *copy_token_list(t_token *laubry_list)
+{
+    t_token *copy_head = NULL;
+    t_token *copy_current = NULL;
+    t_token *current = laubry_list;
+
+    while (current != NULL)
+    {
+        // alloue pour la nouvelle liste
+        t_token *new_node = malloc(sizeof(t_token));
+        if (!new_node)
+            return NULL;
+
+        // copiage
+        new_node->type = current->type;
+        new_node->content = ft_strdup(current->content);
+        new_node->index = current->index;
+        new_node->next = NULL;
+
+        if (copy_head == NULL)
+        {
+            copy_head = new_node;  // 1er node
+            copy_current = copy_head; // on remonte
+        }
+        else
+        {
+            copy_current->next = new_node; // i++ en gros
+            copy_current = copy_current->next;
+        }
+        current = current->next; // i++ dans la liste de lucas
+    }
+
+    return copy_head;
+}
+
 char	*ft_realloc_string(char *str, int new_size)
 {
 	char	*res;
@@ -109,6 +144,7 @@ int	main(int argc, char **argv, char **envp)
 	t_cmd	*cmd;
 	int		len;
 
+
 	token_list = NULL;
 	(void)argv;
 
@@ -179,10 +215,16 @@ int	main(int argc, char **argv, char **envp)
 		}
 
 
-		cmd->tokens = token_list;
+        cmd->tokens = copy_token_list(token_list);
+        if (!cmd->tokens)
+        {
+            fprintf(stderr, "pas reussi a copier la liste de toekn\n");
+            token_lstclear(&token_list, free);
+            return (0);
+        }
 
-		print_token_list(token_list);
-
+		//print_token_list(token_list);
+		//printf("\n\n");
 		path_main(token_list, envp);
 		cmd->final_tab = main_cat(&token_list);//dedans ou celui dans dessou il y a un free token_list donc fais gaffe
 		cmd->final_line = tab_to_str(cmd->final_tab);
@@ -196,6 +238,7 @@ int	main(int argc, char **argv, char **envp)
 //head = *token_list;
 //et donc pour acceder a head type tu fais head->type
 //void
+
 		free(cmd->final_line);
 		tab = cmd->env;
 		token_lstclear(&token_list, free);// tu supprime ca ou tu le met en bas
