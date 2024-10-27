@@ -69,7 +69,7 @@ int	execute(t_cmd *cmd)
 	}
 	else if (ft_builtin(cmd) == EXIT_SUCCESS)
 	{
-		printf("into builtins");
+		//printf("into builtins");
 		return (EXIT_SUCCESS);
 	}
 	else
