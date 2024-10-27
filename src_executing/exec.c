@@ -42,7 +42,6 @@ bool pipe_found(t_token *token_list)
 int	execute(t_cmd *cmd)
 {
 	int	i;
-	printf("exec\n");
 
 	i = 0;
 	if (ft_strcmp(cmd->final_line, "|") == 0)
@@ -65,7 +64,7 @@ int	execute(t_cmd *cmd)
 	}
 	if (pipe_found(cmd->tokens) == true)
 	{
-		printf("into PIPE\n");
+	//	printf("into PIPE\n");
 		return (pipe_execute(cmd));
 	}
 	else if (ft_builtin(cmd) == EXIT_SUCCESS)
@@ -75,7 +74,7 @@ int	execute(t_cmd *cmd)
 	}
 	else
 	{
-		printf("into BASIC");
+	//	printf("into BASIC");
 		return (basic_execute(cmd));
 	}
 }

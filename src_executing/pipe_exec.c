@@ -136,6 +136,7 @@ int	pipe_execute(t_cmd *cmd)
 				ft_freetab(commands);
 				free(cmd->final_line);
 				free(full_path);
+				token_lstclear(&cmd->tokens, free);// tu supprime ca ou tu le met en bas
 				free(cmd);
 				exit(127);
 			}

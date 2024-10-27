@@ -198,7 +198,9 @@ int	main(int argc, char **argv, char **envp)
 		{
 			free_split_line(split_line);
 			g_signal = 127;
-			return (0);
+			printf("synthax error : unmatching quote\n");
+			// return (0);
+			continue;
 		}
 		if (line == NULL)
 		{
@@ -228,8 +230,11 @@ int	main(int argc, char **argv, char **envp)
 		path_main(token_list, envp);
 		cmd->final_tab = main_cat(&token_list);//dedans ou celui dans dessou il y a un free token_list donc fais gaffe
 		cmd->final_line = tab_to_str(cmd->final_tab);
+		// printf("final_tab\n");
+		// print_tab(cmd->final_tab);
 		free(split_line);
 		free(line);
+		token_lstclear(&token_list, free);// tu supprime ca ou tu le met en bas
 		process_input(cmd);
 
 // donc tu supprime les 2 free ou tu les descant et tu envoie dedand comme ca (process_input(cmd, &token_list));
@@ -240,8 +245,8 @@ int	main(int argc, char **argv, char **envp)
 //void
 
 		free(cmd->final_line);
+		token_lstclear(&cmd->tokens, free);// tu supprime ca ou tu le met en bas
 		tab = cmd->env;
-		token_lstclear(&token_list, free);// tu supprime ca ou tu le met en bas
 	}
 	//printf("sortie de loop\n");
 	return (0);

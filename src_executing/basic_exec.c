@@ -114,6 +114,7 @@ int	basic_execute(t_cmd *cmd)
 		ft_freetab(cmd->final_tab);
 		ft_freetab(cmd->env);
 		ft_freetab(cmd->path_split);
+		token_lstclear(&cmd->tokens, free);// tu supprime ca ou tu le met en bas
 		free(cmd);
 		exit(exit_code);
 	}
