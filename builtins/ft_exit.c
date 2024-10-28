@@ -38,7 +38,10 @@ int	ft_exit(char **split_line, t_cmd *cmd)
 		if (ft_isnumber(split_line[1]))
 			exit_code = ft_atoi(split_line[1]);
 		else
+		{
+			fprintf(stderr, "exit : %s : number argument required\n", split_line[1]);
 			exit_code = 255;
+		}
 	}
 	return (exit_code);
 }

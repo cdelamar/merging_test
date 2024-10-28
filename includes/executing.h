@@ -74,6 +74,7 @@ typedef struct s_cmd
 	int		export_added;
 	char	*final_line;
 	char	**final_tab;
+	int		exit_status;
 	t_token	*tokens;
 }	t_cmd;
 
@@ -170,5 +171,9 @@ char				**split_commands(t_cmd *cmd);
 int					count_commands(t_cmd *cmd);
 
 void				ignore_sigpipe(void);
+bool				is_builtin(char *command);
+
+int					pipe_builtin(t_cmd *cmd, char **command);
+
 
 #endif

@@ -114,37 +114,79 @@ int	pipe_execute(t_cmd *cmd)
 		if (pid == 0)
 		{
 			signal(SIGPIPE, SIG_DFL);
+
 			if (fd_in != 0)
 			{
 				dup2(fd_in, STDIN_FILENO);
 				close(fd_in);
 			}
+
 			if (commands[i + 1] != NULL)
 			{
 				dup2(fd[1], STDOUT_FILENO);
 			}
+
 			close(fd[0]);
 			close(fd[1]);
+
 			cmd->path_command = ft_split(commands[i], ' ');
-			char *full_path = get_command_path(cmd->path_command[0], cmd->env);
-			if (full_path == NULL)
+			if (!cmd->path_command)
+				exit(1); // on gerera les free plus tard
+
+			//printf("cmd->path_command\n");
+			//print_tab(cmd->path_command);
+
+			if(is_builtin(cmd->path_command[0]))
 			{
-				fprintf(stderr, "%s:command not found\n", cmd->path_command[0]);
-				ft_freetab(cmd->path_command);
-				ft_freetab(cmd->final_tab);
-				ft_freetab(cmd->env);
-				ft_freetab(commands);
-				free(cmd->final_line);
-				free(full_path);
-				token_lstclear(&cmd->tokens, free);// tu supprime ca ou tu le met en bas
-				free(cmd);
-				exit(127);
+				printf("in builtin\n");
+				if (pipe_builtin(cmd, cmd->path_command) == EXIT_SUCCESS)
+				{
+					ft_freetab(cmd->path_command);
+					ft_freetab(cmd->final_tab);
+					ft_freetab(cmd->env);
+					ft_freetab(commands);
+					free(cmd->final_line);
+					token_lstclear(&cmd->tokens, free);
+					free(cmd);
+                    exit(EXIT_SUCCESS);
+                }
+
+				else // a revoir
+				{
+				//	printf("echec builtin\n");
+					ft_freetab(cmd->path_command);
+					ft_freetab(cmd->final_tab);
+					ft_freetab(cmd->env);
+					ft_freetab(commands);
+					free(cmd->final_line);
+					token_lstclear(&cmd->tokens, free);
+					free(cmd);
+                    exit(EXIT_SUCCESS);
+				}
 			}
-			if (execve(full_path, cmd->path_command, cmd->env) == -1)
+
+			else
 			{
-				printf("%s : command not found\n", cmd->path_command[0]); // 0 ou i je pige plus
-				ft_freetab(cmd->path_command);
-				exit(127);
+				char *full_path = get_command_path(cmd->path_command[0], cmd->env);
+				if (full_path == NULL)
+				{
+					fprintf(stderr, "%s:command not found\n", cmd->path_command[0]);
+					ft_freetab(cmd->path_command);
+					ft_freetab(cmd->final_tab);
+					ft_freetab(cmd->env);
+					ft_freetab(commands);
+					free(cmd->final_line);
+					free(full_path);
+					token_lstclear(&cmd->tokens, free);
+					free(cmd);
+					exit(127);
+				}
+				if (execve(full_path, cmd->path_command, cmd->env) == -1)
+				{
+					printf("%s : command not found\n", cmd->path_command[0]); // 0 ou i je pige plus
+					ft_freetab(cmd->path_command);
+					exit(127);
+				}
 			}
 		}
 		else
@@ -156,10 +198,17 @@ int	pipe_execute(t_cmd *cmd)
 
 			waitpid(pid, &cmd->status, 0);  // Wait for child process
 
+			//_____________
+
+			//_____________
+
             if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
             {
                 fprintf(stderr, "aie aie aie\n");
             }
+
+			//if(WIFEXITED(cmd->status))
+			//	cmd->exit_status = WEXITSTATUS(cmd->status);
 		}
 		i++;
 	}

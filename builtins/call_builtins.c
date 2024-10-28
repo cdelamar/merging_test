@@ -12,6 +12,20 @@
 
 #include "../includes/minishell.h"
 
+bool is_builtin(char *command)
+{
+    if (!command)
+        return false;
+    return (ft_strcmp(command, "unset") == 0 ||
+            ft_strcmp(command, "echo") == 0 ||
+            ft_strcmp(command, "cd") == 0 ||
+            ft_strcmp(command, "export") == 0 ||
+            ft_strcmp(command, "env") == 0 ||
+            ft_strcmp(command, "pwd") == 0 ||
+            ft_strcmp(command, "exit") == 0);
+}
+
+
 static int	builtin_commands(char **split_line, t_cmd *cmd,
 		int saved_in, int saved_out)
 {
@@ -81,6 +95,8 @@ int	ft_builtin(t_cmd *cmd)
 	int		ret;
 
 	split_line = ft_split(cmd->final_line, ' ');
+	//printf("split_line\n");
+	//print_tab(split_line);
 	if (!split_line)
 		return (EXIT_FAILURE);
 	if (backup_manager(split_line, &saved_in, &saved_out, cmd) == EXIT_SUCCESS)
@@ -88,5 +104,18 @@ int	ft_builtin(t_cmd *cmd)
 	else
 		ret = (EXIT_FAILURE);
 	ft_freetab(split_line);
+	return (ret);
+}
+
+int pipe_builtin(t_cmd *cmd, char **command)
+{
+	int		saved_in;
+	int		saved_out;
+	int		ret;
+
+	if (backup_manager(command, &saved_in, &saved_out, cmd) == EXIT_SUCCESS)
+		ret = builtin_commands(command, cmd, saved_in, saved_out);
+	else
+		ret = (EXIT_FAILURE);
 	return (ret);
 }
