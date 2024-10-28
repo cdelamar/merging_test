@@ -182,6 +182,10 @@ int	main(int argc, char **argv, char **envp)
 			g_signal = 0;
 			return (0);
 		}
+
+		if (line)
+			add_history(line);
+
 		if (space_only(line) == true)
 		{
 			//printf("faut fix quand ya juste un espace\n");

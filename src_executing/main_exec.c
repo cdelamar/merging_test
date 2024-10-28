@@ -14,8 +14,6 @@
 
 void	process_input(t_cmd *cmd)
 {
-	if (cmd->final_line)
-		add_history(cmd->final_line);
 	execute(cmd);
 }
 

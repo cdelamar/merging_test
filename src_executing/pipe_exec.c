@@ -138,7 +138,7 @@ int	pipe_execute(t_cmd *cmd)
 
 			if(is_builtin(cmd->path_command[0]))
 			{
-				printf("in builtin\n");
+				//printf("in builtin\n");
 				if (pipe_builtin(cmd, cmd->path_command) == EXIT_SUCCESS)
 				{
 					ft_freetab(cmd->path_command);
