@@ -51,7 +51,7 @@ static int	builtin_commands(char **split_line, t_cmd *cmd,
 		if (cmd->pid1 == 0)
 		{
 			ft_freetab(split_line);
-			ft_freetab(cmd->final_tab);
+			//ft_freetab(cmd->final_tab);
 			ft_freetab(cmd->env);
 			free(cmd->final_line);
 			free(cmd);
@@ -94,7 +94,7 @@ int	ft_builtin(t_cmd *cmd)
 	int		saved_out;
 	int		ret;
 
-	split_line = ft_split(cmd->final_line, ' ');
+	split_line = cmd->final_tab;
 	//printf("split_line\n");
 	//print_tab(split_line);
 	if (!split_line)
@@ -103,7 +103,7 @@ int	ft_builtin(t_cmd *cmd)
 		ret = builtin_commands(split_line, cmd, saved_in, saved_out);
 	else
 		ret = (EXIT_FAILURE);
-	ft_freetab(split_line);
+	//ft_freetab(split_line);
 	return (ret);
 }
 

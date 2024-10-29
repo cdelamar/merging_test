@@ -16,6 +16,10 @@ static void	echo_output(char **split_line, int i)
 {
 	int	start;
 
+	// printf("echo's split_line\n");
+	// print_tab(split_line);
+	// printf("\nft_echo\n");
+
 	start = i;
 	while (split_line[start])
 	{

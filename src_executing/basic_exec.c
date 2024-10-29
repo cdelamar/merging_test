@@ -19,6 +19,7 @@ bool	syntax_redirect(char *line)
 
 	i = 0;
 	split_line = ft_split(line, ' ');
+
 	while (split_line[i] != NULL)
 	{
 		if ((strcmp(split_line[i], ">") == 0 && split_line[i + 1] != NULL
@@ -63,6 +64,7 @@ int	basic_child_process(t_cmd *cmd)
 		return (EXIT_FAILURE);
 	}
 	command = cmd_finder(split_line, cmd);
+	//printf("command\n%s\n", command);
 	if (command)
 		execve(command, split_line, cmd->env);
 	//print_tab(split_line);
@@ -89,22 +91,18 @@ int	basic_parent_process(pid_t pid)
 int	basic_execute(t_cmd *cmd)
 {
 	int		exit_code;
-	char	**split_line;
 
-	split_line = NULL;
 	exit_code = ft_path_split(cmd);
 	if (exit_code != EXIT_SUCCESS)
 	{
 		printf("Command not found: %s\n", cmd->final_line);
-		if (split_line)
-			ft_freetab(split_line);
 		return (exit_code);
 	}
+
 	cmd->pid1 = fork();
 	if (cmd->pid1 < 0)
 	{
 		printf("Fork error\n");
-		ft_freetab(split_line);
 		return (EXIT_FAILURE);
 	}
 	else if (cmd->pid1 == 0)

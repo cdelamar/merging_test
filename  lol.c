@@ -1,1 +1,1 @@
-cat lol.c ' | ' cat 
+cat lol.c  <<  cat 

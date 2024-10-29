@@ -234,8 +234,8 @@ int	main(int argc, char **argv, char **envp)
 		path_main(token_list, envp);
 		cmd->final_tab = main_cat(&token_list);//dedans ou celui dans dessou il y a un free token_list donc fais gaffe
 		cmd->final_line = tab_to_str(cmd->final_tab);
-		// printf("final_tab\n");
-		// print_tab(cmd->final_tab);
+		//printf("final_tab\n");
+		//print_tab(cmd->final_tab);
 		free(split_line);
 		free(line);
 		token_lstclear(&token_list, free);// tu supprime ca ou tu le met en bas
