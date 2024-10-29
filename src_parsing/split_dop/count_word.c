@@ -6,19 +6,30 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:34:31 by laubry            #+#    #+#             */
-/*   Updated: 2024/08/30 10:37:09 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/29 14:59:25 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_char(char s)
+int	is_char(char s, int boul)
 {
-	if (s == ' ' || s == '"' || s == '\''
-		|| s == '|' || s == '<' || s == '>' || s == '\0' || s == '$')
-		return (0);
+	if (boul == 1)
+	{	
+		if (s == ' ' || s == '"' || s == '\''
+			|| s == '<' || s == '>' || s == '\0' || s == '$')
+			return (0);
+		else
+			return (1);
+	}
 	else
-		return (1);
+	{
+		if (s == ' ' || s == '"' || s == '\''
+			|| s == '<' || s == '>' || s == '\0' || s == '$')
+			return (0);
+		else
+			return (1);
+	}
 }
 
 int	is_quote(char *s, int i)
@@ -76,14 +87,14 @@ size_t	count_word(char *s)
 	ft_bzero(tab, 3 * 4);
 	while (s[tab[0]])
 	{
-		if (!is_char(s[tab[0]]))
+		if (!is_char(s[tab[0]], 0))
 		{
 			if (!word_plus(s, tab[0], tab))
 				return (0);
 		}
-		else if (is_char(s[tab[0]]))
+		else if (is_char(s[tab[0]], 0))
 		{
-			while (is_char(s[tab[0]]))
+			while (is_char(s[tab[0]], 0))
 				tab[0]++;
 			tab[1]++;
 		}

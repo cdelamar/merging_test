@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:02:11 by lucasaubry        #+#    #+#             */
-/*   Updated: 2024/10/22 18:17:24 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/29 14:59:21 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void		free_head(t_token *head);
 void		print_free_tab(char **final_token);
 
 size_t		count_word(char *s);
-int			is_char(char s);
+int			is_char(char s, int boul);
 int			skip_space(char *s, int i);
 void		print_split(char **split_line);
 int			solo_quote(char **split_line);

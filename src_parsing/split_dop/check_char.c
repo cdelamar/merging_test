@@ -6,7 +6,7 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:35:32 by laubry            #+#    #+#             */
-/*   Updated: 2024/08/19 19:10:51 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/29 14:58:38 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	check_is_dollar(int i, char *s, char **lst, int j)
 	word_len = 0;
 	start = i;
 	i++;
-	while (s[i] && s[i] != ' ' && s[i] != is_char(*s) && s[i] != '$'
+	while (s[i] && s[i] != ' ' && s[i] != is_char(*s, 0) && s[i] != '$'
 		&& !is_qte(s[i]))
 		i++;
 	word_len = i - start;

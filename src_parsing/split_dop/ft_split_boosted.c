@@ -6,7 +6,7 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:11:15 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/22 17:23:28 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/29 14:57:35 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	word_sub(char **lst, int *j, int *i, char *s)
 	int	word_len;
 
 	start = *i;
-	while (is_char(s[*i]))
+	while (is_char(s[*i], 1))
 		(*i)++;
 	word_len = *i - start;
 	lst[*j] = ft_substr(s + start, 0, word_len);
