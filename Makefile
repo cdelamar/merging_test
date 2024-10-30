@@ -21,9 +21,10 @@ LFLAGS = -Llib -lft -lreadline
 SRC_DIRS = src_executing/ builtins/ src_parsing/
 OBJ_DIR = obj/
 
+MAIN_FILES = above_the_main error_main main signal_tab
 EXECUTING_FILES = command pipe_command main_exec exec memory path signal signal_2 redirection heredoc fd basic_exec pipe_exec safety
 BUILTIN_FILES = call_builtins ft_echo ft_env ft_pwd ft_unset ft_cd ft_export ft_exit
-PARSING_FILES = main parsing error tools \
+PARSING_FILES = parsing error tools \
 				libft/all_lst free_all \
                 libft/ft_isalpha libft/sub_chr_cpy libft/ft_strtrim \
                 split_dop/ft_split_boosted split_dop/count_word \
@@ -36,15 +37,17 @@ PARSING_FILES = main parsing error tools \
                 libft/ft_strlcpy libft/ft_strlen libft/ft_strcmp \
                 libft/ft_bzero libft/ft_strdup \
 
+MAIN_SRCS = $(addsuffix .c, $(MAIN_FILES))
 EXEC_SRCS = $(addprefix src_executing/, $(addsuffix .c, $(EXECUTING_FILES)))
 BUILTIN_SRCS = $(addprefix builtins/, $(addsuffix .c, $(BUILTIN_FILES)))
 PARSE_SRCS = $(addprefix src_parsing/, $(addsuffix .c, $(PARSING_FILES)))
 SRCS = $(EXEC_SRCS) $(BUILTIN_SRCS) $(PARSE_SRCS)
 
+MAIN_OBJS = $(addsuffix .o, $(MAIN_FILES))
 EXEC_OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(EXECUTING_FILES)))
 BUILTIN_OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(BUILTIN_FILES)))
 PARSE_OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(PARSING_FILES)))
-OBJS = $(EXEC_OBJS) $(BUILTIN_OBJS) $(PARSE_OBJS)
+OBJS = $(MAIN_OBJS) $(EXEC_OBJS) $(BUILTIN_OBJS) $(PARSE_OBJS)
 
 VALGRIND_SUPP = valgrind.supp
 
@@ -105,5 +108,3 @@ gdb: $(NAME)
 
 # Avoid to rebuild the lib
 $(OBJS): | $(LIBFT)
-
-
