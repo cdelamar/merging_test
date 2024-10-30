@@ -48,6 +48,8 @@ static int	builtin_commands(char **split_line, t_cmd *cmd,
 	else if (ft_strcmp(split_line[0], "exit") == 0)
 	{
 		exit_code = ft_exit(split_line, cmd);
+		if(exit_code == -1)
+			return(0);
 		if (cmd->pid1 == 0)
 		{
 			ft_freetab(split_line);

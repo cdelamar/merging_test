@@ -40,7 +40,7 @@ int	ft_exit(char **split_line, t_cmd *cmd)
 		else
 		{
 			fprintf(stderr, "exit : %s : number argument required\n", split_line[1]);
-			exit_code = 255;
+			exit_code = -1;
 		}
 	}
 	return (exit_code);
