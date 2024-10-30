@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:02:11 by lucasaubry        #+#    #+#             */
-/*   Updated: 2024/10/29 14:59:21 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/30 14:16:35 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,14 @@ void print_token_list(t_token *head);
 bool pipe_found(t_token *token_list);
 
 t_token *copy_token_list(t_token *laubry_list);
+
+int	check_pipe(char **split_line);
+void signal_main(char **envp);
+t_token *copy_token_list(t_token *laubry_list);
+char	*ft_realloc_string(char *str, int new_size);
+char	*tab_to_str(char **tab);
+int	add_node(t_token **token_list, char **strs, int i);
+int	make_token(char **split_line, t_token **token_list);
 
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:42:17 by laubry            #+#    #+#             */
-/*   Updated: 2024/07/11 18:11:00 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/30 12:05:28 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,25 @@ int	check_quote_error(char *line)
 	if (tab[2] || tab[1])
 		return (1);
 	return (check_error(ERROR_QUOTE));
+}
+
+int	check_pipe(char **split_line)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (split_line[i])
+	{
+		j = 0;
+		while (split_line[i][j])
+		{
+			if (split_line[i][j] == '|' && split_line[i + 1][j] == '|')
+				return (0);
+			j++;
+		}
+		i++;
+	}
+	return (1);
 }

@@ -6,7 +6,7 @@
 #    By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/10 21:54:20 by cdelamar          #+#    #+#              #
-#    Updated: 2024/10/22 16:58:43 by laubry           ###   ########.fr        #
+#    Updated: 2024/10/30 15:37:32 by laubry           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ BUILTIN_SRCS = $(addprefix builtins/, $(addsuffix .c, $(BUILTIN_FILES)))
 PARSE_SRCS = $(addprefix src_parsing/, $(addsuffix .c, $(PARSING_FILES)))
 SRCS = $(MAIN_SRCS) $(EXEC_SRCS) $(BUILTIN_SRCS) $(PARSE_SRCS)
 
-MAIN_OBJS = $(addsuffix .o, $(MAIN_FILES))
+MAIN_OBJS = $(addprefix $(OBJ_DIR), addsuffix .o, $(MAIN_FILES))
 EXEC_OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(EXECUTING_FILES)))
 BUILTIN_OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(BUILTIN_FILES)))
 PARSE_OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(PARSING_FILES)))

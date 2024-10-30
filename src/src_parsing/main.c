@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:11:04 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/25 17:10:45 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/30 12:11:58 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ t_token *copy_token_list(t_token *laubry_list)
         }
         current = current->next; // i++ dans la liste de lucas
     }
-
     return copy_head;
 }
 
@@ -182,20 +181,26 @@ int	main(int argc, char **argv, char **envp)
 			g_signal = 0;
 			return (0);
 		}
-
 		if (line)
 			add_history(line);
-
 		if (space_only(line) == true)
 		{
 			//printf("faut fix quand ya juste un espace\n");
 			free (line);
 			continue;
 		}
-		if(ft_strcmp(split_line[0], "|") == 0)
+		if (ft_strcmp(split_line[0], "|") == 0)
 		{
 			printf("erreur synthaxe du au symbole ' | '\n");
 			free(line);
+			continue;
+		}
+		if (!check_pipe(split_line))
+		{
+			free_split_line(split_line);
+			g_signal = 2;
+			printf("syntax error double pipes detected");
+			//return (0);
 			continue;
 		}
 		if (solo_quote(split_line) || badchar(split_line))
@@ -206,6 +211,7 @@ int	main(int argc, char **argv, char **envp)
 			// return (0);
 			continue;
 		}
+
 		if (line == NULL)
 		{
 			//printf("je sors plutot la, checker leak de sortie\n");
@@ -229,8 +235,8 @@ int	main(int argc, char **argv, char **envp)
             return (0);
         }
 
-		print_token_list(token_list);
-		printf("\n\n");
+		//print_token_list(token_list);
+		//printf("\n\n");
 		path_main(token_list, envp);
 		cmd->final_tab = main_cat(&token_list);//dedans ou celui dans dessou il y a un free token_list donc fais gaffe
 		cmd->final_line = tab_to_str(cmd->final_tab);

@@ -1,39 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_all.c                                         :+:      :+:    :+:   */
+/*   signal_tab.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 13:46:50 by laubry            #+#    #+#             */
-/*   Updated: 2024/08/19 18:49:56 by laubry           ###   ########.fr       */
+/*   Created: 2024/10/30 12:19:07 by laubry            #+#    #+#             */
+/*   Updated: 2024/10/30 13:18:43 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_split(char **strs)
+void signal_main(char **envp, int boul)
 {
-	int	i;
+	int			len;
+	static char	**tab;
 
-	i = 0;
-	while (strs[i])
+	if (boul == 0)
 	{
-		free(strs[i]);
-		i++;
+		len = -1;
+		rl_outstream = stderr;
+		signal(SIGPIPE, SIG_IGN);
+		signals();
+		cmd = NULL;
+		while (envp[++len]) {}
+		tab = malloc(sizeof(char *) * (len + 1));
+		cpy_tab(tab, envp);
 	}
-	free(strs);
-}
-
-void	free_head(t_token *head)
-{
-	t_token	*temp;
-
-	while (head != NULL)
+	else
 	{
-		temp = head;
-		head = head->next;
-		free(temp->content);
-		free(temp);
+		cmd->heredoc_processed = FALSE;
+		cmd->env = tab;
 	}
 }
+

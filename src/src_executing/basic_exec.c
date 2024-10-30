@@ -93,12 +93,6 @@ int	basic_execute(t_cmd *cmd)
 	int		exit_code;
 
 	exit_code = ft_path_split(cmd);
-	// print_tab(cmd->final_tab);
-	if (is_builtin(cmd->final_tab[0]) == true)
-	{
-		return (ft_builtin(cmd));
-	}
-
 	if (exit_code != EXIT_SUCCESS)
 	{
 		printf("Command not found: %s\n", cmd->final_line);
