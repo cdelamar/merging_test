@@ -67,11 +67,11 @@ int	execute(t_cmd *cmd)
 	//	printf("into PIPE\n");
 		return (pipe_execute(cmd));
 	}
-	else if (ft_builtin(cmd) == EXIT_SUCCESS)
+	/*else if (ft_builtin(cmd) == EXIT_SUCCESS)
 	{
 		//printf("into builtins");
 		return (EXIT_SUCCESS);
-	}
+	}*/
 	else
 	{
 	//	printf("into BASIC");
