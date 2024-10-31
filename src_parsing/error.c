@@ -6,11 +6,32 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:42:17 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/30 20:26:29 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/31 14:37:43 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	check_pipe(char **split_line)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (split_line[i])
+	{
+		j = 0;
+		while (split_line[i][j])
+		{
+			if (split_line[i][j] == '|' && split_line[i + 1][j] == '|')
+				return (0);
+			j++;
+		}
+		i++;
+	}
+	return (1);
+}
 
 int	check_error(int code_error)
 {
@@ -47,26 +68,4 @@ int	check_quote_error(char *line)
 	if (tab[2] || tab[1])
 		return (1);
 	return (check_error(ERROR_QUOTE));
-}
-
-int	check_pipe(char **split_line)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (split_line[i])
-	{
-		j = 0;
-		while (split_line[i][j])
-		{
-			if (split_line[i][j] == '|'
-					&& split_line[i+1] && split_line[i + 1][j] == '|')
-				return (0);
-			j++;
-		}
-		i++;
-	}
-	return (1);
 }

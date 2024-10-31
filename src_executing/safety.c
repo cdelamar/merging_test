@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:48:35 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/30 20:10:18 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/22 16:49:54 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,26 +52,13 @@ bool	freeable_tab(char **tab)
 
 void	free_cmd(t_cmd *cmd)
 {
-    if (cmd)
-    {
-        if (cmd->path_command)
-        {
-            ft_freetab(cmd->path_command);
-            cmd->path_command = NULL;  // Réinitialise après libération
-        }
-        if (cmd->path_split)
-        {
-            ft_freetab(cmd->path_split);
-            cmd->path_split = NULL;  // Réinitialise après libération
-        }
-        if (cmd->final_tab)
-        {
-            ft_freetab(cmd->final_tab);
-            cmd->final_tab = NULL;  // Réinitialise après libération
-        }
-        free(cmd);
-        cmd = NULL;  // Réinitialise après libération
-    }
+	if (cmd->path_command)
+		ft_freetab(cmd->path_command);
+	if (cmd->path_split)
+		ft_freetab(cmd->path_split);
+	if (cmd->final_tab)
+		ft_freetab(cmd->final_tab);
+	free(cmd);
 }
 
 char *get_token_type(t_token_enum type)

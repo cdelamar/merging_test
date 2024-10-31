@@ -6,11 +6,44 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:11:15 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/29 14:57:35 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/31 13:55:38 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char **modif_pipe(char **lst)
+{
+    int i;
+    char quote;
+
+    i = 0;
+    while (lst[i])
+    {
+        if (lst[i][0] == '"' || lst[i][0] == '\'')
+        {
+            quote = lst[i][0];
+            i++;
+            while (lst[i] && lst[i][0] != quote)
+            {
+                if (lst[i][0] == '|')
+                {
+                    char *new_str;
+                    new_str = malloc(strlen(lst[i]) + 2);
+                    if (!new_str)
+                        return (NULL);
+                    strcpy(new_str, lst[i]);
+                    new_str[0] = '-';
+                    free(lst[i]);
+                    lst[i] = new_str;
+                }
+                i++;
+            }
+        }
+        i++;
+    }
+    return (lst);
+}
 
 void	skip_sub(char **lst, char *s, int *i, int *j)
 {
@@ -80,5 +113,6 @@ char	**ft_split_boosted(char *s)
 		return (0);
 	split_in_tab(s, lst);
 	free(s);
+	lst = modif_pipe(lst);
 	return (lst);
 }

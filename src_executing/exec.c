@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 18:32:50 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/31 00:41:29 by laubry           ###   ########.fr       */
+/*   Updated: 2024/10/22 15:59:01 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	handle_error(char *msg, t_cmd *cmd, int *fd)
 
 bool pipe_found(t_token *token_list)
 {
-    while (token_list->next)//token_list != NULL
+    while (token_list != NULL)
     {
 		//printf("content : %s\n", token_list->content);
         if (token_list->type == PIPE)
@@ -67,11 +67,11 @@ int	execute(t_cmd *cmd)
 	//	printf("into PIPE\n");
 		return (pipe_execute(cmd));
 	}
-	else if (ft_builtin(cmd) == EXIT_SUCCESS)
+	/*else if (ft_builtin(cmd) == EXIT_SUCCESS)
 	{
 		//printf("into builtins");
 		return (EXIT_SUCCESS);
-	}
+	}*/
 	else
 	{
 	//	printf("into BASIC");
