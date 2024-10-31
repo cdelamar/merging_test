@@ -167,13 +167,8 @@ char				**cpy_tab(char **dest, char **src);
 bool				syntax_redirect(char *line);
 void				process_input(t_cmd *cmd);
 
-char				**split_commands(t_cmd *cmd);
-int					count_commands(t_cmd *cmd);
-
 void				ignore_sigpipe(void);
 bool				is_builtin(char *command);
-
 int					pipe_builtin(t_cmd *cmd, char **command);
-
 
 #endif

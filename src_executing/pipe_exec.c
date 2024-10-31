@@ -14,6 +14,101 @@
 
 extern sig_atomic_t	g_signal;
 
+void free_commands(char ***commands)
+{
+    int i = 0;
+    while (commands[i])
+    {
+        int j = 0;
+        while (commands[i][j])
+        {
+            free(commands[i][j]);
+            j++;
+        }
+        free(commands[i]);
+        i++;
+    }
+    free(commands);
+}
+
+static void free_cmd_resources (t_cmd *cmd)
+{
+	ft_freetab(cmd->path_command);
+	ft_freetab(cmd->final_tab);
+	ft_freetab(cmd->env);
+	free(cmd->final_line);
+	//free(full_path);
+	token_lstclear(&cmd->tokens, free);
+	free(cmd);
+}
+
+//--------------------------
+
+static int count_commands(char **final_tab)
+{
+    int count = 1;
+    int i = 0;
+
+    while (final_tab[i])
+    {
+        if (strcmp(final_tab[i], "|") == 0)
+            count++;
+        i++;
+    }
+    return count;
+}
+
+
+static int count_args(char **final_tab, int start)
+{
+    int count = 0;
+    int i = start;
+
+    while (final_tab[i] && strcmp(final_tab[i], "|") != 0)
+    {
+        count++;
+        i++;
+    }
+    return count;
+}
+
+static char	***split_commands(char **final_tab)
+{
+	int		num_commands = count_commands(final_tab);
+	char	***commands = malloc((num_commands + 1) * sizeof(char **));
+	int		cmd_index = 0;
+	int		arg_index = 0;
+
+	if (!commands)
+		return (NULL);
+
+	for (int i = 0; final_tab[i]; i++)
+	{
+		if (strcmp(final_tab[i], "|") == 0)
+		{
+			// Null-terminate the current command and move to the next
+			commands[cmd_index][arg_index] = NULL;
+			cmd_index++;
+			arg_index = 0;
+			continue;
+		}
+
+		//technique : alloue pour l'argument actuel
+		if (arg_index == 0)
+			commands[cmd_index] = malloc((count_args(final_tab, i) + 1) * sizeof(char *));
+
+		// Copier argument to the current command
+		commands[cmd_index][arg_index] = strdup(final_tab[i]);
+		arg_index++;
+	}
+
+	// "securite"
+	commands[cmd_index][arg_index] = NULL;
+	commands[cmd_index + 1] = NULL;
+
+	return (commands);
+}
+
 static char	*ft_strjoin_path(const char *path, const char *cmd)
 {
 	char	*full_path;
@@ -85,20 +180,18 @@ static char	*get_command_path(char *cmd_name, char **env)
 	return (NULL);
 }
 
+
 int	pipe_execute(t_cmd *cmd)
 {
 	int		fd[2];
-	int		fd_in;
+	int		fd_in = 0;
 	pid_t	pid;
-	int		i;
-	char	**commands;
+	int		i = 0;
 
-	i = 0;
-	commands = ft_split(cmd->final_line, '|');
+	char ***commands = split_commands(cmd->final_tab);
 	if (!commands)
 		return (0);
-	fd_in = 0;
-	//signal(SIGPIPE, SIG_IGN);
+
 	while (commands[i] != NULL)
 	{
 		if (pipe(fd) == -1)
@@ -111,7 +204,7 @@ int	pipe_execute(t_cmd *cmd)
 			perror("fork");
 			return (0);
 		}
-		if (pid == 0)
+		if (pid == 0) // Child process
 		{
 			signal(SIGPIPE, SIG_DFL);
 
@@ -121,74 +214,49 @@ int	pipe_execute(t_cmd *cmd)
 				close(fd_in);
 			}
 
+			// sauvegarde pour la suite des commandes
 			if (commands[i + 1] != NULL)
 			{
 				dup2(fd[1], STDOUT_FILENO);
 			}
 
 			close(fd[0]);
-			close(fd[1]);
+			cmd->path_command = commands[i]; // split commande par commande
 
-			cmd->path_command = ft_split(commands[i], ' ');
-			if (!cmd->path_command)
-				exit(1); // on gerera les free plus tard
-
-			//printf("cmd->path_command\n");
-			//print_tab(cmd->path_command);
-
-			if(is_builtin(cmd->path_command[0]))
+			if (is_builtin(cmd->path_command[0]))
 			{
-				//printf("in builtin\n");
 				if (pipe_builtin(cmd, cmd->path_command) == EXIT_SUCCESS)
 				{
-					ft_freetab(cmd->path_command);
-					ft_freetab(cmd->final_tab);
-					ft_freetab(cmd->env);
-					ft_freetab(commands);
-					free(cmd->final_line);
-					token_lstclear(&cmd->tokens, free);
-					free(cmd);
-                    exit(EXIT_SUCCESS);
-                }
-
-				else // a revoir
+					free_cmd_resources(cmd);
+					exit(EXIT_SUCCESS);
+				}
+				else
 				{
-				//	printf("echec builtin\n");
-					ft_freetab(cmd->path_command);
-					ft_freetab(cmd->final_tab);
-					ft_freetab(cmd->env);
-					ft_freetab(commands);
-					free(cmd->final_line);
-					token_lstclear(&cmd->tokens, free);
-					free(cmd);
-                    exit(EXIT_SUCCESS);
+					free_cmd_resources(cmd);
+					exit(EXIT_FAILURE);
 				}
 			}
-
 			else
 			{
+				// cherche "/bin/ls" pour ls par ex
 				char *full_path = get_command_path(cmd->path_command[0], cmd->env);
 				if (full_path == NULL)
 				{
-					fprintf(stderr, "%s:command not found\n", cmd->path_command[0]);
-					ft_freetab(cmd->path_command);
-					ft_freetab(cmd->final_tab);
-					ft_freetab(cmd->env);
-					ft_freetab(commands);
-					free(cmd->final_line);
-					free(full_path);
-					token_lstclear(&cmd->tokens, free);
-					free(cmd);
+					fprintf(stderr, "%s: command not found\n", cmd->path_command[0]);
+					free_cmd_resources(cmd);
+					free_commands(commands);
 					exit(127);
 				}
 				if (execve(full_path, cmd->path_command, cmd->env) == -1)
 				{
-					printf("%s : command not found\n", cmd->path_command[0]); // 0 ou i je pige plus
-					ft_freetab(cmd->path_command);
+					fprintf(stderr, "%s: command execution failed\n", cmd->path_command[0]);
+					free_cmd_resources(cmd);
+					free_commands(commands);
 					exit(127);
 				}
 			}
 		}
+
 		else
 		{
 			close(fd[1]);
@@ -196,25 +264,18 @@ int	pipe_execute(t_cmd *cmd)
 				close(fd_in);
 			fd_in = fd[0];
 
-			waitpid(pid, &cmd->status, 0);  // Wait for child process
-
-			//_____________
-
-			//_____________
-
-            if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
-            {
-                fprintf(stderr, "aie aie aie\n");
-            }
-
-			//if(WIFEXITED(cmd->status))
-			//	cmd->exit_status = WEXITSTATUS(cmd->status);
+			waitpid(pid, &cmd->status, 0);
+			if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
+			{
+				fprintf(stderr, "wrong input\n");
+			}
 		}
 		i++;
 	}
+
 	if (fd_in != 0)
 		close(fd_in);
 	//while (waitpid(-1, NULL, 0) > 0);
-	ft_freetab(commands);
+	free_commands(commands);
 	return (0);
 }

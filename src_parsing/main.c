@@ -143,12 +143,12 @@ int	main(int argc, char **argv, char **envp)
 	t_token	*token_list;
 	t_cmd	*cmd;
 	int		len;
-	int		error;
+	//int		error;
 
 
 	token_list = NULL;
 	(void)argv;
-	error = 0;
+	//error = 0;
 
 	rl_outstream = stderr;
 
@@ -234,13 +234,13 @@ int	main(int argc, char **argv, char **envp)
             return (0);
         }
 
-		//print_token_list(token_list);
-		//printf("\n\n");
+		// print_token_list(token_list);
+		// printf("\n\n");
 		path_main(token_list, envp);
 		cmd->final_tab = main_cat(&token_list);//dedans ou celui dans dessou il y a un free token_list donc fais gaffe
 		cmd->final_line = tab_to_str(cmd->final_tab);
-		//printf("final_tab\n");
-		//print_tab(cmd->final_tab);
+		// printf("final_tab\n");
+		// print_tab(cmd->final_tab);
 		free(split_line);
 		free(line);
 		token_lstclear(&token_list, free);// tu supprime ca ou tu le met en bas
