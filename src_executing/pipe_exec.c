@@ -33,7 +33,7 @@ void free_commands(char ***commands)
 
 static void free_cmd_resources (t_cmd *cmd)
 {
-	ft_freetab(cmd->path_command);
+	//ft_freetab(cmd->path_command);
 	ft_freetab(cmd->final_tab);
 	ft_freetab(cmd->env);
 	free(cmd->final_line);
@@ -243,7 +243,7 @@ int	pipe_execute(t_cmd *cmd)
 				{
 					fprintf(stderr, "%s: command not found\n", cmd->path_command[0]);
 					free_cmd_resources(cmd);
-					//free_commands(commands);
+					free_commands(commands);
 					exit(127);
 				}
 				if (execve(full_path, cmd->path_command, cmd->env) == -1)
