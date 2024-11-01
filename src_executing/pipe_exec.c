@@ -216,11 +216,10 @@ int	pipe_execute(t_cmd *cmd)
 
 			// sauvegarde pour la suite des commandes
 			if (commands[i + 1] != NULL)
-			{
 				dup2(fd[1], STDOUT_FILENO);
-			}
 
 			close(fd[0]);
+			close(fd[1]);
 			cmd->path_command = commands[i]; // split commande par commande
 
 			if (is_builtin(cmd->path_command[0]))
@@ -244,7 +243,7 @@ int	pipe_execute(t_cmd *cmd)
 				{
 					fprintf(stderr, "%s: command not found\n", cmd->path_command[0]);
 					free_cmd_resources(cmd);
-					free_commands(commands);
+					//free_commands(commands);
 					exit(127);
 				}
 				if (execve(full_path, cmd->path_command, cmd->env) == -1)
@@ -268,6 +267,7 @@ int	pipe_execute(t_cmd *cmd)
 			if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
 			{
 				fprintf(stderr, "wrong input\n");
+				//break; // ?
 			}
 		}
 		i++;
