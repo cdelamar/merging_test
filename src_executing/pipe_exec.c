@@ -227,11 +227,13 @@ int	pipe_execute(t_cmd *cmd)
 				if (pipe_builtin(cmd, cmd->path_command) == EXIT_SUCCESS)
 				{
 					free_cmd_resources(cmd);
+					free_commands(commands);
 					exit(EXIT_SUCCESS);
 				}
 				else
 				{
 					free_cmd_resources(cmd);
+					free_commands(commands);
 					exit(EXIT_FAILURE);
 				}
 			}
