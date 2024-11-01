@@ -265,19 +265,19 @@ int	pipe_execute(t_cmd *cmd)
 				close(fd_in);
 			fd_in = fd[0];
 
-			waitpid(pid, &cmd->status, 0);
+			/*waitpid(pid, &cmd->status, 0);
 			if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
 			{
 				fprintf(stderr, "wrong input\n");
 				//break; // ?
-			}
+			}*/
+			i++;
 		}
-		i++;
 	}
 
 	if (fd_in != 0)
 		close(fd_in);
-	//while (waitpid(-1, NULL, 0) > 0);
+	while (waitpid(-1, NULL, 0) > 0);
 	free_commands(commands);
 	return (0);
 }
