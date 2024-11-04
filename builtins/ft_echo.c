@@ -62,6 +62,7 @@ int	ft_echo(char **split_line)
 
 	i = 1;
 	newline = true;
+
 	while (split_line[i] && split_line[i][0] == '-')
 	{
 		j = 1;
@@ -72,6 +73,14 @@ int	ft_echo(char **split_line)
 		newline = false;
 		i++;
 	}
+
+	if (split_line[i] == NULL)
+	{
+		if (newline)
+			ft_putchar_fd('\n', 1);
+		return (EXIT_SUCCESS);
+	}
+
 	if (ft_strcmp(split_line[i], "$?") == 0)
 		printf("%d\n", g_signal);
 	else
