@@ -170,5 +170,7 @@ void				process_input(t_cmd *cmd);
 void				ignore_sigpipe(void);
 bool				is_builtin(char *command);
 int					pipe_builtin(t_cmd *cmd, char **command);
+bool				synthax_manager(char **split_line);
+
 
 #endif

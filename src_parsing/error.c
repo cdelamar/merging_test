@@ -18,16 +18,19 @@ int	check_pipe(char **split_line)
 	int	j;
 
 	i = 0;
-	j = 0;
 	while (split_line[i])
 	{
 		j = 0;
 		while (split_line[i][j])
 		{
-			if (split_line[i][j] == '|' && split_line[i + 1][j] == '|')
+			// comme le tiens d'avant mais on check si [i + 1] == NULL ou pas
+			if (split_line[i][j] == '|' && split_line[i + 1] && split_line[i + 1][j] == '|')
 				return (0);
 			j++;
 		}
+		// evite les segfault en cas de ' | ' qui se baladerait tout seul a la fin de la chaine
+		if (split_line[i][0] == '|' && (split_line[i + 1] == NULL || split_line[i + 1][0] == '\0'))
+			return (0);
 		i++;
 	}
 	return (1);

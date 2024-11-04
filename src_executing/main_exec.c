@@ -12,8 +12,35 @@
 
 #include "../includes/minishell.h"
 
+
+bool synthax_manager(char **split_line)
+{
+	int i;
+
+	i = 0;
+	while(split_line[i])
+		i++;
+
+	if (ft_strcmp(split_line[i - 1], "|") == 0 || split_line[0][0] == '|' )
+	{
+		printf("synthax error near \"|\"\n");
+		return (true);
+	}
+
+
+	if (ft_strcmp(split_line[0], "<") == 0 || ft_strcmp(split_line[0], ">") == 0
+		|| ft_strcmp(split_line[0], "<<") == 0 || ft_strcmp(split_line[0], ">>") == 0)
+	{
+		printf("redirection have to be implemented between a command and an argument\n");
+		return (true);
+	}
+	return (false);
+}
+
 void	process_input(t_cmd *cmd)
 {
+	if (synthax_manager(cmd->final_tab))
+		return;
 	execute(cmd);
 }
 
