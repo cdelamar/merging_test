@@ -6,27 +6,50 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 17:05:29 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/22 17:49:31 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/04 16:14:30 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+extern volatile int	g_signal;
+
+void	skip_x1f(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '\x1F')
+			i++;
+		else
+		{
+			ft_putchar_fd(line[i], 1);
+			i++;
+		}
+	}
+}
+
 static void	echo_output(char **split_line, int i)
 {
 	int	start;
 
-	// printf("echo's split_line\n");
-	// print_tab(split_line);
-	// printf("\nft_echo\n");
-
 	start = i;
 	while (split_line[start])
 	{
-		ft_putstr_fd(split_line[start], 1);
-		start++;
-		if (split_line[start])
-			ft_putchar_fd(' ', 1);
+		if (ft_strchr(split_line[start], '\x1F'))
+		{
+			skip_x1f(split_line[start]);
+			start++;
+		}
+		else
+		{
+			ft_putstr_fd(split_line[start], 1);
+			start++;
+			if (split_line[start])
+				ft_putchar_fd(' ', 1);
+		}
 	}
 	return ;
 }
@@ -49,8 +72,13 @@ int	ft_echo(char **split_line)
 		newline = false;
 		i++;
 	}
-	echo_output(split_line, i);
-	if (newline)
-		ft_putchar_fd('\n', 1);
+	if (ft_strcmp(split_line[i], "$?") == 0)
+		printf("%d\n", g_signal);
+	else
+	{
+		echo_output(split_line, i);
+		if (newline)
+			ft_putchar_fd('\n', 1);
+	}
 	return (EXIT_SUCCESS);
 }

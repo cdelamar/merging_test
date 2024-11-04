@@ -6,11 +6,13 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:07 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/22 15:53:16 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/04 17:53:03 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+extern volatile int	g_signal;
 
 bool	syntax_redirect(char *line)
 {
@@ -69,6 +71,7 @@ int	basic_child_process(t_cmd *cmd)
 		execve(command, split_line, cmd->env);
 	//print_tab(split_line);
 	printf("%s : command not found\n", split_line[0]);
+	g_signal = 127;
 	free(command);
 	close(cmd->fd_in);
 	return (EXIT_FAILURE);
@@ -102,6 +105,7 @@ int	basic_execute(t_cmd *cmd)
 	if (exit_code != EXIT_SUCCESS)
 	{
 		printf("Command not found: %s\n", cmd->final_line);
+		g_signal = 127;
 		return (exit_code);
 	}
 

@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:11:04 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/31 14:36:45 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/04 16:17:53 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (!check_pipe(split_line))
 		{
-			printf("erreur synthax symbole");
+			printf("erreur synthax symbole\n");
 			g_signal = 2;
 			continue;
 		}
@@ -245,14 +245,6 @@ int	main(int argc, char **argv, char **envp)
 		free(line);
 		token_lstclear(&token_list, free);// tu supprime ca ou tu le met en bas
 		process_input(cmd);
-
-// donc tu supprime les 2 free ou tu les descant et tu envoie dedand comme ca (process_input(cmd, &token_list));
-//tu copie dans head sinon ca va poser probleme
-//donc t_token *head
-//head = *token_list;
-//et donc pour acceder a head type tu fais head->type
-//void
-
 		free(cmd->final_line);
 		token_lstclear(&cmd->tokens, free);// tu supprime ca ou tu le met en bas
 		tab = cmd->env;
