@@ -243,10 +243,9 @@ int	main(int argc, char **argv, char **envp)
 		// print_tab(cmd->final_tab);
 		free(split_line);
 		free(line);
-		token_lstclear(&token_list, free);// tu supprime ca ou tu le met en bas
+		token_lstclear(&token_list, free);// si on le deplace c'est segfault assure
 		process_input(cmd);
 		free(cmd->final_line);
-		token_lstclear(&cmd->tokens, free);// tu supprime ca ou tu le met en bas
 		tab = cmd->env;
 	}
 	//printf("sortie de loop\n");

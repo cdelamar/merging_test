@@ -180,7 +180,7 @@ static char	*get_command_path(char *cmd_name, char **env)
 	return (NULL);
 }
 
-
+/*
 int	pipe_execute(t_cmd *cmd)
 {
 	int		fd[2];
@@ -265,13 +265,13 @@ int	pipe_execute(t_cmd *cmd)
 				close(fd_in);
 			fd_in = fd[0];
 
-			/*waitpid(pid, &cmd->status, 0);
-			if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
-			{
-				fprintf(stderr, "wrong input\n");
+			// waitpid(pid, &cmd->status, 0);
+			// if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
+			// {
+				// fprintf(stderr, "wrong input\n");
 				//break; // ?
-			}*/
-			i++;
+			// }
+			// i++;
 		}
 	}
 
@@ -280,4 +280,100 @@ int	pipe_execute(t_cmd *cmd)
 	while (waitpid(-1, NULL, 0) > 0);
 	free_commands(commands);
 	return (0);
+}*/
+
+int pipe_execute(t_cmd *cmd) {
+    int fd[2];
+    int fd_in = 0;  // Initially read from standard input
+    pid_t pid;
+    int i = 0;
+
+    char ***commands = split_commands(cmd->final_tab);
+    if (!commands)
+        return (EXIT_FAILURE);
+
+    while (commands[i] != NULL) {
+        if (pipe(fd) == -1) {
+            perror("pipe");
+            free_commands(commands);
+            return (EXIT_FAILURE);
+        }
+
+        if ((pid = fork()) == -1) {
+            perror("fork");
+            free_commands(commands);
+            return (EXIT_FAILURE);
+        }
+
+        if (pid == 0) {  // Child process
+            signal(SIGPIPE, SIG_DFL);
+
+            // Manage input redirection if not the first command
+            if (fd_in != 0) {
+                dup2(fd_in, STDIN_FILENO);
+                close(fd_in);
+            }
+
+            // Manage output redirection if not the last command
+            if (commands[i + 1] != NULL)
+                dup2(fd[1], STDOUT_FILENO);
+
+            close(fd[0]);  // Close unused read end of the pipe
+            close(fd[1]);
+
+            // Prepare the command for execution
+            cmd->path_command = commands[i];
+
+            // Handle redirections for the current command
+            if (handle_redirections(cmd->path_command, 0, cmd) == EXIT_FAILURE) {
+                fprintf(stderr, "Error handling redirections\n");
+                free_cmd_resources(cmd);
+                free_commands(commands);
+                exit(EXIT_FAILURE);
+            }
+
+            // Execute built-in or external command
+            if (is_builtin(cmd->path_command[0])) {
+                if (pipe_builtin(cmd, cmd->path_command) == EXIT_SUCCESS) {
+                    free_cmd_resources(cmd);
+                    free_commands(commands);
+                    exit(EXIT_SUCCESS);
+                } else {
+                    free_cmd_resources(cmd);
+                    free_commands(commands);
+                    exit(EXIT_FAILURE);
+                }
+            } else {
+                char *full_path = get_command_path(cmd->path_command[0], cmd->env);
+                if (full_path == NULL) {
+                    fprintf(stderr, "%s: command not found\n", cmd->path_command[0]);
+                    free_cmd_resources(cmd);
+                    free_commands(commands);
+                    exit(127);
+                }
+                if (execve(full_path, cmd->path_command, cmd->env) == -1) {
+                    perror("execve");
+                    free_cmd_resources(cmd);
+                    free(full_path);
+                    free_commands(commands);
+                    exit(127);
+                }
+                free(full_path);
+            }
+        } else {  // Parent process
+            close(fd[1]);  // Close write end of the pipe
+            if (fd_in != 0)
+                close(fd_in);  // Close the previous read end if any
+            fd_in = fd[0];  // Keep the read end for the next command
+
+            i++;
+        }
+    }
+
+    // Wait for all children processes to finish
+    while (waitpid(-1, NULL, 0) > 0);
+
+    // Clean up and free allocated memory
+    free_commands(commands);
+    return (EXIT_SUCCESS);
 }
