@@ -12,8 +12,6 @@
 
 #include "../includes/minishell.h"
 
-extern volatile int	g_signal;
-
 bool	syntax_redirect(char *line)
 {
 	int		i;
@@ -51,6 +49,133 @@ int	ft_path_split(t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
+
+
+int	basic_parent_process(pid_t pid)
+{
+	int	status;
+
+	if (waitpid(pid, &status, 0) == -1)
+	{
+		printf("waitpid -1\n");
+		return (EXIT_FAILURE);
+	}
+	if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
+
+int basic_child_process(t_cmd *cmd, int fd_signal)
+{
+    char    **split_line;
+    char    *command;
+    //int     exit_code;
+
+    split_line = cmd->final_tab;
+    if (!split_line)
+        return (EXIT_FAILURE);
+    if (handle_redirections(split_line, HEREDOC_ON, cmd) != 0)
+    {
+        ft_freetab(split_line);
+        return (EXIT_FAILURE);
+    }
+    command = cmd_finder(split_line, cmd);
+    if (command)
+    {
+        execve(command, split_line, cmd->env);
+        // Si execve réussit, on ne retourne pas ici
+    }
+    else
+    {
+        printf("%s : commande pas trouvee, ligne 90\n", split_line[0]);
+		token_lstclear(&cmd->tokens, free);
+		printf("token liberees\n");
+        g_signal = 127;
+    }
+
+    // Écrit g_signal dans le pipe avant la sortie de l'enfant
+    if (write(fd_signal, (const void *)&g_signal, sizeof(g_signal)) == -1)
+        perror("write error");
+
+    close(fd_signal); // Ferme l'extrémité du pipe
+    free(command);
+
+	close(cmd->fd_in);
+	printf("la cest close\n");
+    return (EXIT_FAILURE);
+}
+
+int basic_execute(t_cmd *cmd)
+{
+    int     exit_code;
+    int     fd_signal[2];
+    int     signal_value;
+
+    // Initialise le pipe pour transmettre la valeur de g_signal
+    if (pipe(fd_signal) == -1)
+    {
+        perror("pipe error");
+        return (EXIT_FAILURE);
+    }
+
+    exit_code = ft_path_split(cmd);
+    if (is_builtin(cmd->final_tab[0]) == true)
+    {
+        close(fd_signal[0]);
+        close(fd_signal[1]);
+        return (ft_builtin(cmd));
+    }
+
+    if (exit_code != EXIT_SUCCESS)
+    {
+        printf("je sais meme pas si on passe ici au moins une fois: %s\n", cmd->final_line);
+        g_signal = 127;
+		close(fd_signal[0]);
+        close(fd_signal[1]);
+        return (exit_code);
+    }
+
+    cmd->pid1 = fork();
+    if (cmd->pid1 < 0)
+    {
+        perror("Fork error");
+        close(fd_signal[0]);
+        close(fd_signal[1]);
+        return (EXIT_FAILURE);
+    }
+    else if (cmd->pid1 == 0)
+    {
+        // Processus enfant
+        close(fd_signal[0]); // Ferme l'extrémité de lecture
+        exit_code = basic_child_process(cmd, fd_signal[1]);
+        free(cmd->final_line);
+        ft_freetab(cmd->final_tab);
+        ft_freetab(cmd->env);
+        ft_freetab(cmd->path_split);
+        token_lstclear(&cmd->tokens, free);
+        free(cmd);
+        exit(exit_code);
+    }
+    else
+    {
+        // Processus parent
+        close(fd_signal[1]); // Ferme l'extrémité d'écriture
+
+        // Attend que l'enfant termine
+        exit_code = basic_parent_process(cmd->pid1);
+
+        // Lit la valeur de g_signal depuis le pipe
+        if (read(fd_signal[0], &signal_value, sizeof(signal_value)) > 0)
+            g_signal = signal_value; // Met à jour g_signal
+        close(fd_signal[0]); // Ferme l'extrémité de lecture
+
+        return (exit_code);
+    }
+}
+
+
+
+/*
 int	basic_child_process(t_cmd *cmd)
 {
 	char	**split_line;
@@ -72,25 +197,11 @@ int	basic_child_process(t_cmd *cmd)
 	//print_tab(split_line);
 	printf("%s : command not found\n", split_line[0]);
 	g_signal = 127;
-	//token_lstclear(&cmd->tokens, free);
 	free(command);
 	close(cmd->fd_in);
 	return (EXIT_FAILURE);
 }
 
-int	basic_parent_process(pid_t pid)
-{
-	int	status;
-
-	if (waitpid(pid, &status, 0) == -1)
-	{
-		printf("waitpid -1\n");
-		return (EXIT_FAILURE);
-	}
-	if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-}
 
 int	basic_execute(t_cmd *cmd)
 {
@@ -105,7 +216,7 @@ int	basic_execute(t_cmd *cmd)
 
 	if (exit_code != EXIT_SUCCESS)
 	{
-		printf("Command not found %s\n", cmd->final_line);
+		printf("Command not found: %s\n", cmd->final_line);
 		g_signal = 127;
 		return (exit_code);
 	}
@@ -123,14 +234,14 @@ int	basic_execute(t_cmd *cmd)
 		ft_freetab(cmd->final_tab);
 		ft_freetab(cmd->env);
 		ft_freetab(cmd->path_split);
-		token_lstclear(&cmd->tokens, free);
+		token_lstclear(&cmd->tokens, free);// tu supprime ca ou tu le met en bas
 		free(cmd);
 		exit(exit_code);
 	}
 	else
 	{
 		exit_code = basic_parent_process(cmd->pid1);
-		token_lstclear(&cmd->tokens, free);
 		return (exit_code);
 	}
 }
+*/

@@ -12,8 +12,6 @@
 
 #include "../includes/minishell.h"
 
-extern sig_atomic_t	g_signal;
-
 void	ignore_sigpipe(void)
 {
 	signal(SIGPIPE, SIG_IGN);

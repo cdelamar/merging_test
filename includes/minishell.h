@@ -24,7 +24,7 @@
 # include "readline/readline.h"
 # include "readline/history.h"
 
-extern volatile int	g_var;
+extern volatile sig_atomic_t g_signal;
 /* ========== ENUM ================= */
 
 typedef enum token_num

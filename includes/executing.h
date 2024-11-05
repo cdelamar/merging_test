@@ -13,6 +13,8 @@
 #ifndef EXECUTING_H
 # define EXECUTING_H
 
+#pragma once
+
 # include "minishell.h"
 # include "libft.h"
 # include <fcntl.h>
@@ -78,6 +80,22 @@ typedef struct s_cmd
 	t_token	*tokens;
 }	t_cmd;
 
+
+typedef enum
+{
+	ADD,
+	FREE
+} COLLECTOR_ACTION;
+
+typedef struct lnk_list
+{
+	void *ptr;
+	struct lnk_list *next;
+} lnk_list;
+
+void *dino_alloc(void *ptr);
+void dino_free();
+
 void				ft_path_command(t_cmd *cmd);
 int					ft_path_split(t_cmd *cmd);
 
@@ -132,7 +150,7 @@ int					open_heredoc_file(void);
 
 //basic executing
 int					handle_exit_command(char *line);
-int					basic_child_process(t_cmd *cmd);
+int					basic_child_process(t_cmd *cmd, int fd_signal);
 int					basic_parent_process(pid_t pid);
 int					basic_execute(t_cmd *cmd);
 
@@ -171,6 +189,8 @@ void				ignore_sigpipe(void);
 bool				is_builtin(char *command);
 int					pipe_builtin(t_cmd *cmd, char **command);
 bool				synthax_manager(char **split_line);
+void				free_cmd_resources (t_cmd *cmd);
+
 
 
 #endif

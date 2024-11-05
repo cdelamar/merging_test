@@ -12,8 +12,6 @@
 
 #include "../includes/minishell.h"
 
-extern volatile int	g_signal;
-
 void	skip_x1f(char *line)
 {
 	int	i;

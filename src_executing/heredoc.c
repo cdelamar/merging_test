@@ -12,8 +12,6 @@
 
 #include "../includes/minishell.h"
 
-extern sig_atomic_t	g_signal;
-
 int	ft_heredoc(char *limit)
 {
 	char	*line;

@@ -12,8 +12,22 @@
 
 #include "minishell.h"
 
-volatile int	g_signal = 0;
+volatile sig_atomic_t	g_signal = 0;
 
+static void free_token_list(t_token *token_list)
+{
+    t_token *temp;
+    while (token_list)
+    {
+        temp = token_list;
+        token_list = token_list->next;
+        free(temp->content);
+        free(temp);
+    }
+}
+
+
+/*
 t_token *copy_token_list(t_token *laubry_list)
 {
     t_token *copy_head = NULL;
@@ -25,7 +39,10 @@ t_token *copy_token_list(t_token *laubry_list)
         // alloue pour la nouvelle liste
         t_token *new_node = malloc(sizeof(t_token));
         if (!new_node)
+		{
+			free_token_list(copy_head);
             return NULL;
+		}
 
         // copiage
         new_node->type = current->type;
@@ -47,7 +64,54 @@ t_token *copy_token_list(t_token *laubry_list)
     }
 
     return copy_head;
+}*/
+
+t_token *copy_token_list(t_token *laubry_list)
+{
+    t_token *copy_head = NULL;
+    t_token *copy_current = NULL;
+    t_token *current = laubry_list;
+
+    while (current != NULL)
+    {
+        // Allocate a new node
+        t_token *new_node = malloc(sizeof(t_token));
+        if (!new_node)
+        {
+            free_token_list(copy_head);  // Free everything we've copied so far
+            return NULL;
+        }
+
+        // Copying content with strdup (assuming ft_strdup is well-implemented)
+        new_node->type = current->type;
+        new_node->content = ft_strdup(current->content);
+        if (!new_node->content)
+        {
+            free(new_node); // Free node if strdup fails
+            free_token_list(copy_head);
+            return NULL;
+        }
+        
+        new_node->index = current->index;
+        new_node->next = NULL;
+
+        if (copy_head == NULL)
+        {
+            copy_head = new_node;
+            copy_current = copy_head;
+        }
+        else
+        {
+            copy_current->next = new_node;
+            copy_current = copy_current->next;
+        }
+        current = current->next;
+    }
+
+    return copy_head;
 }
+
+
 
 char	*ft_realloc_string(char *str, int new_size)
 {
@@ -245,6 +309,7 @@ int	main(int argc, char **argv, char **envp)
 		free(line);
 		token_lstclear(&token_list, free);// si on le deplace c'est segfault assure
 		process_input(cmd);
+		token_lstclear(&cmd->tokens, free);// en test, a deplacer si ca foire
 		free(cmd->final_line);
 		tab = cmd->env;
 	}

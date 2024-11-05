@@ -12,8 +12,6 @@
 
 #include "../includes/minishell.h"
 
-extern sig_atomic_t	g_signal;
-
 void free_commands(char ***commands)
 {
     int i = 0;
@@ -31,7 +29,7 @@ void free_commands(char ***commands)
     free(commands);
 }
 
-static void free_cmd_resources (t_cmd *cmd)
+void free_cmd_resources (t_cmd *cmd)
 {
 	//ft_freetab(cmd->path_command);
 	ft_freetab(cmd->final_tab);
