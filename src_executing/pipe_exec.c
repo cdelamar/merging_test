@@ -183,6 +183,128 @@ static char	*get_command_path(char *cmd_name, char **env)
 int pipe_execute(t_cmd *cmd)
 {
     int fd[2];
+    int fd_in = 0;  // input pour pipe suivant
+    pid_t pid;
+    int i = 0;
+
+    char ***commands = split_commands(cmd->final_tab);
+    if (!commands)
+        return (EXIT_FAILURE);
+
+    while (commands[i] != NULL)
+	{
+
+        if (pipe(fd) == -1)
+		{
+            free_commands(commands);
+            return (EXIT_FAILURE);
+        }
+
+        // Fork a new process for the current command
+        if ((pid = fork()) == -1)
+		{
+            free_commands(commands);
+            return (EXIT_FAILURE);
+        }
+
+
+		// _________________________ CHILD
+        if (pid == 0)
+		{
+            // Reset SIGPIPE pour process enfant
+            signal(SIGPIPE, SIG_DFL);
+
+            // si c'est pas la 1ere commande, rediricge la sauvegarde sur sortie Standard
+            if (fd_in != STDIN_FILENO)
+			{
+                dup2(fd_in, STDIN_FILENO);
+                close(fd_in);
+            }
+
+            // si cest pas la derniere cmd, redirige stdout sur le pipe
+            if (commands[i + 1] != NULL)
+                dup2(fd[1], STDOUT_FILENO);
+
+            close(fd[0]);  // Close cote read
+            close(fd[1]);  // Close cote write
+
+            // Set command and handle redirections
+            cmd->path_command = commands[i];
+            if (handle_redirections(cmd->path_command, 0, cmd) == EXIT_FAILURE)
+			{
+                fprintf(stderr, "Error handling redirections\n");
+                free_cmd_resources(cmd);
+                free_commands(commands);
+                exit(EXIT_FAILURE);
+            }
+
+            // Check if it's a built-in command
+            if (is_builtin(cmd->path_command[0]))
+			{
+                if (pipe_builtin(cmd, cmd->path_command) == EXIT_SUCCESS)
+				{
+                    free_cmd_resources(cmd);
+                    free_commands(commands);
+                    exit(EXIT_SUCCESS);
+                } else
+				{
+                    free_cmd_resources(cmd);
+                    free_commands(commands);
+                    exit(EXIT_FAILURE);
+                }
+            }
+
+			else
+			{  // External command execution
+                char *full_path = get_command_path(cmd->path_command[0], cmd->env);
+                if (full_path == NULL) {
+                    fprintf(stderr, "%s: command not found\n", cmd->path_command[0]);
+                    free_cmd_resources(cmd);
+                    free_commands(commands);
+                    exit(127);
+                }
+                execve(full_path, cmd->path_command, cmd->env);
+                perror("execve");  // If execve fails
+                free(full_path);
+                free_cmd_resources(cmd);
+                free_commands(commands);
+                exit(127);
+            }
+        }
+
+		// ___________________ PARENT
+
+		else
+		{
+            // Close the write end of the pipe in the parent
+            close(fd[1]);
+            // Close the previous fd_in if it's not the first command
+            if (fd_in != 0)
+                close(fd_in);
+
+            // Move the read end to fd_in for the next command
+            fd_in = fd[0];
+            i++;
+        }
+    }
+
+    // on attend tous les childs
+	token_lstclear(&cmd->tokens, free);
+    while (waitpid(-1, NULL, 0) > 0);
+
+    // Cleanup resources
+    free_commands(commands);
+    if (fd_in != 0)  // Close final fd_in if still open
+        close(fd_in);
+
+    return (EXIT_SUCCESS);
+}
+
+
+/*
+int pipe_execute(t_cmd *cmd)
+{
+    int fd[2];
     int fd_in = 0;
     pid_t pid;
     int i = 0;
@@ -289,4 +411,4 @@ int pipe_execute(t_cmd *cmd)
     while (waitpid(-1, NULL, 0) > 0);
     free_commands(commands);
     return (EXIT_SUCCESS);
-}
+}*/

@@ -72,6 +72,7 @@ int	basic_child_process(t_cmd *cmd)
 	//print_tab(split_line);
 	printf("%s : command not found\n", split_line[0]);
 	g_signal = 127;
+	//token_lstclear(&cmd->tokens, free);
 	free(command);
 	close(cmd->fd_in);
 	return (EXIT_FAILURE);
@@ -104,7 +105,7 @@ int	basic_execute(t_cmd *cmd)
 
 	if (exit_code != EXIT_SUCCESS)
 	{
-		printf("Command not found: %s\n", cmd->final_line);
+		printf("Command not found %s\n", cmd->final_line);
 		g_signal = 127;
 		return (exit_code);
 	}
@@ -122,13 +123,14 @@ int	basic_execute(t_cmd *cmd)
 		ft_freetab(cmd->final_tab);
 		ft_freetab(cmd->env);
 		ft_freetab(cmd->path_split);
-		token_lstclear(&cmd->tokens, free);// tu supprime ca ou tu le met en bas
+		token_lstclear(&cmd->tokens, free);
 		free(cmd);
 		exit(exit_code);
 	}
 	else
 	{
 		exit_code = basic_parent_process(cmd->pid1);
+		token_lstclear(&cmd->tokens, free);
 		return (exit_code);
 	}
 }
