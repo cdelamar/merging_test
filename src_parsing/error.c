@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:42:17 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/31 14:37:43 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/05 12:41:48 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@ int	check_pipe(char **split_line)
 		j = 0;
 		while (split_line[i][j])
 		{
-			// comme le tiens d'avant mais on check si [i + 1] == NULL ou pas
 			if (split_line[i][j] == '|' && split_line[i + 1] && split_line[i + 1][j] == '|')
+				return (0);
+			if (split_line[i][j] == '|' && split_line[i + 1] && split_line[i + 1][j] == ' '
+					&& split_line[i + 2] && split_line[i + 2][j] == '|')
 				return (0);
 			j++;
 		}
-		// evite les segfault en cas de ' | ' qui se baladerait tout seul a la fin de la chaine
 		if (split_line[i][0] == '|' && (split_line[i + 1] == NULL || split_line[i + 1][0] == '\0'))
 			return (0);
 		i++;
