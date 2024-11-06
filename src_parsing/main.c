@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:11:04 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/04 16:17:53 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/06 16:31:45 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,7 @@ int	main(int argc, char **argv, char **envp)
 		if(ft_strcmp(split_line[0], "|") == 0)
 		{
 			printf("erreur synthaxe du au symbole ' | '\n");
+			free_split_line(split_line);
 			g_signal = 2;
 			free(line);
 			continue;
@@ -265,6 +266,9 @@ int	main(int argc, char **argv, char **envp)
 		{
 			printf("erreur synthax symbole\n");
 			g_signal = 2;
+			free_split_line(split_line);
+
+			//free(line);
 			continue;
 		}
 		if (solo_quote(split_line) || badchar(split_line))

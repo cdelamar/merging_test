@@ -6,7 +6,7 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:11:15 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/06 15:03:56 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/06 15:29:33 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,12 @@ char **modif_pipe(char **lst)
     int     i;
     char    quote;
     char    *new_str;
+	int		len;
 
     i = 0;
+	len = 0;
+	while (lst[len])
+		len++;
     while (lst[i])
     {
         if (lst[i][0] == '"' || lst[i][0] == '\'')
@@ -43,7 +47,7 @@ char **modif_pipe(char **lst)
                 i++;
             }
         }
-		if (lst[i])
+		if (i == len)
 			return (lst);
         i++;
     }
