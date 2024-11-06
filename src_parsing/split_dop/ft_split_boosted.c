@@ -6,7 +6,7 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:11:15 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/05 11:18:10 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/06 15:03:56 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ char **modif_pipe(char **lst)
                 i++;
             }
         }
+		if (lst[i])
+			return (lst);
         i++;
     }
     return (lst);
