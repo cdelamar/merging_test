@@ -65,11 +65,14 @@ int	basic_parent_process(pid_t pid)
 	return (EXIT_SUCCESS);
 }
 
-int basic_child_process(t_cmd *cmd, int fd_signal)
+int basic_child_process(t_cmd *cmd)
 {
     char    **split_line;
     char    *command;
     //int     exit_code;
+
+	// printf("into basic\n");
+	//dup2(cmd->fd[1], STDIN);
 
     split_line = cmd->final_tab;
     if (!split_line)
@@ -82,6 +85,9 @@ int basic_child_process(t_cmd *cmd, int fd_signal)
     command = cmd_finder(split_line, cmd);
     if (command)
     {
+		close(cmd->fd[1]);
+		// close(cmd->fd_in);
+		// printf("execve\n");
         execve(command, split_line, cmd->env);
         // Si execve réussit, on ne retourne pas ici
     }
@@ -93,24 +99,23 @@ int basic_child_process(t_cmd *cmd, int fd_signal)
     }
 
     // Écrit g_signal dans le pipe avant la sortie de l'enfant
-    if (write(fd_signal, (const void *)&g_signal, sizeof(g_signal)) == -1)
+    if (write(cmd->fd[1], (const void *)&g_signal, sizeof(g_signal)) == -1)
         perror("write error");
 
-    close(fd_signal); // Ferme l'extrémité du pipe
+    close(cmd->fd[1]); // Ferme l'extrémité du pipe
     free(command);
 
-	close(cmd->fd_in);
+	//close(cmd->fd_in);
     return (EXIT_FAILURE);
 }
 
 int basic_execute(t_cmd *cmd)
 {
     int     exit_code;
-    int     fd_signal[2];
     int     signal_value;
 
     // Initialise le pipe pour transmettre la valeur de g_signal
-    if (pipe(fd_signal) == -1)
+    if (pipe(cmd->fd) == -1)
     {
         perror("pipe error");
         return (EXIT_FAILURE);
@@ -119,8 +124,8 @@ int basic_execute(t_cmd *cmd)
     exit_code = ft_path_split(cmd);
     if (is_builtin(cmd->final_tab[0]) == true)
     {
-        close(fd_signal[0]);
-        close(fd_signal[1]);
+        close(cmd->fd[0]);
+        close(cmd->fd[1]);
         return (ft_builtin(cmd));
     }
 
@@ -128,8 +133,8 @@ int basic_execute(t_cmd *cmd)
     {
         printf("je sais meme pas si on passe ici au moins une fois: %s\n", cmd->final_line);
         g_signal = 127;
-		close(fd_signal[0]);
-        close(fd_signal[1]);
+		close(cmd->fd[0]);
+        close(cmd->fd[1]);
         return (exit_code);
     }
 
@@ -137,16 +142,17 @@ int basic_execute(t_cmd *cmd)
     if (cmd->pid1 < 0)
     {
         perror("Fork error");
-        close(fd_signal[0]);
-        close(fd_signal[1]);
+        close(cmd->fd[0]);
+        close(cmd->fd[1]);
         return (EXIT_FAILURE);
     }
     else if (cmd->pid1 == 0)
     {
         // Processus enfant
-        close(fd_signal[0]); // Ferme l'extrémité de lecture
-        exit_code = basic_child_process(cmd, fd_signal[1]);
-        free(cmd->final_line);
+        close(cmd->fd[0]); // Ferme l'extrémité de lecture
+        exit_code = basic_child_process(cmd);
+        //close(cmd->fd[1]); // Ferme l'extrémité de lecture
+	    free(cmd->final_line);
         ft_freetab(cmd->final_tab);
         ft_freetab(cmd->env);
         ft_freetab(cmd->path_split);
@@ -157,15 +163,15 @@ int basic_execute(t_cmd *cmd)
     else
     {
         // Processus parent
-        close(fd_signal[1]); // Ferme l'extrémité d'écriture
+        close(cmd->fd[1]); // Ferme l'extrémité d'écriture
 
         // Attend que l'enfant termine
         exit_code = basic_parent_process(cmd->pid1);
 
         // Lit la valeur de g_signal depuis le pipe
-        if (read(fd_signal[0], &signal_value, sizeof(signal_value)) > 0)
+        if (read(cmd->fd[0], &signal_value, sizeof(signal_value)) > 0)
             g_signal = signal_value; // Met à jour g_signal
-        close(fd_signal[0]); // Ferme l'extrémité de lecture
+        close(cmd->fd[0]); // Ferme l'extrémité de lecture
 
         return (exit_code);
     }

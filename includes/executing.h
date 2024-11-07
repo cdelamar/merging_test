@@ -150,7 +150,7 @@ int					open_heredoc_file(void);
 
 //basic executing
 int					handle_exit_command(char *line);
-int					basic_child_process(t_cmd *cmd, int fd_signal);
+int					basic_child_process(t_cmd *cmd);
 int					basic_parent_process(pid_t pid);
 int					basic_execute(t_cmd *cmd);
 
