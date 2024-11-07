@@ -87,9 +87,8 @@ int basic_child_process(t_cmd *cmd, int fd_signal)
     }
     else
     {
-        printf("%s : commande pas trouvee, ligne 90\n", split_line[0]);
+        printf("%s : command not found\n", split_line[0]);
 		token_lstclear(&cmd->tokens, free);
-		printf("token liberees\n");
         g_signal = 127;
     }
 
@@ -101,7 +100,6 @@ int basic_child_process(t_cmd *cmd, int fd_signal)
     free(command);
 
 	close(cmd->fd_in);
-	printf("la cest close\n");
     return (EXIT_FAILURE);
 }
 

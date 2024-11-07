@@ -178,6 +178,9 @@ static char	*get_command_path(char *cmd_name, char **env)
 	return (NULL);
 }
 
+// gere sleep 2 | sleep 2 comme bash mais pas SIGPIPE
+
+/*
 int pipe_execute(t_cmd *cmd)
 {
     int fd[2];
@@ -296,10 +299,12 @@ int pipe_execute(t_cmd *cmd)
         close(fd_in);
 
     return (EXIT_SUCCESS);
-}
+}*/
 
 
-/*
+// gere SIGPIPE mais pas sleep 2 | sleep 2 comme bash
+
+
 int pipe_execute(t_cmd *cmd)
 {
     int fd[2];
@@ -398,15 +403,24 @@ int pipe_execute(t_cmd *cmd)
 
 		else
 		{
-            close(fd[1]);  // Close la partie write
-            if (fd_in != 0)
-                close(fd_in);  // Close le read d'avant
-            fd_in = fd[0];  // sauvegarde pour la suite des comds
-            i++;
+			close(fd[1]);
+			if (fd_in != 0)
+				close(fd_in);
+			fd_in = fd[0];
+
+			waitpid(pid, &cmd->status, 0);
+			if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
+			{
+				fprintf(stderr, "command not found\n");
+				//break; // ?
+			}
         }
+        i++;
     }
 
-    while (waitpid(-1, NULL, 0) > 0);
+    if(fd_in != 0)
+        close(fd_in);
+    //while (waitpid(-1, NULL, 0) > 0);
     free_commands(commands);
     return (EXIT_SUCCESS);
-}*/
+}
