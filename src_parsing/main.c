@@ -26,8 +26,6 @@ static void free_token_list(t_token *token_list)
     }
 }
 
-
-/*
 t_token *copy_token_list(t_token *laubry_list)
 {
     t_token *copy_head = NULL;
@@ -36,62 +34,22 @@ t_token *copy_token_list(t_token *laubry_list)
 
     while (current != NULL)
     {
-        // alloue pour la nouvelle liste
-        t_token *new_node = malloc(sizeof(t_token));
-        if (!new_node)
-		{
-			free_token_list(copy_head);
-            return NULL;
-		}
-
-        // copiage
-        new_node->type = current->type;
-        new_node->content = ft_strdup(current->content);
-        new_node->index = current->index;
-        new_node->next = NULL;
-
-        if (copy_head == NULL)
-        {
-            copy_head = new_node;  // 1er node
-            copy_current = copy_head; // on remonte
-        }
-        else
-        {
-            copy_current->next = new_node; // i++ en gros
-            copy_current = copy_current->next;
-        }
-        current = current->next; // i++ dans la liste de lucas
-    }
-
-    return copy_head;
-}*/
-
-t_token *copy_token_list(t_token *laubry_list)
-{
-    t_token *copy_head = NULL;
-    t_token *copy_current = NULL;
-    t_token *current = laubry_list;
-
-    while (current != NULL)
-    {
-        // Allocate a new node
         t_token *new_node = malloc(sizeof(t_token));
         if (!new_node)
         {
-            free_token_list(copy_head);  // Free everything we've copied so far
+            free_token_list(copy_head);
             return NULL;
         }
 
-        // Copying content with strdup (assuming ft_strdup is well-implemented)
         new_node->type = current->type;
         new_node->content = ft_strdup(current->content);
         if (!new_node->content)
         {
-            free(new_node); // Free node if strdup fails
+            free(new_node);
             free_token_list(copy_head);
             return NULL;
         }
-        
+
         new_node->index = current->index;
         new_node->next = NULL;
 

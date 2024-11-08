@@ -31,7 +31,7 @@ void	sigint_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		g_signal = 1;
+		g_signal = 130;
 		rl_replace_line("", 0);
 		printf("\n");
 		rl_on_new_line();

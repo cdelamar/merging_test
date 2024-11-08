@@ -69,10 +69,6 @@ int basic_child_process(t_cmd *cmd)
 {
     char    **split_line;
     char    *command;
-    //int     exit_code;
-
-	// printf("into basic\n");
-	//dup2(cmd->fd[1], STDIN);
 
     split_line = cmd->final_tab;
     if (!split_line)
@@ -86,10 +82,7 @@ int basic_child_process(t_cmd *cmd)
     if (command)
     {
 		close(cmd->fd[1]);
-		// close(cmd->fd_in);
-		// printf("execve\n");
         execve(command, split_line, cmd->env);
-        // Si execve réussit, on ne retourne pas ici
     }
     else
     {
@@ -101,11 +94,8 @@ int basic_child_process(t_cmd *cmd)
     // Écrit g_signal dans le pipe avant la sortie de l'enfant
     if (write(cmd->fd[1], (const void *)&g_signal, sizeof(g_signal)) == -1)
         perror("write error");
-
     close(cmd->fd[1]); // Ferme l'extrémité du pipe
     free(command);
-
-	//close(cmd->fd_in);
     return (EXIT_FAILURE);
 }
 
@@ -157,10 +147,8 @@ int basic_execute(t_cmd *cmd)
     }
     else if (cmd->pid1 == 0)
     {
-        // Processus enfant
-        close(cmd->fd[0]); // Ferme l'extrémité de lecture
+        close(cmd->fd[0]);
         exit_code = basic_child_process(cmd);
-        //close(cmd->fd[1]); // Ferme l'extrémité de lecture
 	    free(cmd->final_line);
         if (cmd->final_tab)
 			ft_freetab(cmd->final_tab);
@@ -172,90 +160,11 @@ int basic_execute(t_cmd *cmd)
     }
     else
     {
-        // Processus parent
-        close(cmd->fd[1]); // Ferme l'extrémité d'écriture
-
-        // Attend que l'enfant termine
+        close(cmd->fd[1]);
         exit_code = basic_parent_process(cmd->pid1);
-
-        // Lit la valeur de g_signal depuis le pipe
         if (read(cmd->fd[0], &signal_value, sizeof(signal_value)) > 0)
-            g_signal = signal_value; // Met à jour g_signal
-        close(cmd->fd[0]); // Ferme l'extrémité de lecture
-
+            g_signal = signal_value;
+        close(cmd->fd[0]);
         return (exit_code);
     }
 }
-
-
-
-/*
-int	basic_child_process(t_cmd *cmd)
-{
-	char	**split_line;
-	char	*command;
-
-	split_line = NULL;
-	split_line = cmd->final_tab;
-	if (!split_line)
-		return (EXIT_FAILURE);
-	if (handle_redirections(split_line, HEREDOC_ON, cmd) != 0)
-	{
-		ft_freetab(split_line);
-		return (EXIT_FAILURE);
-	}
-	command = cmd_finder(split_line, cmd);
-	//printf("command\n%s\n", command);
-	if (command)
-		execve(command, split_line, cmd->env);
-	//print_tab(split_line);
-	printf("%s : command not found\n", split_line[0]);
-	g_signal = 127;
-	free(command);
-	close(cmd->fd_in);
-	return (EXIT_FAILURE);
-}
-
-
-int	basic_execute(t_cmd *cmd)
-{
-	int		exit_code;
-
-	exit_code = ft_path_split(cmd);
-	// print_tab(cmd->final_tab);
-	if (is_builtin(cmd->final_tab[0]) == true)
-	{
-		return (ft_builtin(cmd));
-	}
-
-	if (exit_code != EXIT_SUCCESS)
-	{
-		printf("Command not found: %s\n", cmd->final_line);
-		g_signal = 127;
-		return (exit_code);
-	}
-
-	cmd->pid1 = fork();
-	if (cmd->pid1 < 0)
-	{
-		printf("Fork error\n");
-		return (EXIT_FAILURE);
-	}
-	else if (cmd->pid1 == 0)
-	{
-		exit_code = basic_child_process(cmd);
-		free(cmd->final_line);
-		ft_freetab(cmd->final_tab);
-		ft_freetab(cmd->env);
-		ft_freetab(cmd->path_split);
-		token_lstclear(&cmd->tokens, free);// tu supprime ca ou tu le met en bas
-		free(cmd);
-		exit(exit_code);
-	}
-	else
-	{
-		exit_code = basic_parent_process(cmd->pid1);
-		return (exit_code);
-	}
-}
-*/
