@@ -16,9 +16,12 @@ int	is_valid_var_name(char *name)
 {
 	int	i;
 
-	i = 0;
+	if (!name || !name[0])
+		return (0);
 	if (!ft_isalpha(name[0]) && name[0] != '_')
 		return (0);
+
+	i = 1;
 	while (name[i] && name[i] != '=')
 	{
 		if (!ft_isalnum(name[i]) && name[i] != '_')
@@ -71,10 +74,27 @@ void	print_env(t_cmd *cmd)
 
 int	ft_export(char **args, t_cmd *cmd)
 {
+	int	i = 1;
+	int	result = EXIT_SUCCESS;
+
 	if (!args[1])
 	{
 		print_env(cmd);
 		return (EXIT_SUCCESS);
 	}
-	return (add_env_var(args[1], cmd));
+
+	while (args[i])
+	{
+		if (!is_valid_var_name(args[i]))
+		{
+			printf("export: `%s`: not a valid identifier\n", args[i]);
+			result = EXIT_FAILURE;
+		}
+		else if (add_env_var(args[i], cmd) == EXIT_FAILURE)
+			result = EXIT_FAILURE;
+		i++;
+	}
+	g_signal = result;
+	// va surement falloir rajouter g_signal
+	return result;
 }
