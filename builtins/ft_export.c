@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 16:29:31 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/22 18:07:28 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/08 21:00:25 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	add_env_var(char *var, t_cmd *cmd)
 		if (ft_strncmp(cmd->env[i], var, name_end - var) == 0
 			&& cmd->env[i][name_end - var] == '=')
 		{
-			cmd->env[i] = ft_strdup(var);
+			cmd->env[i] = (free(cmd->env[i]), ft_strdup(var));
 			return (EXIT_SUCCESS);
 		}
 		i++;

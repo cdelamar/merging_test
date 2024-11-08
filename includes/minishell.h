@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:02:11 by lucasaubry        #+#    #+#             */
-/*   Updated: 2024/10/31 14:35:03 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/08 20:25:02 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,16 +99,15 @@ int			find_the_dollar(t_token *token);
 int			skip_prefix(char *word);
 char		*skip_sufix(char *word);
 void		is_dollar_interogation(t_token *token_list);
-void		path_other(char **envp, t_token *token_list, int place_of_dollar);
+void		path_other(char **envp, t_token **token_list, int place_of_dollar);
 char		**minisplit_dollar(char *word);
 int			nbr_of_dollar(t_token *token_list, int place_of_dollar);
 int			which_node(int nbr_dollar, t_token *token_list);
 char		**delet_space_to_tab(char **tab_token);
-void		path_main(t_token *token_list, char **envp);
 
 /*------------parsing----------------*/
 void		lexer(t_token *token);
-void		path_main(t_token *token_list, char **envp);
+void		path_main(t_token **token_list, char **envp);
 int			skip_prefix(char *word);
 int			find_the_dollar(t_token *token);
 

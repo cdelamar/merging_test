@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:11:04 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/06 16:31:45 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/08 20:53:21 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,6 +252,11 @@ int	main(int argc, char **argv, char **envp)
 		}
 
 
+		free(split_line);
+		path_main(&token_list, tab);
+		if (token_list == NULL)
+			continue ;
+
         cmd->tokens = copy_token_list(token_list);
         if (!cmd->tokens)
         {
@@ -262,12 +267,10 @@ int	main(int argc, char **argv, char **envp)
 
 		// print_token_list(token_list);
 		// printf("\n\n");
-		path_main(token_list, envp);
 		cmd->final_tab = main_cat(&token_list);//dedans ou celui dans dessou il y a un free token_list donc fais gaffe
 		cmd->final_line = tab_to_str(cmd->final_tab);
 		// printf("final_tab\n");
 		// print_tab(cmd->final_tab);
-		free(split_line);
 		free(line);
 		token_lstclear(&token_list, free);// si on le deplace c'est segfault assure
 		process_input(cmd);
