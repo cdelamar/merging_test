@@ -114,6 +114,12 @@ int basic_execute(t_cmd *cmd)
     int     exit_code;
     int     signal_value;
 
+	if(ft_strcmp(cmd->final_tab[0], "$?") == 0)
+	{
+		printf("%d : command not found\n", g_signal);
+		g_signal = 127;
+		return (g_signal);
+	}
     // Initialise le pipe pour transmettre la valeur de g_signal
     if (pipe(cmd->fd) == -1)
     {
@@ -122,12 +128,15 @@ int basic_execute(t_cmd *cmd)
     }
 
     exit_code = ft_path_split(cmd);
+
+
     if (is_builtin(cmd->final_tab[0]) == true)
     {
         close(cmd->fd[0]);
         close(cmd->fd[1]);
         return (ft_builtin(cmd));
     }
+
 
     if (exit_code != EXIT_SUCCESS)
     {
@@ -153,7 +162,8 @@ int basic_execute(t_cmd *cmd)
         exit_code = basic_child_process(cmd);
         //close(cmd->fd[1]); // Ferme l'extrémité de lecture
 	    free(cmd->final_line);
-        ft_freetab(cmd->final_tab);
+        if (cmd->final_tab)
+			ft_freetab(cmd->final_tab);
         ft_freetab(cmd->env);
         ft_freetab(cmd->path_split);
         token_lstclear(&cmd->tokens, free);
