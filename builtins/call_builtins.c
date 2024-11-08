@@ -47,7 +47,7 @@ static int	builtin_commands(char **split_line, t_cmd *cmd,
 		ret = ft_pwd();
 	else if (ft_strcmp(split_line[0], "exit") == 0)
 	{
-		printf ("FT_EXIT CALL\n");
+		//printf ("FT_EXIT CALL\n");
 		exit_code = ft_exit(split_line, cmd);
 		if(exit_code == -1)
 			return(0);

@@ -58,10 +58,15 @@ int	basic_parent_process(pid_t pid)
 	if (waitpid(pid, &status, 0) == -1)
 	{
 		printf("waitpid -1\n");
+		g_signal = 1;
 		return (EXIT_FAILURE);
 	}
-	if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+	if (WIFEXITED(status))
+		g_signal = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_signal = 128 + WTERMSIG(status);
+	//if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE)
+	//	return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
@@ -86,7 +91,7 @@ int basic_child_process(t_cmd *cmd)
     }
     else
     {
-        printf("%s : command not found\n", split_line[0]);
+        printf("%s : command not found in basic child\n", split_line[0]);
 		token_lstclear(&cmd->tokens, free);
         g_signal = 127;
     }
@@ -106,7 +111,7 @@ int basic_execute(t_cmd *cmd)
 
 	if(ft_strcmp(cmd->final_tab[0], "$?") == 0)
 	{
-		printf("%d : command not found\n", g_signal);
+		printf("%d : command not found in basic exec\n", g_signal);
 		g_signal = 127;
 		return (g_signal);
 	}
@@ -165,6 +170,7 @@ int basic_execute(t_cmd *cmd)
         if (read(cmd->fd[0], &signal_value, sizeof(signal_value)) > 0)
             g_signal = signal_value;
         close(cmd->fd[0]);
+
         return (exit_code);
     }
 }

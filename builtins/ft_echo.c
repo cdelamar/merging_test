@@ -80,7 +80,10 @@ int	ft_echo(char **split_line)
 	}
 
 	if (ft_strcmp(split_line[i], "$?") == 0)
+	{
 		printf("%d\n", g_signal);
+		g_signal = 0;
+	}
 	else
 	{
 		echo_output(split_line, i);

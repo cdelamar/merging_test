@@ -23,6 +23,7 @@ int	ft_output_redirect(char **split_line, int i, int append)
 	if (!split_line[i + 1])
 	{
 		printf("Syntax error: expected file after redirection\n");
+		g_signal = 2;
 		return (EXIT_FAILURE);
 	}
 	if (append)
