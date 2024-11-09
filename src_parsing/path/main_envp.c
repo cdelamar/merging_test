@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:51:59 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/09 13:33:24 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/09 14:02:53 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,22 @@ void	path_other(char **envp, t_token **token_list, int place_of_dollar)
 {
 	t_token	**head;
 	int		prefix;
+	char	*signal_str;
 
 	head = token_list;
 	while ((*head)->index < place_of_dollar)
 		head = &(*head)->next;
 	if ((*head)->type == SIMPLE_QUOTE)
 		return ;
-	prefix = skip_prefix((*head)->content);
 	if (!ft_strcmp((*head)->content, "$?"))// || !ft_strcmp((*head)->content, "$"))
+	{
+		free((*head)->content);
+		signal_str = malloc(12);
+		signal_str = ft_itoa(g_signal);
+		(*head)->content = signal_str;
 		return ;
+	}
+	prefix = skip_prefix((*head)->content);
 	getenv_in_list(envp, head);
 }
 

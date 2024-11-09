@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 17:05:29 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/04 16:14:30 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/09 14:02:07 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,11 @@ int	ft_echo(char **split_line)
 		return (EXIT_SUCCESS);
 	}
 
-	if (ft_strcmp(split_line[i], "$?") == 0)
-	{
-		printf("%d\n", g_signal);
-		g_signal = 0;
-	}
+//	if (ft_strcmp(split_line[i], "$?") == 0)
+//	{
+//		printf("%d\n", g_signal);
+//		g_signal = 0;
+//	}
 	else
 	{
 		echo_output(split_line, i);
