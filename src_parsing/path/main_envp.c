@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:51:59 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/08 20:38:40 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/09 13:33:24 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	path_other(char **envp, t_token **token_list, int place_of_dollar)
 	if ((*head)->type == SIMPLE_QUOTE)
 		return ;
 	prefix = skip_prefix((*head)->content);
+	if (!ft_strcmp((*head)->content, "$?"))// || !ft_strcmp((*head)->content, "$"))
+		return ;
 	getenv_in_list(envp, head);
 }
 
