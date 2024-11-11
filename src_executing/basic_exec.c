@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:07 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/04 17:53:03 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/09 14:18:54 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int basic_child_process(t_cmd *cmd)
     }
     else
     {
-        printf("%s : command not found in basic child\n", split_line[0]);
+        printf("%s: command not found\n", split_line[0]);
 		token_lstclear(&cmd->tokens, free);
         g_signal = 127;
     }
@@ -111,7 +111,7 @@ int basic_execute(t_cmd *cmd)
 
 	if(ft_strcmp(cmd->final_tab[0], "$?") == 0)
 	{
-		printf("%d : command not found in basic exec\n", g_signal);
+		printf("%d: command not found\n", g_signal);
 		g_signal = 127;
 		return (g_signal);
 	}

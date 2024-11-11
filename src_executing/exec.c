@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 18:32:50 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/22 15:59:01 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/09 14:18:16 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	execute(t_cmd *cmd)
 	{
 		if (space_only(cmd->final_tab[i]))
 		{
-			printf("%s : command not found\n", cmd->final_tab[i]);
+			printf("%s: command not found\n", cmd->final_tab[i]);
 			return (EXIT_SUCCESS);
 		}
 		i++;

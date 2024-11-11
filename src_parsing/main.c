@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:11:04 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/08 20:53:21 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/11 03:23:36 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,7 +229,7 @@ int	main(int argc, char **argv, char **envp)
 			//free(line);
 			continue;
 		}
-		if (solo_quote(split_line) || badchar(split_line))
+		if (solo_quote(split_line) || badchar(split_line) || qte(split_line))
 		{
 			free_split_line(split_line);
 			g_signal = 127;

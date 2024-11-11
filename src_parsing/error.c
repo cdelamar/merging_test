@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:42:17 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/05 12:41:48 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/11 03:50:46 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,29 @@ int	check_quote_error(char *line)
 	if (tab[2] || tab[1])
 		return (1);
 	return (check_error(ERROR_QUOTE));
+}
+
+int	qte(char **split_line)
+{
+	int	i;
+	int	j;
+	int	has_quote ;
+	
+	has_quote = 0;
+	i = 0;
+
+	while (split_line[i])
+	{
+		j = 0;
+		while (split_line[i][j])
+		{
+			if (split_line[i][j] == '\'' || split_line[i][j] == '"')	
+				has_quote = 1;
+			else if (split_line[i][j] > 32)
+				return (0);
+			j++;
+		}
+		i++;
+	}
+	return (has_quote);
 }

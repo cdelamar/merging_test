@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:02:11 by lucasaubry        #+#    #+#             */
-/*   Updated: 2024/11/08 20:25:02 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/11 03:33:28 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ typedef struct s_token
 int			check_error(int code_error);
 int			check_error_before_split(char *line);
 int			badchar(char **split_line);
+int			qte(char **split_line);
+
 
 /*-------------libft-----------------*/
 t_token		*token_lstnew(void *content);
@@ -110,6 +112,7 @@ void		lexer(t_token *token);
 void		path_main(t_token **token_list, char **envp);
 int			skip_prefix(char *word);
 int			find_the_dollar(t_token *token);
+
 
 /*------------cat_quote--------------*/
 void		before_node_cat(t_token **token, int i, int verif);
