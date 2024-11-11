@@ -31,7 +31,8 @@ bool synthax_manager(char **split_line)
 	if (ft_strcmp(split_line[0], "<") == 0 || ft_strcmp(split_line[0], ">") == 0
 		|| ft_strcmp(split_line[0], "<<") == 0 || ft_strcmp(split_line[0], ">>") == 0)
 	{
-		printf("redirection have to be implemented between a command and an argument\n");
+		printf("redirections : syntax error\n");
+		g_signal = 2;
 		return (true);
 	}
 	return (false);
