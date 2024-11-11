@@ -45,7 +45,7 @@ void	getenv_in_list(char **envp, t_token **token)
 void	path_other(char **envp, t_token **token_list, int place_of_dollar)
 {
 	t_token	**head;
-	int		prefix;
+	//int		prefix;
 	char	*signal_str;
 
 	head = token_list;
@@ -61,7 +61,7 @@ void	path_other(char **envp, t_token **token_list, int place_of_dollar)
 		(*head)->content = signal_str;
 		return ;
 	}
-	prefix = skip_prefix((*head)->content);
+	//prefix = skip_prefix((*head)->content);
 	getenv_in_list(envp, head);
 }
 
