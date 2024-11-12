@@ -50,7 +50,10 @@ int	execute(t_cmd *cmd)
 		return (0);
 	}
 	if (syntax_redirect(cmd->final_line) == false)
-		return (0);
+	{
+		g_signal = 2;
+		return (2);
+	}
 	if (cmd->final_line[0] == '\0')
 		return (0);
 	while (cmd->final_tab[i])

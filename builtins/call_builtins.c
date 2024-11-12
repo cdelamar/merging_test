@@ -61,7 +61,7 @@ static int	builtin_commands(char **split_line, t_cmd *cmd,
 			free(cmd->final_line);
 			free(cmd);
 			restore_fd(saved_in, saved_out);
-			exit(exit_code);
+			exit(g_signal);
 		}
 		ret = exit_code;
 	}

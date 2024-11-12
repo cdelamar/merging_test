@@ -30,6 +30,7 @@ bool	syntax_redirect(char *line)
 			printf("Error: consecutive redirections ('%s %s') not allowed.\n",
 				split_line[i], split_line[i + 1]);
 			ft_freetab(split_line);
+            g_signal = 2;
 			return (false);
 		}
 		i++;

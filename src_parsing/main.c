@@ -192,20 +192,22 @@ int	main(int argc, char **argv, char **envp)
 		{
 			ft_putendl_fd(MALLOC_FAILURE, 2);
 			g_signal = 1;
-			return (0);
+			return (1);
 		}
 		cmd->heredoc_processed = FALSE;
 		cmd->env = tab;
 		line = readline("$ ");
 		split_line = ft_split_boosted(line);
 
+		//ctrl + D
 		if (line == NULL)
 		{
 			ft_freetab(cmd->env);
 			free_cmd(cmd);
-			g_signal = 0;
-			return (0);
+			//g_signal = 0;
+			return (g_signal);
 		}
+
 		add_history(line);
 		if (space_only(line) == true)
 		{
@@ -214,7 +216,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if(ft_strcmp(split_line[0], "|") == 0)
 		{
-			printf("erreur synthaxe du au symbole ' | '\n");
+			printf("synthax error near \"|\"\n");
 			free_split_line(split_line);
 			g_signal = 2;
 			free(line);
@@ -239,7 +241,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (line == NULL)
 		{
-			//printf("je sors plutot la, checker leak de sortie\n");
 			free_split_line(split_line);
 			g_signal = 0;
 			return (0);
