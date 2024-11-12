@@ -12,6 +12,9 @@
 
 #include "../includes/minishell.h"
 
+
+
+
 void free_commands(char ***commands)
 {
     int i = 0;
@@ -176,6 +179,25 @@ static char	*get_command_path(char *cmd_name, char **env)
 	return (NULL);
 }
 
+static int check_all_commands_executable(char ***commands, char **env)
+{
+    int i = 0;
+    char *path;
+
+    while (commands[i] != NULL)
+    {
+        path = get_command_path(commands[i][0], env);
+        if (path == NULL)
+        {
+            fprintf(stderr, "%s: command not found\n", commands[i][0]);
+            return (0);  // Retourne 0 si une commande est introuvable
+        }
+        free(path);
+        i++;
+    }
+    return (1);  // Toutes les commandes sont exécutables
+}
+
 int pipe_execute(t_cmd *cmd)
 {
     int fd[2];
@@ -186,6 +208,13 @@ int pipe_execute(t_cmd *cmd)
     char ***commands = split_commands(cmd->final_tab);
     if (!commands)
         return (EXIT_FAILURE);
+
+
+    if (!check_all_commands_executable(commands, cmd->env))
+    {
+        free_commands(commands);
+        return (EXIT_FAILURE);
+    }
 
     while (commands[i] != NULL)
 	{
@@ -279,19 +308,20 @@ int pipe_execute(t_cmd *cmd)
 				close(fd_in);
 			fd_in = fd[0];
 
-			waitpid(pid, &cmd->status, 0);
-			if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
-			{
-				fprintf(stderr, "command not found\n");
-				//break; // ?
-			}
+			waitpid(pid, &cmd->status, 1);
+			//while(wait(NULL) > 0);
+
+
         }
+		//if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
+		//	fprintf(stderr, "command not found\n");
+
         i++;
     }
 
     if(fd_in != 0)
         close(fd_in);
-    //while (waitpid(-1, NULL, 0) > 0);
+    while (waitpid(-1, NULL, 1) > 0);
     free_commands(commands);
     return (EXIT_SUCCESS);
 }
