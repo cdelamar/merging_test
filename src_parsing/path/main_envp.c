@@ -6,31 +6,91 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:51:59 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/09 14:05:28 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/12 01:27:23 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+char	*reste(char *start)
+{
+	int		i;
+	int		j;
+	char	*str;
+
+	i = 0;
+	j = 0;
+	if (!start[i])
+		return (start);
+	str = ft_calloc(ft_strlen(start) + 1, sizeof(char));
+	while (start[i])
+	{
+		if (!ft_isalnum(start[i]))
+		{
+			while (start[i])
+			{			
+				str[j] = start[i];
+				j++;
+				i++;
+			}
+			str[j] = '\0';
+			return (str);
+		}
+		i++;
+	}
+	return (str);
+}
+
+char	*before(char *start)
+{
+	int		i;
+	char	*str;
+	
+	str = ft_calloc(ft_strlen(start) + 1, sizeof(char));
+	i = 0;
+	while (start[i])
+	{
+
+		if (!ft_isalnum(start[i]))
+		{
+			str[i] = '\0';
+			return (str);
+		}
+		str[i] = start[i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}
+
 void	getenv_in_list(char **envp, t_token **token)
 {
 	char		**env;
 	size_t		len;
-	char		*start;
+	char		*start_rest[2];
 	int			old_enum;
 	t_token		*next;
 
-	start = (*token)->content + 1;
+	start_rest[0] = before((*token)->content + 1);
+	start_rest[1] = reste((*token)->content + 1);
 	env = envp;
-	len = ft_strlen((*token)->content) - 1;
+	len = ft_strlen(start_rest[0]);
 	while (*env != NULL)
 	{
-		if (ft_strncmp(*env, start, len) == 0 && (*env)[len] == '=')
+		if (ft_strncmp(*env, start_rest[0], len) == 0 && (*env)[len] == '=')
 		{
-			start = *env + len + 1;
+			free(start_rest[0]);
+			start_rest[0] = *env + len + 1;
 			old_enum = (*token)->type;
 			free((*token)->content);
-			(*token)->content = ft_strdup(start);
+			if (start_rest[1] != NULL)
+			{
+				(*token)->content = ft_strjoin(start_rest[0], start_rest[1]);
+				free(start_rest[1]);
+				start_rest[1] = NULL;
+			}
+			else
+				(*token)->content = ft_strdup(start_rest[0]);
 			(*token)->type = old_enum;
 			return ;
 		}
@@ -40,12 +100,14 @@ void	getenv_in_list(char **envp, t_token **token)
 	free((*token)->content);
 	free(*token);
 	*token = next;
+//	if (start_rest[1] != NULL)
+//		free(start_rest[1]);
+//	free(start_rest[0]);
 }
 
 void	path_other(char **envp, t_token **token_list, int place_of_dollar)
 {
 	t_token	**head;
-	//int		prefix;
 	char	*signal_str;
 
 	head = token_list;
@@ -61,7 +123,6 @@ void	path_other(char **envp, t_token **token_list, int place_of_dollar)
 		(*head)->content = signal_str;
 		return ;
 	}
-	//prefix = skip_prefix((*head)->content);
 	getenv_in_list(envp, head);
 }
 
