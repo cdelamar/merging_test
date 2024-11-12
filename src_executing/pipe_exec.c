@@ -218,6 +218,14 @@ int pipe_execute(t_cmd *cmd)
 
     while (commands[i] != NULL)
 	{
+        if (strcmp(commands[i][0], ".") == 0 || strcmp(commands[i][0], "..") == 0)
+        {
+            fprintf(stderr, "minishell: %s: file argument required\n", commands[i][0]);
+            g_signal = 127; // Code de sortie pour indiquer une erreur de commande
+            i++; // Passer à la commande suivante sans exécuter un fork
+            continue;
+        }
+
         if (pipe(fd) == -1)
 		{
             free_commands(commands);
@@ -247,7 +255,8 @@ int pipe_execute(t_cmd *cmd)
             close(fd[1]);
             cmd->path_command = commands[i];
 
-            if (handle_redirections(cmd->path_command, 0, cmd) == EXIT_FAILURE)
+
+		    if (handle_redirections(cmd->path_command, 0, cmd) == EXIT_FAILURE)
 			{
                 fprintf(stderr, "Error handling redirections\n");
                 free_cmd_resources(cmd);
@@ -272,9 +281,10 @@ int pipe_execute(t_cmd *cmd)
                 }
             }
 
+
 			else
 			{
-				// waitpid(pid, &cmd->status, 0);
+				//waitpid(pid, &cmd->status, 0);
 				// if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
 				// {
 					// fprintf(stderr, "wrong input\n");
@@ -291,7 +301,7 @@ int pipe_execute(t_cmd *cmd)
                 }
                 if (execve(full_path, cmd->path_command, cmd->env) == -1)
 				{
-                    perror("execve");
+                    perror("minishell");
                     free_cmd_resources(cmd);
                     free(full_path);
                     free_commands(commands);
@@ -308,7 +318,7 @@ int pipe_execute(t_cmd *cmd)
 				close(fd_in);
 			fd_in = fd[0];
 
-			waitpid(pid, &cmd->status, 1);
+			waitpid(pid, &cmd->status, 0);
 			//while(wait(NULL) > 0);
 
 

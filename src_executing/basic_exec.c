@@ -110,6 +110,13 @@ int basic_execute(t_cmd *cmd)
     int     exit_code;
     int     signal_value;
 
+    if (ft_strcmp(cmd->final_tab[0], ".") == 0 || ft_strcmp(cmd->final_tab[0], "..") == 0)
+    {
+        printf("minishell: %s: file argument required\n", cmd->final_tab[0]);
+        g_signal = 127;
+        return (g_signal);
+    }
+
 	if(ft_strcmp(cmd->final_tab[0], "$?") == 0)
 	{
 		printf("%d: command not found\n", g_signal);
