@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 19:01:33 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/22 16:54:52 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/15 22:54:08 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	sigint_heredoc(int sig)
 	if (sig == SIGINT)
 	{
 		g_signal = 1;
-		write(STDOUT_FILENO, "\n", 1); // Print newline after ^C
+		write(STDOUT_FILENO, "\n", 1);
 		close(STDIN_FILENO);
 	}
 }

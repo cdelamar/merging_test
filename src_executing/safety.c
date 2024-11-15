@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   safety.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:48:35 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/22 16:49:54 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/15 23:00:25 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,45 +61,30 @@ void	free_cmd(t_cmd *cmd)
 	free(cmd);
 }
 
-char *get_token_type(t_token_enum type)
+char	*get_token_type(t_token_enum type)
 {
 	if (type == WORD)
-		return "WORD (Command)";
+		return ("WORD (Command)");
 	else if (type == SPACES)
-		return "SPACES";
+		return ("SPACES");
 	else if (type == PIPE)
-		return "PIPE (|)";
+		return ("PIPE (|)");
 	else if (type == REDIRECTION)
-		return "REDIRECTION";
+		return ("REDIRECTION");
 	else if (type == VAR)
-		return "VAR ($)";
+		return ("VAR ($)");
 	else if (type == DOUBLE_QUOTE)
-		return "DOUBLE_QUOTE";
+		return ("DOUBLE_QUOTE");
 	else if (type == SIMPLE_QUOTE)
-		return "SIMPLE_QUOTE";
+		return ("SIMPLE_QUOTE");
 	else if (type == LAST_VERIF)
-		return "LAST_VERIF";
+		return ("LAST_VERIF");
 	else if (type == GLOBAL)
-		return "GLOBAL ($?)";
+		return ("GLOBAL ($?)");
 	else if (type == ERROR)
-		return "ERROR";
+		return ("ERROR");
 	else if (type == END)
-		return "END (\\0)";
+		return ("END (\\0)");
 	else
-		return "UNKNOWN";
-}
-
-void print_token_list(t_token *head)
-{
-	t_token *current = head;
-
-	while (current != NULL)
-	{
-		printf("Index: %d\n", current->index);
-		printf("Type: %s\n", get_token_type(current->type));
-		printf("Content: %s\n", current->content);
-		printf("\n");
-
-		current = current->next; // Move to the next token
-	}
+		return ("UNKNOWN");
 }
