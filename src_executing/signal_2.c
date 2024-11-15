@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:53:57 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/15 22:58:17 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:44:22 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,33 @@ void	print_token_list(t_token *head)
 		printf("\n");
 		current = current->next;
 	}
+}
+
+void	free_commands(char ***commands)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (commands[i])
+	{
+		j = 0;
+		while (commands[i][j])
+		{
+			free(commands[i][j]);
+			j++;
+		}
+		free(commands[i]);
+		i++;
+	}
+	free(commands);
+}
+
+void	free_cmd_resources(t_cmd *cmd)
+{
+	ft_freetab(cmd->final_tab);
+	ft_freetab(cmd->env);
+	free(cmd->final_line);
+	token_lstclear(&cmd->tokens, free);
+	free(cmd);
 }

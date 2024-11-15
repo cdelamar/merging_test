@@ -6,7 +6,7 @@
 #    By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/10 21:54:20 by cdelamar          #+#    #+#              #
-#    Updated: 2024/10/22 16:58:43 by laubry           ###   ########.fr        #
+#    Updated: 2024/11/15 23:50:53 by cdelamar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ LFLAGS = -Llib -lft -lreadline
 SRC_DIRS = src_executing/ builtins/ src_parsing/
 OBJ_DIR = obj/
 
-EXECUTING_FILES = command main_exec exec memory path signal signal_2 redirection heredoc fd basic_exec pipe_exec safety
+EXECUTING_FILES = command main_exec pipe_args exec memory path signal signal_2 redirection heredoc fd basic_exec pipe_exec safety
 BUILTIN_FILES = call_builtins ft_echo ft_env ft_pwd ft_unset ft_cd ft_export ft_exit
 PARSING_FILES = main parsing error tools \
 				libft/all_lst free_all \

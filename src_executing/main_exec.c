@@ -6,30 +6,27 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 18:06:47 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/22 16:10:27 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/16 00:11:40 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-
-bool synthax_manager(char **split_line)
+bool	synthax_manager(char **split_line)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(split_line[i])
+	while (split_line[i])
 		i++;
-
 	if (ft_strcmp(split_line[i - 1], "|") == 0 || split_line[0][0] == '|' )
 	{
 		printf("synthax error near \"|\"\n");
 		return (true);
 	}
-
-
 	if (ft_strcmp(split_line[0], "<") == 0 || ft_strcmp(split_line[0], ">") == 0
-		|| ft_strcmp(split_line[0], "<<") == 0 || ft_strcmp(split_line[0], ">>") == 0)
+		|| ft_strcmp(split_line[0], "<<") == 0
+		|| ft_strcmp(split_line[0], ">>") == 0)
 	{
 		printf("redirections : syntax error\n");
 		g_signal = 2;
@@ -41,7 +38,7 @@ bool synthax_manager(char **split_line)
 void	process_input(t_cmd *cmd)
 {
 	if (synthax_manager(cmd->final_tab))
-		return;
+		return ;
 	execute(cmd);
 }
 

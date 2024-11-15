@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:05:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/22 18:15:16 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/15 23:50:32 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,9 @@ int					pipe_builtin(t_cmd *cmd, char **command);
 bool				synthax_manager(char **split_line);
 void				free_cmd_resources (t_cmd *cmd);
 
-
+int					count_commands(char **final_tab);
+int					count_args(char **final_tab, int start);
+char				***split_commands(char **final_tab);
+void				free_commands(char ***commands);
 
 #endif

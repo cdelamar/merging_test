@@ -6,107 +6,11 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:23:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/12 22:47:54 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/16 00:08:30 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-
-
-
-void free_commands(char ***commands)
-{
-    int i = 0;
-    while (commands[i])
-    {
-        int j = 0;
-        while (commands[i][j])
-        {
-            free(commands[i][j]);
-            j++;
-        }
-        free(commands[i]);
-        i++;
-    }
-    free(commands);
-}
-
-void free_cmd_resources (t_cmd *cmd)
-{
-	ft_freetab(cmd->final_tab);
-	ft_freetab(cmd->env);
-	free(cmd->final_line);
-	token_lstclear(&cmd->tokens, free);
-	free(cmd);
-}
-
-//--------------------------
-
-static int count_commands(char **final_tab)
-{
-    int count = 1;
-    int i = 0;
-
-    while (final_tab[i])
-    {
-        if (strcmp(final_tab[i], "|") == 0)
-            count++;
-        i++;
-    }
-    return count;
-}
-
-
-static int count_args(char **final_tab, int start)
-{
-    int count = 0;
-    int i = start;
-
-    while (final_tab[i] && strcmp(final_tab[i], "|") != 0)
-    {
-        count++;
-        i++;
-    }
-    return count;
-}
-
-static char	***split_commands(char **final_tab)
-{
-	int		num_commands = count_commands(final_tab);
-	char	***commands = malloc((num_commands + 1) * sizeof(char **));
-	int		cmd_index = 0;
-	int		arg_index = 0;
-
-	if (!commands)
-		return (NULL);
-
-	for (int i = 0; final_tab[i]; i++)
-	{
-		if (strcmp(final_tab[i], "|") == 0)
-		{
-			// Null-terminate the current command and move to the next
-			commands[cmd_index][arg_index] = NULL;
-			cmd_index++;
-			arg_index = 0;
-			continue;
-		}
-
-		//technique : alloue pour l'argument actuel
-		if (arg_index == 0)
-			commands[cmd_index] = malloc((count_args(final_tab, i) + 1) * sizeof(char *));
-
-		// Copier argument to the current command
-		commands[cmd_index][arg_index] = strdup(final_tab[i]);
-		arg_index++;
-	}
-
-	// "securite"
-	commands[cmd_index][arg_index] = NULL;
-	commands[cmd_index + 1] = NULL;
-
-	return (commands);
-}
 
 static char	*ft_strjoin_path(const char *path, const char *cmd)
 {
@@ -134,7 +38,7 @@ static int	is_executable(char *path)
 	return (0);
 }
 
-static char	*get_command_path(char *cmd_name, char **env)
+static char	*get_cmd_path(char *cmd_name, char **env)
 {
 	char	**path_dirs;
 	char	*path_env;
@@ -179,159 +83,143 @@ static char	*get_command_path(char *cmd_name, char **env)
 	return (NULL);
 }
 
-static int check_all_commands_executable(char ***commands, char **env)
+static int	check_all_commands_executable(char ***commands, char **env)
 {
-    int i = 0;
-    char *path;
+	int		i;
+	char	*path;
 
-    while (commands[i] != NULL)
-    {
-        path = get_command_path(commands[i][0], env);
-        if (path == NULL)
-        {
-            if (ft_strcmp(commands[i][0], "<") == 0 ||
-                ft_strcmp(commands[i][0], ">") == 0 ||
-                ft_strcmp(commands[i][0], "<<") == 0 ||
-                ft_strcmp(commands[i][0], ">>") == 0)
-                printf("redirections : syntax error\n");
-            else
-                fprintf(stderr, "%s: command not found\n", commands[i][0]);
-            return 0;
-        }
-        free(path);
-        i++;
-    }
-    return 1;
+	i = 0;
+	while (commands[i] != NULL)
+	{
+		path = get_cmd_path(commands[i][0], env);
+		if (path == NULL)
+		{
+			if (ft_strcmp(commands[i][0], "<") == 0 ||
+				ft_strcmp(commands[i][0], ">") == 0 ||
+				ft_strcmp(commands[i][0], "<<") == 0 ||
+				ft_strcmp(commands[i][0], ">>") == 0)
+				printf("redirections : syntax error\n");
+			else
+				fprintf(stderr, "%s: command not found\n", commands[i][0]);
+			return (0);
+		}
+		free(path);
+		i++;
+	}
+	return (1);
 }
 
-int pipe_execute(t_cmd *cmd)
+int	pipe_execute(t_cmd *cmd)
 {
-    int fd[2];
-    int fd_in = 0;
-    pid_t pid;
-    int i = 0;
+	int		fd[2];
+	int		fd_in;
+	pid_t	pid;
+	int		i;
+	char	*full_path;
+	char	***commands;
 
-    char ***commands = split_commands(cmd->final_tab);
-    if (!commands)
-        return (EXIT_FAILURE);
-    if (!check_all_commands_executable(commands, cmd->env))
-    {
-        free_commands(commands);
-        return (EXIT_FAILURE);
-    }
-    while (commands[i] != NULL)
+	fd_in = 0;
+	i = 0;
+	commands = split_commands(cmd->final_tab);
+	if (!commands)
+		return (EXIT_FAILURE);
+	if (!check_all_commands_executable(commands, cmd->env))
 	{
-        if (strcmp(commands[i][0], ".") == 0 || strcmp(commands[i][0], "..") == 0)
-        {
-            fprintf(stderr, "minishell: %s: file argument required\n", commands[i][0]);
-            g_signal = 127;
-            i++;
-            continue;
-        }
-        if (pipe(fd) == -1)
+		free_commands(commands);
+		return (EXIT_FAILURE);
+	}
+	while (commands[i] != NULL)
+	{
+		if (strcmp(commands[i][0], ".") == 0 ||
+			strcmp(commands[i][0], "..") == 0)
 		{
-            free_commands(commands);
-            return (EXIT_FAILURE);
-        }
-        if ((pid = fork()) == -1)
+			fprintf(stderr, "%s: file argument required\n", commands[i][0]);
+			g_signal = 127;
+			i++;
+			continue ;
+		}
+		if (pipe(fd) == -1)
 		{
-            free_commands(commands);
-            return (EXIT_FAILURE);
-        }
-        if (pid == 0)
+			free_commands(commands);
+			return (EXIT_FAILURE);
+		}
+		pid = fork();
+		if (pid == -1)
 		{
-            signal(SIGPIPE, SIG_DFL);
-
-            if (fd_in != 0)
+			free_commands(commands);
+			return (EXIT_FAILURE);
+		}
+		if (pid == 0)
+		{
+			signal(SIGPIPE, SIG_DFL);
+			if (fd_in != 0)
 			{
-                dup2(fd_in, STDIN_FILENO);
-                close(fd_in);
-            }
-
-            if (commands[i + 1] != NULL)
-                dup2(fd[1], STDOUT_FILENO);
-
-            close(fd[0]);
-            close(fd[1]);
-            cmd->path_command = commands[i];
-
-
-		    if (handle_redirections(cmd->path_command, 0, cmd) == EXIT_FAILURE)
+				dup2(fd_in, STDIN_FILENO);
+				close(fd_in);
+			}
+			if (commands[i + 1] != NULL)
+				dup2(fd[1], STDOUT_FILENO);
+			close(fd[0]);
+			close(fd[1]);
+			cmd->path_command = commands[i];
+			if (handle_redirections(cmd->path_command, 0, cmd) == EXIT_FAILURE)
 			{
-                fprintf(stderr, "Error handling redirections\n");
-                free_cmd_resources(cmd);
-                free_commands(commands);
-                exit(EXIT_FAILURE);
-            }
-
-            if (is_builtin(cmd->path_command[0]))
+				fprintf(stderr, "Error handling redirections\n");
+				free_cmd_resources(cmd);
+				free_commands(commands);
+				exit(EXIT_FAILURE);
+			}
+			if (is_builtin(cmd->path_command[0]))
 			{
-                if (pipe_builtin(cmd, cmd->path_command) == EXIT_SUCCESS)
+				if (pipe_builtin(cmd, cmd->path_command) == EXIT_SUCCESS)
 				{
-                    free_cmd_resources(cmd);
-                    free_commands(commands);
-                    exit(EXIT_SUCCESS);
-                }
-
+					free_cmd_resources(cmd);
+					free_commands(commands);
+					exit(EXIT_SUCCESS);
+				}
 				else
 				{
-                    free_cmd_resources(cmd);
-                    free_commands(commands);
-                    exit(EXIT_FAILURE);
-                }
-            }
-
-
+					free_cmd_resources(cmd);
+					free_commands(commands);
+					exit(EXIT_FAILURE);
+				}
+			}
 			else
 			{
-				//waitpid(pid, &cmd->status, 0);
-				// if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
-				// {
-					// fprintf(stderr, "wrong input\n");
-					//break; // ?
-				// }
-				// i++;
-                char *full_path = get_command_path(cmd->path_command[0], cmd->env);
-                if (full_path == NULL)
+				full_path = get_cmd_path(cmd->path_command[0], cmd->env);
+				if (full_path == NULL)
 				{
-                    fprintf(stderr, "%s: command not found\n", cmd->path_command[0]);
-                    free_cmd_resources(cmd);
-                    free_commands(commands);
-                    exit(127);
-                }
-                if (execve(full_path, cmd->path_command, cmd->env) == -1)
+					fprintf(stderr, "%s: command not found\n",
+						cmd->path_command[0]);
+					free_cmd_resources(cmd);
+					free_commands(commands);
+					exit(127);
+				}
+				if (execve(full_path, cmd->path_command, cmd->env) == -1)
 				{
-                    perror("minishell");
-                    free_cmd_resources(cmd);
-                    free(full_path);
-                    free_commands(commands);
-                    exit(127);
-                }
-                free(full_path);
-            }
-        }
-
+					perror("minishell");
+					free_cmd_resources(cmd);
+					free(full_path);
+					free_commands(commands);
+					exit(127);
+				}
+				free(full_path);
+			}
+		}
 		else
 		{
 			close(fd[1]);
 			if (fd_in != 0)
 				close(fd_in);
 			fd_in = fd[0];
-
 			waitpid(pid, &cmd->status, 0);
-			//while(wait(NULL) > 0);
-
-
-        }
-		//if (WIFSIGNALED(cmd->status) && WTERMSIG(cmd->status) == SIGPIPE)
-		//	fprintf(stderr, "command not found\n");
-
-        i++;
-    }
-
-    if(fd_in != 0)
-        close(fd_in);
-    while (waitpid(-1, NULL, 1) > 0);
-    free_commands(commands);
-    return (EXIT_SUCCESS);
+		}
+		i++;
+	}
+	if (fd_in != 0)
+		close(fd_in);
+	while (waitpid(-1, NULL, 1) > 0)
+		;
+	free_commands(commands);
+	return (EXIT_SUCCESS);
 }
