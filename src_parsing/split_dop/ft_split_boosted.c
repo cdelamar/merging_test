@@ -6,54 +6,11 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:11:15 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/15 22:13:14 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/15 23:44:40 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-#include <string.h>
-#include <stdlib.h>
-
-char **modif_pipe(char **lst)
-{
-    int     i;
-    char    quote;
-    char    *new_str;
-	int		len;
-
-    i = 0;
-	len = 0;
-	while (lst[len])
-		len++;
-    while (lst[i])
-    {
-        if (lst[i][0] == '"' || lst[i][0] == '\'')
-        {
-            quote = lst[i][0];
-            i++;
-            while (lst[i] && lst[i][0] != quote)
-            {
-                if (lst[i][0] == '|' || lst[i][0] == '>' || lst[i][0] == '<')
-                {
-                    new_str = malloc(strlen(lst[i]) + 2);
-                    if (!new_str)
-                        return (NULL);
-                    new_str[0] = '\x1F';
-                    strcpy(new_str + 1, lst[i]);
-                    free(lst[i]);
-                    lst[i] = new_str;
-                }
-                i++;
-            }
-        }
-		if (i == len)
-			return (lst);
-        i++;
-    }
-    return (lst);
-}
-
 
 void	skip_sub(char **lst, char *s, int *i, int *j)
 {

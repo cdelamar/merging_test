@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:02:11 by lucasaubry        #+#    #+#             */
-/*   Updated: 2024/11/11 03:33:28 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/15 23:46:23 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ bool pipe_found(t_token *token_list);
 t_token *copy_token_list(t_token *laubry_list);
 char **modif_pipe(char **lst);
 int	check_pipe(char **split_line);
+char	**modif_pipe(char **lst);
 
 
 #endif

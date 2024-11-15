@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:42:17 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/11 03:50:46 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/16 00:16:28 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,17 @@ int	check_pipe(char **split_line)
 		j = 0;
 		while (split_line[i][j])
 		{
-			if (split_line[i][j] == '|' && split_line[i + 1] && split_line[i + 1][j] == '|')
+			if (split_line[i][j] == '|' && split_line[i + 1]
+					&& split_line[i + 1][j] == '|')
 				return (0);
-			if (split_line[i][j] == '|' && split_line[i + 1] && split_line[i + 1][j] == ' '
+			if (split_line[i][j] == '|' && split_line[i + 1]
+					&& split_line[i + 1][j] == ' '
 					&& split_line[i + 2] && split_line[i + 2][j] == '|')
 				return (0);
 			j++;
 		}
-		if (split_line[i][0] == '|' && (split_line[i + 1] == NULL || split_line[i + 1][0] == '\0'))
+		if (split_line[i][0] == '|' && (split_line[i + 1] == NULL
+					|| split_line[i + 1][0] == '\0'))
 			return (0);
 		i++;
 	}
@@ -78,17 +81,16 @@ int	qte(char **split_line)
 {
 	int	i;
 	int	j;
-	int	has_quote ;
-	
+	int	has_quote;
+
 	has_quote = 0;
 	i = 0;
-
 	while (split_line[i])
 	{
 		j = 0;
 		while (split_line[i][j])
 		{
-			if (split_line[i][j] == '\'' || split_line[i][j] == '"')	
+			if (split_line[i][j] == '\'' || split_line[i][j] == '"')
 				has_quote = 1;
 			else if (split_line[i][j] > 32)
 				return (0);
