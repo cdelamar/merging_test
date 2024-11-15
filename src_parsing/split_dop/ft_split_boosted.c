@@ -6,7 +6,7 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:11:15 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/08 15:12:12 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/15 22:13:14 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char **modif_pipe(char **lst)
             i++;
             while (lst[i] && lst[i][0] != quote)
             {
-                if (lst[i][0] == '|')
+                if (lst[i][0] == '|' || lst[i][0] == '>' || lst[i][0] == '<')
                 {
                     new_str = malloc(strlen(lst[i]) + 2);
                     if (!new_str)

@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:23:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/05 12:20:54 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/12 22:47:54 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,13 +189,19 @@ static int check_all_commands_executable(char ***commands, char **env)
         path = get_command_path(commands[i][0], env);
         if (path == NULL)
         {
-            fprintf(stderr, "%s: command not found\n", commands[i][0]);
-            return (0);  // Retourne 0 si une commande est introuvable
+            if (ft_strcmp(commands[i][0], "<") == 0 ||
+                ft_strcmp(commands[i][0], ">") == 0 ||
+                ft_strcmp(commands[i][0], "<<") == 0 ||
+                ft_strcmp(commands[i][0], ">>") == 0)
+                printf("redirections : syntax error\n");
+            else
+                fprintf(stderr, "%s: command not found\n", commands[i][0]);
+            return 0;
         }
         free(path);
         i++;
     }
-    return (1);  // Toutes les commandes sont exécutables
+    return 1;
 }
 
 int pipe_execute(t_cmd *cmd)
@@ -208,36 +214,30 @@ int pipe_execute(t_cmd *cmd)
     char ***commands = split_commands(cmd->final_tab);
     if (!commands)
         return (EXIT_FAILURE);
-
-
     if (!check_all_commands_executable(commands, cmd->env))
     {
         free_commands(commands);
         return (EXIT_FAILURE);
     }
-
     while (commands[i] != NULL)
 	{
         if (strcmp(commands[i][0], ".") == 0 || strcmp(commands[i][0], "..") == 0)
         {
             fprintf(stderr, "minishell: %s: file argument required\n", commands[i][0]);
-            g_signal = 127; // Code de sortie pour indiquer une erreur de commande
-            i++; // Passer à la commande suivante sans exécuter un fork
+            g_signal = 127;
+            i++;
             continue;
         }
-
         if (pipe(fd) == -1)
 		{
             free_commands(commands);
             return (EXIT_FAILURE);
         }
-
         if ((pid = fork()) == -1)
 		{
             free_commands(commands);
             return (EXIT_FAILURE);
         }
-
         if (pid == 0)
 		{
             signal(SIGPIPE, SIG_DFL);
