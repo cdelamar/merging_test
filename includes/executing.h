@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:05:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/15 23:50:32 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/16 01:17:57 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ char				*cmd_finder(char **split_line, t_cmd *cmd);
 int					ft_copy_envp(char **envp, t_cmd *cmd);
 char				*path_finder(t_cmd *cmd, char *path, int size);
 void				ft_path(t_cmd *cmd);
+int					is_executable(char *path);
+
 
 // builtins
 int					ft_unset(char **split_line, t_cmd *cmd);

@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:46:53 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/15 23:49:33 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/16 01:25:56 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,15 @@ int	count_args(char **final_tab, int start)
 		i++;
 	}
 	return (count);
+}
+
+int	is_executable(char *path)
+{
+	struct stat	sb;
+
+	if (stat(path, &sb) == 0 && sb.st_mode & S_IXUSR)
+		return (1);
+	return (0);
 }
 
 char	***split_commands(char **final_tab)

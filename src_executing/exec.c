@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 18:32:50 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/09 14:18:16 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/16 01:15:14 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,16 @@ void	handle_error(char *msg, t_cmd *cmd, int *fd)
 	exit(EXIT_FAILURE);
 }
 
-bool pipe_found(t_token *token_list)
+bool	pipe_found(t_token *token_list)
 {
-    while (token_list != NULL)
-    {
-		//printf("content : %s\n", token_list->content);
-        if (token_list->type == PIPE)
-		{
-			// printf("PIPE TRUE\n");
-            return (true);
-		}
+	while (token_list != NULL)
+	{
+		if (token_list->type == PIPE)
+			return (true);
 		token_list = token_list->next;
-    }
-	// printf("PIPE FALSE\n");
-    return (false);
+	}
+	return (false);
 }
-
-
 
 int	execute(t_cmd *cmd)
 {
@@ -66,18 +59,7 @@ int	execute(t_cmd *cmd)
 		i++;
 	}
 	if (pipe_found(cmd->tokens) == true)
-	{
-	//	printf("into PIPE\n");
 		return (pipe_execute(cmd));
-	}
-	/*else if (ft_builtin(cmd) == EXIT_SUCCESS)
-	{
-		//printf("into builtins");
-		return (EXIT_SUCCESS);
-	}*/
 	else
-	{
-	//	printf("into BASIC");
 		return (basic_execute(cmd));
-	}
 }

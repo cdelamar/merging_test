@@ -6,36 +6,27 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:23:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/16 00:08:30 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/16 01:21:58 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static char	*ft_strjoin_path(const char *path, const char *cmd)
+static char	*ft_strjoin_path(char *path, char *cmd)
 {
 	char	*full_path;
 	int		path_len;
 	int		cmd_len;
 
-	path_len = strlen(path);
-	cmd_len = strlen(cmd);
+	path_len = ft_strlen(path);
+	cmd_len = ft_strlen(cmd);
 	full_path = malloc(path_len + cmd_len + 2);
 	if (!full_path)
 		return (NULL);
-	strcpy(full_path, path);
+	ft_strcpy(full_path, path);
 	full_path[path_len] = '/';
-	strcpy(full_path + path_len + 1, cmd);
+	ft_strcpy(full_path + path_len + 1, cmd);
 	return (full_path);
-}
-
-static int	is_executable(char *path)
-{
-	struct stat	sb;
-
-	if (stat(path, &sb) == 0 && sb.st_mode & S_IXUSR)
-		return (1);
-	return (0);
 }
 
 static char	*get_cmd_path(char *cmd_name, char **env)
@@ -55,7 +46,7 @@ static char	*get_cmd_path(char *cmd_name, char **env)
 	path_env = NULL;
 	while (env[i])
 	{
-		if (strncmp(env[i], "PATH=", 5) == 0)
+		if (ft_strncmp(env[i], "PATH=", 5) == 0)
 		{
 			path_env = env[i] + 5;
 			break ;
