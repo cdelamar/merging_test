@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:51:59 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/12 01:27:23 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/16 00:20:20 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*reste(char *start)
 		if (!ft_isalnum(start[i]))
 		{
 			while (start[i])
-			{			
+			{
 				str[j] = start[i];
 				j++;
 				i++;
@@ -45,12 +45,11 @@ char	*before(char *start)
 {
 	int		i;
 	char	*str;
-	
+
 	str = ft_calloc(ft_strlen(start) + 1, sizeof(char));
 	i = 0;
 	while (start[i])
 	{
-
 		if (!ft_isalnum(start[i]))
 		{
 			str[i] = '\0';
@@ -100,9 +99,6 @@ void	getenv_in_list(char **envp, t_token **token)
 	free((*token)->content);
 	free(*token);
 	*token = next;
-//	if (start_rest[1] != NULL)
-//		free(start_rest[1]);
-//	free(start_rest[0]);
 }
 
 void	path_other(char **envp, t_token **token_list, int place_of_dollar)
@@ -115,7 +111,7 @@ void	path_other(char **envp, t_token **token_list, int place_of_dollar)
 		head = &(*head)->next;
 	if ((*head)->type == SIMPLE_QUOTE)
 		return ;
-	if (!ft_strcmp((*head)->content, "$?"))// || !ft_strcmp((*head)->content, "$"))
+	if (!ft_strcmp((*head)->content, "$?"))
 	{
 		free((*head)->content);
 		signal_str = malloc(12);

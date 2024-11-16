@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:02:11 by lucasaubry        #+#    #+#             */
-/*   Updated: 2024/11/15 23:46:23 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/16 01:06:06 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,9 @@ void		cat_quote(char **tab_token, t_token **token);
 void		free_split(char **strs);
 void		free_head(t_token *head);
 void		print_free_tab(char **final_token);
+void		free_token_list(t_token *token_list);
+void		free_split_line(char **split_line);
+
 
 size_t		count_word(char *s);
 int			is_char(char s, int boul);
@@ -157,9 +160,10 @@ void print_token_list(t_token *head);
 bool pipe_found(t_token *token_list);
 
 t_token *copy_token_list(t_token *laubry_list);
-char **modif_pipe(char **lst);
-int	check_pipe(char **split_line);
 char	**modif_pipe(char **lst);
+int		check_pipe(char **split_line);
+char	**modif_pipe(char **lst);
+int		make_token(char **split_line, t_token **token_list);
 
 
 #endif

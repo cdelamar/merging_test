@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 13:46:50 by laubry            #+#    #+#             */
-/*   Updated: 2024/08/19 18:49:56 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/16 00:45:14 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,3 +37,29 @@ void	free_head(t_token *head)
 		free(temp);
 	}
 }
+
+void free_token_list(t_token *token_list)
+{
+    t_token *temp;
+    while (token_list)
+    {
+        temp = token_list;
+        token_list = token_list->next;
+        free(temp->content);
+        free(temp);
+    }
+}
+
+void	free_split_line(char **split_line)
+{
+	int	i;
+
+	i = 0;
+	while (split_line[i])
+	{
+		free(split_line[i]);
+		i++;
+	}
+	free(split_line);
+}
+
