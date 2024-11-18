@@ -77,6 +77,8 @@ typedef struct s_cmd
 	char	*final_line;
 	char	**final_tab;
 	int		exit_status;
+	int		cmd_index;
+	int		arg_index;
 	t_token	*tokens;
 }	t_cmd;
 
@@ -157,6 +159,9 @@ int					basic_parent_process(pid_t pid);
 int					basic_execute(t_cmd *cmd);
 
 //pipe executing
+void	shift_left(char **split_line, int start_index);
+
+void	handle_pipe_separator(char ***commands, int *cmd_index, int *arg_index);
 void				handle_pipe_error(t_cmd *cmd, int *fd);
 void				handle_fork_error(t_cmd *cmd, int *fd);
 void				execute_child_process(t_cmd *cmd, int *fd, int i);
@@ -197,5 +202,27 @@ int					count_commands(char **final_tab);
 int					count_args(char **final_tab, int start);
 char				***split_commands(char **final_tab);
 void				free_commands(char ***commands);
+int					populate_commands(char ***commands, char **final_tab);
+
+
+int					basic_setup (t_cmd *cmd);
+int					path_split_return (t_cmd *cmd);
+int					fork_error (t_cmd *cmd);
+int					ft_child (t_cmd *cmd, int exit_code);
+int					ft_parent (t_cmd *cmd, int exit_code);
+int					child_failure_signal(t_cmd *cmd, char *command, char **split_line);
+
+void				exit_with_clean(t_cmd *cmd, char ***commands, int exit_code);
+void				exit_with_error(char *message, t_cmd *cmd, char ***commands);
+void				finalize_execution(t_cmd *cmd);
+void				handle_parent(t_cmd *cmd, pid_t pid);
+void				execve_or_exit(char *full_path, t_cmd *cmd, char ***commands);
+
+char				*get_cmd_path(char *cmd_name, char **env);
+char				*ft_strjoin_path(char *path, char *cmd);
+int					check_all_commands_executable(char ***commands, char **env);
+
+void				execute_builtin_child(t_cmd *cmd, char ***commands);
+
 
 #endif

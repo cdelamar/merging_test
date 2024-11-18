@@ -34,9 +34,6 @@ bool	pipe_found(t_token *token_list)
 
 int	execute(t_cmd *cmd)
 {
-	int	i;
-
-	i = 0;
 	if (ft_strcmp(cmd->final_line, "|") == 0)
 	{
 		printf("synthax error : expected arguments with '|'\n");
@@ -49,15 +46,6 @@ int	execute(t_cmd *cmd)
 	}
 	if (cmd->final_line[0] == '\0')
 		return (0);
-	while (cmd->final_tab[i])
-	{
-		if (space_only(cmd->final_tab[i]))
-		{
-			printf("%s: command not found\n", cmd->final_tab[i]);
-			return (EXIT_SUCCESS);
-		}
-		i++;
-	}
 	if (pipe_found(cmd->tokens) == true)
 		return (pipe_execute(cmd));
 	else

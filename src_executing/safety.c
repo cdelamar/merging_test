@@ -38,16 +38,12 @@ void	print_tab(char **tab)
 	}
 }
 
-bool	freeable_tab(char **tab)
+int	fork_error(t_cmd *cmd)
 {
-	size_t	i;
-
-	i = 0;
-	while (tab[i])
-		i++;
-	if (i <= 1)
-		return (false);
-	return (true);
+	printf("Fork error\n");
+	close(cmd->fd[0]);
+	close(cmd->fd[1]);
+	return (EXIT_FAILURE);
 }
 
 void	free_cmd(t_cmd *cmd)

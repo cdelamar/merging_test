@@ -47,7 +47,6 @@ static int	builtin_commands(char **split_line, t_cmd *cmd,
 		ret = ft_pwd();
 	else if (ft_strcmp(split_line[0], "exit") == 0)
 	{
-		//printf ("FT_EXIT CALL\n");
 		exit_code = ft_exit(split_line, cmd);
 		if(exit_code == -1)
 			return(0);
@@ -55,7 +54,6 @@ static int	builtin_commands(char **split_line, t_cmd *cmd,
 		{
 			ft_freetab(split_line);
 			token_lstclear(&cmd->tokens, free);
-			//ft_freetab(cmd->final_tab);
 			ft_freetab(cmd->env);
 			ft_freetab(cmd->path_split);
 			free(cmd->final_line);
@@ -100,15 +98,12 @@ int	ft_builtin(t_cmd *cmd)
 	int		ret;
 
 	split_line = cmd->final_tab;
-	//printf("split_line\n");
-	//print_tab(split_line);
 	if (!split_line)
 		return (EXIT_FAILURE);
 	if (backup_manager(split_line, &saved_in, &saved_out, cmd) == EXIT_SUCCESS)
 		ret = builtin_commands(split_line, cmd, saved_in, saved_out);
 	else
 		ret = (EXIT_FAILURE);
-	//ft_freetab(split_line);
 	return (ret);
 }
 

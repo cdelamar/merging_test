@@ -60,7 +60,6 @@ int	ft_echo(char **split_line)
 
 	i = 1;
 	newline = true;
-
 	while (split_line[i] && split_line[i][0] == '-')
 	{
 		j = 1;

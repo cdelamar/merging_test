@@ -21,7 +21,7 @@ LFLAGS = -Llib -lft -lreadline
 SRC_DIRS = src_executing/ builtins/ src_parsing/
 OBJ_DIR = obj/
 
-EXECUTING_FILES = command main_exec pipe_args exec memory path signal signal_2 redirection heredoc fd basic_exec pipe_exec safety
+EXECUTING_FILES = command main_exec pipe_args exec memory pipe_syntax pipe_path path signal pipe_exits basic_safety signal_2 redirection redirect_handler heredoc fd basic_exec pipe_exec safety pipe_commands
 BUILTIN_FILES = call_builtins ft_echo ft_env ft_pwd ft_unset ft_cd ft_export ft_exit
 PARSING_FILES = main parsing error tools \
 				libft/all_lst free_all \

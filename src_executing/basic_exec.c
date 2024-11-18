@@ -91,36 +91,15 @@ int	basic_child_process(t_cmd *cmd)
 		token_lstclear(&cmd->tokens, free);
 		g_signal = 127;
 	}
-	if (write(cmd->fd[1], (const void *)&g_signal, sizeof(g_signal)) == -1)
-		perror("write error");
-	close(cmd->fd[1]);
-	free(command);
-	return (EXIT_FAILURE);
+	return (child_failure_signal(cmd, command, split_line));
 }
 
 int	basic_execute(t_cmd *cmd)
 {
 	int	exit_code;
-	int	signal_value;
 
-	if (ft_strcmp(cmd->final_tab[0], ".") == 0
-		||ft_strcmp(cmd->final_tab[0], "..") == 0)
-	{
-		printf("minishell: %s: file argument required\n", cmd->final_tab[0]);
-		g_signal = 127;
+	if (basic_setup(cmd) != EXIT_SUCCESS)
 		return (g_signal);
-	}
-	if (ft_strcmp(cmd->final_tab[0], "$?") == 0)
-	{
-		printf("%d: command not found\n", g_signal);
-		g_signal = 127;
-		return (g_signal);
-	}
-	if (pipe(cmd->fd) == -1)
-	{
-		perror("pipe error");
-		return (EXIT_FAILURE);
-	}
 	exit_code = ft_path_split(cmd);
 	if (is_builtin(cmd->final_tab[0]) == true)
 	{
@@ -129,41 +108,12 @@ int	basic_execute(t_cmd *cmd)
 		return (ft_builtin(cmd));
 	}
 	if (exit_code != EXIT_SUCCESS)
-	{
-		printf("command not found: %s\n", cmd->final_line);
-		g_signal = 127;
-		close(cmd->fd[0]);
-		close(cmd->fd[1]);
-		return (exit_code);
-	}
+		return (path_split_return(cmd));
 	cmd->pid1 = fork();
 	if (cmd->pid1 < 0)
-	{
-		perror("Fork error");
-		close(cmd->fd[0]);
-		close(cmd->fd[1]);
-		return (EXIT_FAILURE);
-	}
+		return (fork_error(cmd));
 	else if (cmd->pid1 == 0)
-	{
-		close(cmd->fd[0]);
-		exit_code = basic_child_process(cmd);
-		free(cmd->final_line);
-		if (cmd->final_tab)
-			ft_freetab(cmd->final_tab);
-		ft_freetab(cmd->env);
-		ft_freetab(cmd->path_split);
-		token_lstclear(&cmd->tokens, free);
-		free(cmd);
-		exit(exit_code);
-	}
+		exit (ft_child(cmd, exit_code));
 	else
-	{
-		close(cmd->fd[1]);
-		exit_code = basic_parent_process(cmd->pid1);
-		if (read(cmd->fd[0], &signal_value, sizeof(signal_value)) > 0)
-			g_signal = signal_value;
-		close(cmd->fd[0]);
-		return (exit_code);
-	}
+		return (ft_parent(cmd, exit_code));
 }

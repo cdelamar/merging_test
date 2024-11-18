@@ -52,39 +52,9 @@ int	is_executable(char *path)
 	return (0);
 }
 
-char	***split_commands(char **final_tab)
+void	handle_pipe_separator(char ***commands, int *cmd_index, int *arg_index)
 {
-	int		num_commands;
-	char	***commands;
-	int		cmd_index;
-	int		arg_index;
-	int		i;
-
-	num_commands = count_commands(final_tab);
-	commands = malloc((num_commands + 1) * sizeof(char **));
-	cmd_index = 0;
-	arg_index = 0;
-	i = 0;
-	if (!commands)
-		return (NULL);
-	while (final_tab[i])
-	{
-		if (ft_strcmp(final_tab[i], "|") == 0)
-		{
-			commands[cmd_index][arg_index] = NULL;
-			cmd_index++;
-			arg_index = 0;
-			i++;
-			continue ;
-		}
-		if (arg_index == 0)
-			commands[cmd_index] = malloc((count_args(final_tab, i) + 1)
-				* sizeof(char *));
-		commands[cmd_index][arg_index] = ft_strdup(final_tab[i]);
-		arg_index++;
-		i++;
-	}
-	commands[cmd_index][arg_index] = NULL;
-	commands[cmd_index + 1] = NULL;
-	return (commands);
+	commands[*cmd_index][*arg_index] = NULL;
+	(*cmd_index)++;
+	*arg_index = 0;
 }
