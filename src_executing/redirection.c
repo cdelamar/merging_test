@@ -82,61 +82,14 @@ int	ft_heredoc_redirect(char *delim)
 
 int	handle_redirections(char **split_line, int status, t_cmd *cmd)
 {
-	int	i;
+	int		i;
 
 	i = 0;
 	while (split_line[i])
 	{
-		if (ft_strcmp(split_line[i], ">") == 0)
-		{
-			if (ft_output_redirect(split_line, i, 0) != EXIT_SUCCESS)
-				return (EXIT_FAILURE);
-			free(split_line[i]);
-			free(split_line[i + 1]);
-			shift_left(split_line, i);
-		}
-		else if (ft_strcmp(split_line[i], ">>") == 0)
-		{
-			if (ft_output_redirect(split_line, i, 1) != EXIT_SUCCESS)
-				return (EXIT_FAILURE);
-			free(split_line[i]);
-			free(split_line[i + 1]);
-			shift_left(split_line, i);
-		}
-		else if (ft_strcmp(split_line[i], "<") == 0)
-		{
-			if (ft_input_redirect(split_line, i) != EXIT_SUCCESS)
-				return (EXIT_FAILURE);
-			free(split_line[i]);
-			free(split_line[i + 1]);
-			shift_left(split_line, i);
-		}
-		else if (ft_strcmp(split_line[i], "<<") == 0 && status == HEREDOC_ON)
-		{
-			if (split_line[i + 1] == NULL)
-			{
-				printf("bash: syntax error near unexpected token `newline`\n");
-				return (-1);
-			}
-			if (ft_heredoc_redirect(split_line[i + 1]) < 0)
-			{
-				printf("ft_heredoc return -1\n");
-				return (-1);
-			}
-			cmd->fd_in = open("/tmp/heredoc_tmp", O_RDONLY);
-			if (cmd->fd_in < 0)
-			{
-				perror("Error opening heredoc temp file");
-				return (-1);
-			}
-			dup2(cmd->fd_in, STDIN_FILENO);
-			close(cmd->fd_in);
-			free(split_line[i]);
-			free(split_line[i + 1]);
-			shift_left(split_line, i);
-		}
-		else
-			i++;
+		if (process_redirection_token(split_line, &i, status, cmd)
+			!= EXIT_SUCCESS)
+			return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }

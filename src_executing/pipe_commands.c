@@ -14,7 +14,6 @@ void	finalize_commands(char ***commands, int cmd_index, int arg_index)
 	commands[cmd_index + 1] = NULL;
 }
 
-
 int	populate_commands(char ***commands, char **final_tab)
 {
 	int	cmd_index;

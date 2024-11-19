@@ -217,6 +217,11 @@ void				exit_with_error(char *message, t_cmd *cmd, char ***commands);
 void				finalize_execution(t_cmd *cmd);
 void				handle_parent(t_cmd *cmd, pid_t pid);
 void				execve_or_exit(char *full_path, t_cmd *cmd, char ***commands);
+int					handle_output_redirection(char **split_line, int i, int append);
+int					handle_input_redirection(char **split_line, int i);
+int					handle_heredoc_redirection(char **split_line, int i, t_cmd *cmd);
+int					process_redirection_token(char **split_line, int *i, int status, t_cmd *cmd);
+
 
 char				*get_cmd_path(char *cmd_name, char **env);
 char				*ft_strjoin_path(char *path, char *cmd);
