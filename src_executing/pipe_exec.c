@@ -35,17 +35,17 @@ void	handle_child(char ***commands, int i, t_cmd *cmd)
 	if (handle_redirections(cmd->path_command, 0, cmd) == EXIT_FAILURE)
 		exit_with_error("Error handling redirections", cmd, commands);
 	if (is_builtin(cmd->path_command[0]))
-		execute_builtin_child(cmd, commands);
-	else
 	{
-		full_path = get_cmd_path(cmd->path_command[0], cmd->env);
-		if (full_path == NULL)
-		{
-			fprintf(stderr, "%s: command not found\n", cmd->path_command[0]);
-			exit_with_error(NULL, cmd, commands);
-		}
-		execve_or_exit(full_path, cmd, commands);
+		execute_builtin_child(cmd, commands);
+		exit(EXIT_SUCCESS);
 	}
+	full_path = get_cmd_path(cmd->path_command[0], cmd->env);
+	if (full_path == NULL)
+	{
+		fprintf(stderr, "%s: command not found\n", cmd->path_command[0]);
+		exit_with_error(NULL, cmd, commands);
+	}
+	execve_or_exit(full_path, cmd, commands);
 }
 
 int	dot_checker(char ***commands, int i)

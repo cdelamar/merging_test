@@ -8,6 +8,11 @@ int	check_all_commands_executable(char ***commands, char **env)
 	i = 0;
 	while (commands[i] != NULL)
 	{
+		if (is_builtin(commands[i][0]))
+		{
+			i++;
+			continue ;
+		}
 		path = get_cmd_path(commands[i][0], env);
 		if (path == NULL)
 		{
