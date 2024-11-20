@@ -112,6 +112,9 @@ int					ft_echo(char **split_line);
 int					ft_env(t_cmd *cmd);
 int					ft_cd(char *path);
 int					ft_pwd(void);
+void				skip_x1f(char *line);
+int					builtin_commands(char **split_line, t_cmd *cmd,
+						int saved_in, int saved_out);
 
 //signals
 void				sigint_handler(int sig);
@@ -124,6 +127,10 @@ int					ft_heredoc_redirect(char *delim);
 int					ft_input_redirect(char **split_line, int i);
 int					ft_output_redirect(char **split_line, int i, int append);
 int					ft_heredoc(char *limit);
+int					redirect_manager(char **split_line, int saved_stdin,
+						int saved_stdout, t_cmd *cmd);
+int					backup_manager(char **split_line, int *saved_stdin,
+						int *saved_stdout, t_cmd *cmd);
 
 //fd
 void				close_fds(int *fd);

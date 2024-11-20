@@ -12,23 +12,6 @@
 
 #include "../includes/minishell.h"
 
-void	skip_x1f(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == '\x1F')
-			i++;
-		else
-		{
-			ft_putchar_fd(line[i], 1);
-			i++;
-		}
-	}
-}
-
 static void	echo_output(char **split_line, int i)
 {
 	int	start;
@@ -52,14 +35,10 @@ static void	echo_output(char **split_line, int i)
 	return ;
 }
 
-int	ft_echo(char **split_line)
+int	handle_flags(char **split_line, bool *newline, int i)
 {
-	int		i;
-	int		j;
-	bool	newline;
+	int	j;
 
-	i = 1;
-	newline = true;
 	while (split_line[i] && split_line[i][0] == '-')
 	{
 		j = 1;
@@ -67,23 +46,39 @@ int	ft_echo(char **split_line)
 			j++;
 		if (split_line[i][j] != '\0')
 			break ;
-		newline = false;
+		*newline = false;
 		i++;
 	}
+	return (i);
+}
 
+int	echo_no_arguments(bool newline)
+{
+	if (newline)
+		ft_putchar_fd('\n', 1);
+	g_signal = 0;
+	return (EXIT_SUCCESS);
+}
+
+void	echo_with_arguments(char **split_line, int i, bool newline)
+{
+	echo_output(split_line, i);
+	if (newline)
+		ft_putchar_fd('\n', 1);
+}
+
+int	ft_echo(char **split_line)
+{
+	int		i;
+	bool	newline;
+
+	i = 1;
+	newline = true;
+	i = handle_flags(split_line, &newline, i);
 	if (split_line[i] == NULL)
-	{
-		if (newline)
-			ft_putchar_fd('\n', 1);
-		g_signal = 0;
-		return (EXIT_SUCCESS);
-	}
+		return (echo_no_arguments(newline));
 	else
-	{
-		echo_output(split_line, i);
-		if (newline)
-			ft_putchar_fd('\n', 1);
-	}
+		echo_with_arguments(split_line, i, newline);
 	g_signal = 0;
 	return (EXIT_SUCCESS);
 }

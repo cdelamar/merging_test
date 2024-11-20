@@ -20,7 +20,6 @@ int	is_valid_var_name(char *name)
 		return (0);
 	if (!ft_isalpha(name[0]) && name[0] != '_')
 		return (0);
-
 	i = 1;
 	while (name[i] && name[i] != '=')
 	{
@@ -74,15 +73,16 @@ void	print_env(t_cmd *cmd)
 
 int	ft_export(char **args, t_cmd *cmd)
 {
-	int	i = 1;
-	int	result = EXIT_SUCCESS;
+	int	i;
+	int	result;
 
+	i = 1;
+	result = EXIT_SUCCESS;
 	if (!args[1])
 	{
 		print_env(cmd);
 		return (EXIT_SUCCESS);
 	}
-
 	while (args[i])
 	{
 		if (!is_valid_var_name(args[i]))
@@ -95,6 +95,5 @@ int	ft_export(char **args, t_cmd *cmd)
 		i++;
 	}
 	g_signal = result;
-	// va surement falloir rajouter g_signal
-	return result;
+	return (result);
 }

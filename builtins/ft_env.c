@@ -12,6 +12,23 @@
 
 #include "../includes/minishell.h"
 
+void	skip_x1f(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '\x1F')
+			i++;
+		else
+		{
+			ft_putchar_fd(line[i], 1);
+			i++;
+		}
+	}
+}
+
 int	ft_env(t_cmd *cmd)
 {
 	int	i;
