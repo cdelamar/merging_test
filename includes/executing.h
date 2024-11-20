@@ -12,9 +12,7 @@
 
 #ifndef EXECUTING_H
 # define EXECUTING_H
-
-#pragma once
-
+# pragma once
 # include "minishell.h"
 # include "libft.h"
 # include <fcntl.h>
@@ -57,8 +55,7 @@
 # define STDERR 2
 # define EXIT_COMMAND	3
 
-typedef struct s_token t_token;
-
+typedef struct s_token	t_token;
 typedef struct s_cmd
 {
 	int		fd[2];
@@ -81,22 +78,6 @@ typedef struct s_cmd
 	int		arg_index;
 	t_token	*tokens;
 }	t_cmd;
-
-
-typedef enum
-{
-	ADD,
-	FREE
-} COLLECTOR_ACTION;
-
-typedef struct lnk_list
-{
-	void *ptr;
-	struct lnk_list *next;
-} lnk_list;
-
-void *dino_alloc(void *ptr);
-void dino_free();
 
 void				ft_path_command(t_cmd *cmd);
 int					ft_path_split(t_cmd *cmd);
@@ -121,7 +102,6 @@ int					ft_copy_envp(char **envp, t_cmd *cmd);
 char				*path_finder(t_cmd *cmd, char *path, int size);
 void				ft_path(t_cmd *cmd);
 int					is_executable(char *path);
-
 
 // builtins
 int					ft_unset(char **split_line, t_cmd *cmd);
@@ -159,9 +139,7 @@ int					basic_parent_process(pid_t pid);
 int					basic_execute(t_cmd *cmd);
 
 //pipe executing
-void	shift_left(char **split_line, int start_index);
-
-void	handle_pipe_separator(char ***commands, int *cmd_index, int *arg_index);
+void				shift_left(char **split_line, int start_index);
 void				handle_pipe_error(t_cmd *cmd, int *fd);
 void				handle_fork_error(t_cmd *cmd, int *fd);
 void				execute_child_process(t_cmd *cmd, int *fd, int i);
@@ -172,15 +150,12 @@ int					pipe_execute(t_cmd *cmd);
 bool				space_only(char *line);
 void				print_tab(char **tab);
 
-//WIP
 int					handle_path(t_cmd *cmd);
 void				reset_signals(void);
 void				heredoc_signals(void);
 void				sigint_heredoc(int sig);
-
 int					ft_isnumber(char *str);
 bool				syntax_redirect(char *line);
-
 void				setup_signal_handler(int signum, void (*handler)(int));
 bool				freeable_tab(char **tab);
 void				free_cmd(t_cmd *cmd);
@@ -196,7 +171,7 @@ void				ignore_sigpipe(void);
 bool				is_builtin(char *command);
 int					pipe_builtin(t_cmd *cmd, char **command);
 bool				synthax_manager(char **split_line);
-void				free_cmd_resources (t_cmd *cmd);
+void				free_cmd_resources(t_cmd *cmd);
 
 int					count_commands(char **final_tab);
 int					count_args(char **final_tab, int start);
@@ -204,30 +179,34 @@ char				***split_commands(char **final_tab);
 void				free_commands(char ***commands);
 int					populate_commands(char ***commands, char **final_tab);
 
-
-int					basic_setup (t_cmd *cmd);
-int					path_split_return (t_cmd *cmd);
-int					fork_error (t_cmd *cmd);
-int					ft_child (t_cmd *cmd, int exit_code);
-int					ft_parent (t_cmd *cmd, int exit_code);
-int					child_failure_signal(t_cmd *cmd, char *command, char **split_line);
-
-void				exit_with_clean(t_cmd *cmd, char ***commands, int exit_code);
-void				exit_with_error(char *message, t_cmd *cmd, char ***commands);
+int					fork_error(t_cmd *cmd);
+int					basic_setup(t_cmd *cmd);
+int					path_split_return(t_cmd *cmd);
 void				finalize_execution(t_cmd *cmd);
+int					ft_child(t_cmd *cmd, int exit_code);
 void				handle_parent(t_cmd *cmd, pid_t pid);
-void				execve_or_exit(char *full_path, t_cmd *cmd, char ***commands);
-int					handle_output_redirection(char **split_line, int i, int append);
-int					handle_input_redirection(char **split_line, int i);
-int					handle_heredoc_redirection(char **split_line, int i, t_cmd *cmd);
-int					process_redirection_token(char **split_line, int *i, int status, t_cmd *cmd);
-
-
-char				*get_cmd_path(char *cmd_name, char **env);
+int					ft_parent(t_cmd *cmd, int exit_code);
 char				*ft_strjoin_path(char *path, char *cmd);
+char				*get_cmd_path(char *cmd_name, char **env);
+int					handle_input_redirection(char **split_line, int i);
+void				execute_builtin_child(t_cmd *cmd, char ***commands);
 int					check_all_commands_executable(char ***commands, char **env);
 
-void				execute_builtin_child(t_cmd *cmd, char ***commands);
-
+int					child_failure_signal(t_cmd *cmd, char *command,
+						char **split_line);
+void				exit_with_clean(t_cmd *cmd, char ***commands,
+						int exit_code);
+void				exit_with_error(char *message, t_cmd *cmd,
+						char ***commands);
+void				execve_or_exit(char *full_path, t_cmd *cmd,
+						char ***commands);
+int					handle_output_redirection(char **split_line, int i,
+						int append);
+int					handle_heredoc_redirection(char **split_line, int i,
+						t_cmd *cmd);
+int					process_redirection_token(char **split_line, int *i,
+						int status, t_cmd *cmd);
+void				handle_pipe_separator(char ***commands, int *cmd_index,
+						int *arg_index);
 
 #endif
