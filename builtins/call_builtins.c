@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 17:43:11 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/22 18:19:35 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/22 21:54:08 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	handle_exit_cleanup(char **split_line, t_cmd *cmd,
 	ft_freetab(split_line);
 	token_lstclear(&cmd->tokens, free);
 	ft_freetab(cmd->env);
-	if(cmd->path_split)
+	if (cmd->path_split)
 		ft_freetab(cmd->path_split);
 	free(cmd->final_line);
 	free(cmd);
@@ -30,6 +30,7 @@ static int	handle_exit_builtin(char **split_line, t_cmd *cmd,
 		int saved_in, int saved_out)
 {
 	int	exit_code;
+
 	exit_code = ft_exit(split_line, cmd);
 	if (exit_code == -1)
 	{

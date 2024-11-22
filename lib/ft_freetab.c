@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 22:40:02 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/04/24 22:40:03 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/22 21:52:18 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	ft_freetab(char **tab)
 {
-	size_t i;
-	i = 0;
+	size_t	i;
 
-	while(tab[i])
+	i = 0;
+	while (tab[i])
 	{
 		free(tab[i]);
 		i++;
