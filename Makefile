@@ -6,7 +6,7 @@
 #    By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/10 21:54:20 by cdelamar          #+#    #+#              #
-#    Updated: 2024/11/16 01:41:50 by laubry           ###   ########.fr        #
+#    Updated: 2024/11/19 19:47:34 by laubry           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,8 @@ PARSING_FILES = main parsing error tools \
                 libft/ft_bzero libft/ft_strdup \
 				split_dop/modif_pipe \
 				gestion_list \
+				verif_result \
+				main_loop \
 
 EXEC_SRCS = $(addprefix src_executing/, $(addsuffix .c, $(EXECUTING_FILES)))
 BUILTIN_SRCS = $(addprefix builtins/, $(addsuffix .c, $(BUILTIN_FILES)))
