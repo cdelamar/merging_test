@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:02:11 by lucasaubry        #+#    #+#             */
-/*   Updated: 2024/11/16 01:06:06 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/19 19:46:58 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,13 @@ char	**modif_pipe(char **lst);
 int		check_pipe(char **split_line);
 char	**modif_pipe(char **lst);
 int		make_token(char **split_line, t_token **token_list);
+
+//main
+int	verif_line(char *line, char **split_line);
+int	verif_make_token(char *line, char **split_line, t_token **token_list);
+int handle_loop(t_cmd **cmd, t_token **token_list, char ***tab);
+void process_command(t_cmd *cmd);
+int handle_arguments(int argc);
 
 
 #endif
