@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 18:25:17 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/22 18:25:19 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/23 00:08:39 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	path_split_return(t_cmd *cmd)
 	return (g_signal);
 }
 
-int	ft_child(t_cmd *cmd, int exit_code)
+int	ft_child(t_cmd *cmd, int exit_code, t_token **token_list)
 {
 	close(cmd->fd[0]);
 	exit_code = basic_child_process(cmd);
@@ -55,6 +55,7 @@ int	ft_child(t_cmd *cmd, int exit_code)
 	ft_freetab(cmd->env);
 	ft_freetab(cmd->path_split);
 	token_lstclear(&cmd->tokens, free);
+	token_lstclear(token_list, free);
 	free(cmd);
 	exit (exit_code);
 }

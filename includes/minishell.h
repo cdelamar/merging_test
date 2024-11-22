@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:02:11 by lucasaubry        #+#    #+#             */
-/*   Updated: 2024/11/22 21:30:35 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/23 00:10:22 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ int		make_token(char **split_line, t_token **token_list);
 int		verif_line(char *line, char **split_line);
 int		verif_make_token(char *line, char **split_line, t_token **token_list);
 int		handle_loop(t_cmd **cmd, t_token **token_list, char ***tab);
-void	process_command(t_cmd *cmd);
+void	process_command(t_cmd *cmd, t_token **token_list);
 int		handle_arguments(int argc);
 void	update_token_content(t_token *token, char *env_value, char *rest);
 char	*get_env_value(char **envp, const char *key);

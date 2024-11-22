@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:05:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/22 18:24:32 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/23 00:10:00 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_token				*copy_token_list(t_token *laubry_list);
 // excecuting
 void				shell_exec_loop(char **envp);
 void				handle_error(char *msg, t_cmd *cmd, int *fd);
-int					execute(t_cmd *cmd);
+int					execute(t_cmd *cmd, t_token **token_list);
 
 // memory
 int					malloc_structs(t_cmd **cmd);
@@ -144,7 +144,7 @@ int					open_heredoc_file(void);
 int					handle_exit_command(char *line);
 int					basic_child_process(t_cmd *cmd);
 int					basic_parent_process(pid_t pid);
-int					basic_execute(t_cmd *cmd);
+int					basic_execute(t_cmd *cmd, t_token **token_list);
 
 //pipe executing
 void				shift_left(char **split_line, int start_index);
@@ -173,7 +173,7 @@ char				**cpy_tab(char **dest, char **src);
 void				shell_exec_loop(char **envp);
 char				**cpy_tab(char **dest, char **src);
 bool				syntax_redirect(char *line);
-void				process_input(t_cmd *cmd);
+void				process_input(t_cmd *cmd, t_token **token_list);
 
 void				ignore_sigpipe(void);
 bool				is_builtin(char *command);
@@ -191,7 +191,7 @@ int					fork_error(t_cmd *cmd);
 int					basic_setup(t_cmd *cmd);
 int					path_split_return(t_cmd *cmd);
 void				finalize_execution(t_cmd *cmd);
-int					ft_child(t_cmd *cmd, int exit_code);
+int					ft_child(t_cmd *cmd, int exit_code, t_token **token_list);
 void				handle_parent(t_cmd *cmd, pid_t pid);
 int					ft_parent(t_cmd *cmd, int exit_code);
 char				*ft_strjoin_path(char *path, char *cmd);

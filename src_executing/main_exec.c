@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 18:06:47 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/16 00:11:40 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/23 00:07:18 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ bool	synthax_manager(char **split_line)
 	return (false);
 }
 
-void	process_input(t_cmd *cmd)
+void	process_input(t_cmd *cmd, t_token **token_list)
 {
 	if (synthax_manager(cmd->final_tab))
 		return ;
-	execute(cmd);
+	execute(cmd, token_list);
 }
 
 char	**cpy_tab(char **dest, char **src)

@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 18:32:50 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/16 01:15:14 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/23 00:07:41 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ bool	pipe_found(t_token *token_list)
 	return (false);
 }
 
-int	execute(t_cmd *cmd)
+int	execute(t_cmd *cmd, t_token **token_list)
 {
 	if (ft_strcmp(cmd->final_line, "|") == 0)
 	{
@@ -49,5 +49,5 @@ int	execute(t_cmd *cmd)
 	if (pipe_found(cmd->tokens) == true)
 		return (pipe_execute(cmd));
 	else
-		return (basic_execute(cmd));
+		return (basic_execute(cmd, token_list));
 }

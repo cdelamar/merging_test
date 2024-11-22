@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:11:04 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/22 17:11:41 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/23 00:06:58 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ char	*ft_realloc_string(char *str, int new_size)
 	return (res);
 }
 
-void	process_command(t_cmd *cmd)
+void	process_command(t_cmd *cmd, t_token **token_list)
 {
-	process_input(cmd);
+	process_input(cmd, token_list);
 	token_lstclear(&cmd->tokens, free);
 	free(cmd->final_line);
 }
@@ -82,7 +82,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		else if (res == 0)
 			return (0);
-		process_command(cmd);
+		process_command(cmd, &token_list);
 		token_lstclear(&token_list, free);
 		tab = cmd->env;
 	}
