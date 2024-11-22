@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:51:59 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/20 13:22:03 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/22 19:01:17 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,36 +64,19 @@ char	*before(char *start)
 
 void	getenv_in_list(char **envp, t_token **token)
 {
-	char		**env;
-	size_t		len;
-	char		*start_rest[2];
-	int			old_enum;
-	t_token		*next;
+	char	*key;
+	char	*rest;
+	char	*env_value;
+	t_token	*next;
 
-	start_rest[0] = before((*token)->content + 1);
-	start_rest[1] = reste((*token)->content + 1);
-	env = envp;
-	len = ft_strlen(start_rest[0]);
-	while (*env != NULL)
+	key = before((*token)->content + 1);
+	rest = reste((*token)->content + 1);
+	env_value = get_env_value(envp, key);
+	free(key);
+	if (env_value != NULL)
 	{
-		if (ft_strncmp(*env, start_rest[0], len) == 0 && (*env)[len] == '=')
-		{
-			free(start_rest[0]);
-			start_rest[0] = *env + len + 1;
-			old_enum = (*token)->type;
-			free((*token)->content);
-			if (start_rest[1] != NULL)
-			{
-				(*token)->content = ft_strjoin(start_rest[0], start_rest[1]);
-				free(start_rest[1]);
-				start_rest[1] = NULL;
-			}
-			else
-				(*token)->content = ft_strdup(start_rest[0]);
-			(*token)->type = old_enum;
-			return ;
-		}
-		env++;
+		update_token_content(*token, env_value, rest);
+		return ;
 	}
 	next = (*token)->next;
 	free((*token)->content);
