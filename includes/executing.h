@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:05:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/16 01:17:57 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/22 18:24:32 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_cmd
 
 void				ft_path_command(t_cmd *cmd);
 int					ft_path_split(t_cmd *cmd);
+t_token				*copy_token_list(t_token *laubry_list);
 
 // excecuting
 void				shell_exec_loop(char **envp);

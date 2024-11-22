@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gestion_list.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 00:59:12 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/21 16:31:28 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/22 18:23:40 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,49 +41,6 @@ int	make_token(char **split_line, t_token **token_list)
 	}
 	lexer(*token_list);
 	return (1);
-}
-
-t_token	*copy_token_list(t_token *laubry_list)
-{
-	t_token	*copy_head;
-	t_token	*copy_current;
-	t_token	*current;
-	t_token	*new_node;
-
-	copy_head = NULL;
-	copy_current = NULL;
-	current = laubry_list;
-	while (current != NULL)
-	{
-		new_node = malloc(sizeof(t_token));
-		if (!new_node)
-		{
-			free_token_list(copy_head);
-			return (NULL);
-		}
-		new_node->type = current->type;
-		new_node->content = ft_strdup(current->content);
-		if (!new_node->content)
-		{
-			free(new_node);
-			free_token_list(copy_head);
-			return (NULL);
-		}
-		new_node->index = current->index;
-		new_node->next = NULL;
-		if (copy_head == NULL)
-		{
-			copy_head = new_node;
-			copy_current = copy_head;
-		}
-		else
-		{
-			copy_current->next = new_node;
-			copy_current = copy_current->next;
-		}
-		current = current->next;
-	}
-	return (copy_head);
 }
 
 char	*tab_to_str(char **tab)
