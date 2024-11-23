@@ -6,40 +6,37 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 17:43:11 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/22 21:54:08 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/23 01:32:42 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	handle_exit_cleanup(char **split_line, t_cmd *cmd,
-		int saved_in, int saved_out)
+static void	handle_exit_cleanup(char **split_line, t_cmd *cmd, int saved[], t_token **token_list, char ***to_free)
 {
-	ft_freetab(split_line);
+	(void)to_free;
+	if(split_line)
+		ft_freetab(split_line);
 	token_lstclear(&cmd->tokens, free);
 	ft_freetab(cmd->env);
 	if (cmd->path_split)
 		ft_freetab(cmd->path_split);
 	free(cmd->final_line);
 	free(cmd);
-	restore_fd(saved_in, saved_out);
+	restore_fd(saved[0], saved[1]);
+	token_lstclear(token_list, free);
 	exit(g_signal);
 }
 
-static int	handle_exit_builtin(char **split_line, t_cmd *cmd,
-		int saved_in, int saved_out)
+static int	handle_exit_builtin(char **split_line, t_cmd *cmd, int saved[], t_token **token_list, char ***to_free)
 {
 	int	exit_code;
 
 	exit_code = ft_exit(split_line, cmd);
 	if (exit_code == -1)
-	{
 		return (0);
-	}
 	if (cmd->pid1 == 0)
-	{
-		handle_exit_cleanup(split_line, cmd, saved_in, saved_out);
-	}
+		handle_exit_cleanup(split_line, cmd, saved, token_list, to_free);
 	return (exit_code);
 }
 
@@ -60,14 +57,13 @@ static int	handle_builtins(char **split_line, t_cmd *cmd)
 	return (EXIT_FAILURE);
 }
 
-int	builtin_commands(char **split_line, t_cmd *cmd,
-		int saved_in, int saved_out)
+int	builtin_commands(char **split_line, t_cmd *cmd, int saved[], t_token **token_list, char ***to_free)
 {
 	int	ret;
 
 	ret = handle_builtins(split_line, cmd);
 	if (ft_strcmp(split_line[0], "exit") == 0)
-		ret = handle_exit_builtin(split_line, cmd, saved_in, saved_out);
-	restore_fd(saved_in, saved_out);
+		ret = handle_exit_builtin(split_line, cmd, saved, token_list, to_free);
+	restore_fd(saved[0], saved[1]);
 	return (ret);
 }

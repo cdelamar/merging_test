@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:23:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/16 01:21:58 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/23 01:34:18 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	setup_pipes(t_cmd *cmd, char ***commands, int i)
 	close(cmd->fd[1]);
 }
 
-void	handle_child(char ***commands, int i, t_cmd *cmd)
+void	handle_child(char ***commands, int i, t_cmd *cmd, t_token **token_list)
 {
 	char	*full_path;
 
@@ -36,7 +36,7 @@ void	handle_child(char ***commands, int i, t_cmd *cmd)
 		exit_with_error("Error handling redirections", cmd, commands);
 	if (is_builtin(cmd->path_command[0]))
 	{
-		execute_builtin_child(cmd, commands);
+		execute_builtin_child(cmd, commands, token_list);
 		exit(EXIT_SUCCESS);
 	}
 	full_path = get_cmd_path(cmd->path_command[0], cmd->env);
@@ -60,7 +60,7 @@ int	dot_checker(char ***commands, int i)
 	return (0);
 }
 
-int	execute_commands(char ***commands, t_cmd *cmd)
+int	execute_commands(char ***commands, t_cmd *cmd, t_token **token_list)
 {
 	pid_t	pid;
 	int		i;
@@ -79,7 +79,7 @@ int	execute_commands(char ***commands, t_cmd *cmd)
 		if (pid == -1)
 			return (EXIT_FAILURE);
 		if (pid == 0)
-			handle_child(commands, i, cmd);
+			handle_child(commands, i, cmd, token_list);
 		else
 			handle_parent(cmd, pid);
 		i++;
@@ -88,7 +88,7 @@ int	execute_commands(char ***commands, t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-int	pipe_execute(t_cmd *cmd)
+int	pipe_execute(t_cmd *cmd, t_token **token_list)
 {
 	char	***commands;
 
@@ -101,7 +101,7 @@ int	pipe_execute(t_cmd *cmd)
 		free_commands(commands);
 		return (EXIT_FAILURE);
 	}
-	if (execute_commands(commands, cmd) == EXIT_FAILURE)
+	if (execute_commands(commands, cmd, token_list) == EXIT_FAILURE)
 	{
 		free_commands(commands);
 		return (EXIT_FAILURE);

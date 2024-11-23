@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:07 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/23 00:11:22 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/23 01:00:23 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	basic_execute(t_cmd *cmd, t_token **token_list)
 	{
 		close(cmd->fd[0]);
 		close(cmd->fd[1]);
-		return (ft_builtin(cmd));
+		return (ft_builtin(cmd, token_list));
 	}
 	if (exit_code != EXIT_SUCCESS)
 		return (path_split_return(cmd));
@@ -113,11 +113,7 @@ int	basic_execute(t_cmd *cmd, t_token **token_list)
 	if (cmd->pid1 < 0)
 		return (fork_error(cmd));
 	else if (cmd->pid1 == 0)
-	{
 		exit (ft_child(cmd, exit_code, token_list));
-	}
 	else
-	{
 		return (ft_parent(cmd, exit_code));
-	}
 }
