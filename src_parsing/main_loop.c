@@ -63,6 +63,7 @@ int	handle_loop(t_cmd **cmd, t_token **token_list, char ***tab)
 	if (*token_list == NULL)
 		return (1);
 	put_in_cmd(*cmd, token_list);
+	token_lstclear(token_list, free);
 	return (2);
 }
 

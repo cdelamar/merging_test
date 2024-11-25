@@ -82,6 +82,7 @@ typedef struct s_cmd
 void				ft_path_command(t_cmd *cmd);
 int					ft_path_split(t_cmd *cmd);
 t_token				*copy_token_list(t_token *laubry_list);
+void				print_commands(char ***commands);
 
 // excecuting
 void				shell_exec_loop(char **envp);

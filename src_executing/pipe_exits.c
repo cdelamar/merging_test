@@ -24,6 +24,8 @@ void	execve_or_exit(char *full_path, t_cmd *cmd, char ***commands)
 
 void	exit_with_clean(t_cmd *cmd, char ***commands, int exit_code)
 {
+	if(cmd->path_split)
+		ft_freetab(cmd->path_split);
 	free_cmd_resources(cmd);
 	free_commands(commands);
 	exit(exit_code);

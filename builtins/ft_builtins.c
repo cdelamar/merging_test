@@ -52,7 +52,6 @@ int	pipe_builtin(t_cmd *cmd, char **command, t_token **token_list, char ***to_fr
 {
 	int		saved[2];
 	int		ret;
-
 	if (backup_manager(command, saved, saved+1, cmd) == EXIT_SUCCESS)
 		ret = builtin_commands(command, cmd, saved, token_list, to_free);
 	else

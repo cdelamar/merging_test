@@ -32,3 +32,27 @@ void	ft_path(t_cmd *cmd)
 	if (cmd->path)
 		cmd->path_split = ft_split(cmd->path, ':');
 }
+
+void	print_commands(char ***commands)
+{
+	int	i;
+	int	j;
+
+	if (!commands)
+	{
+		printf("Commands : NULL\n");
+		return;
+	}
+	i = 0;
+	while (commands[i])
+	{
+		printf("Command %d:\n", i);
+		j = 0;
+		while (commands[i][j])
+		{
+			printf("  Arg %d: %s\n", j, commands[i][j]);
+			j++;
+		}
+		i++;
+	}
+}
