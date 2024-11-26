@@ -12,24 +12,18 @@ bool is_redirection(char *token)
 
 int	handle_redirections_with_front_check(char **split_line, t_cmd *cmd)
 {
-	int	i;
-	i = 0;
-	while (split_line[i])
-	{
-		if (ft_strcmp(split_line[i], "<") == 0)
-		{
-			if (handle_input_redirection(split_line, i) != EXIT_SUCCESS)
-				return (EXIT_FAILURE);
-		}
-		else if (ft_strcmp(split_line[i], "<<") == 0)
-		{
-			if (handle_heredoc_redirection(split_line, i, cmd) != EXIT_SUCCESS)
-				return (EXIT_FAILURE);
-		}
-		// TODO gerer les autres cas > et >>
-		else
-			break;
-	}
+	if (!split_line[0])
+		return (EXIT_SUCCESS);
+
+	if (ft_strcmp(split_line[0], "<") == 0)
+		return handle_input_redirection(split_line, 0);
+	else if (ft_strcmp(split_line[0], "<<") == 0)
+		return handle_heredoc_redirection(split_line, 0, cmd);
+	else if (ft_strcmp(split_line[0], ">>") == 0)
+		return handle_output_redirection(split_line, 0, 1);
+	else if (ft_strcmp(split_line[0], ">") == 0)
+		return handle_output_redirection(split_line, 0, 0);
+
 	return (EXIT_SUCCESS);
 }
 
