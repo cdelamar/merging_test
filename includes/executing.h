@@ -83,6 +83,8 @@ void				ft_path_command(t_cmd *cmd);
 int					ft_path_split(t_cmd *cmd);
 t_token				*copy_token_list(t_token *laubry_list);
 void				print_commands(char ***commands);
+bool				is_redirection(char *token);
+
 
 // excecuting
 void				shell_exec_loop(char **envp);
@@ -200,6 +202,11 @@ char				*get_cmd_path(char *cmd_name, char **env);
 int					handle_input_redirection(char **split_line, int i);
 void				execute_builtin_child(t_cmd *cmd, char ***commands, t_token **token_list);
 int					check_all_commands_executable(char ***commands, char **env);
+
+int	handle_redirections_with_front_check(char **split_line, t_cmd *cmd);
+int	preprocess_redirections(char **split_line, t_cmd *cmd);
+int	validate_redirections(char **split_line);
+
 
 int					child_failure_signal(t_cmd *cmd, char *command,
 						char **split_line);

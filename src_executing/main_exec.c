@@ -24,14 +24,14 @@ bool	synthax_manager(char **split_line)
 		printf("synthax error near \"|\"\n");
 		return (true);
 	}
-	if (ft_strcmp(split_line[0], "<") == 0 || ft_strcmp(split_line[0], ">") == 0
+	/*if (ft_strcmp(split_line[0], "<") == 0 || ft_strcmp(split_line[0], ">") == 0
 		|| ft_strcmp(split_line[0], "<<") == 0
 		|| ft_strcmp(split_line[0], ">>") == 0)
 	{
 		printf("redirections : syntax error\n");
 		g_signal = 2;
 		return (true);
-	}
+	}*/
 	return (false);
 }
 

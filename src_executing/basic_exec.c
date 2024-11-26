@@ -42,10 +42,7 @@ int	ft_path_split(t_cmd *cmd)
 {
 	ft_path(cmd);
 	if (!cmd->path)
-	{
-		printf("SET COMMAND PATH command not found\n");
 		return (EXIT_FAILURE);
-	}
 	return (EXIT_SUCCESS);
 }
 
@@ -72,6 +69,10 @@ int	basic_child_process(t_cmd *cmd)
 	char	*command;
 
 	split_line = cmd->final_tab;
+	if (validate_redirections(cmd->final_tab) != EXIT_SUCCESS)
+		return (EXIT_FAILURE);
+	if (preprocess_redirections(cmd->final_tab, cmd) != EXIT_SUCCESS)
+		return (EXIT_FAILURE);
 	if (!split_line)
 		return (EXIT_FAILURE);
 	if (handle_redirections(split_line, HEREDOC_ON, cmd) != 0)
@@ -97,7 +98,6 @@ int	basic_child_process(t_cmd *cmd)
 int	basic_execute(t_cmd *cmd, t_token **token_list)
 {
 	int	exit_code;
-
 	if (basic_setup(cmd) != EXIT_SUCCESS)
 		return (g_signal);
 	exit_code = ft_path_split(cmd);
