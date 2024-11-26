@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 18:59:33 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/26 23:42:57 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/27 00:09:18 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static int	init_heredoc(int *saved_stdin, int *heredoc_fd)
 		close(*saved_stdin);
 		return (-1);
 	}
+	close(*heredoc_fd);
 	return (0);
 }
 
@@ -47,15 +48,16 @@ static int	handle_signal_interrupt(int heredoc_fd, int saved_stdin)
 	return (0);
 }
 
-static int	process_heredoc_line(char *line, char *limit, int heredoc_fd)
+static int	process_heredoc_line(char *line, char *limit, int heredoc_fd, int saved_stdin)
 {
 	if (!line)
 	{
-		write(STDOUT_FILENO, "\n", 1);
+		//write(STDOUT_FILENO, "\n", 1);
+		//close(saved_stdin);
 		//close(heredoc_fd);
 		reset_signals();
-		printf("sig 2\n");
-		//close(saved_stdin);
+		unlink("/tmp/heredoc_tmp_minishell");
+		printf("sig :: %d\n", saved_stdin);
 		return (0);
 	}
 	if (ft_strcmp(line, limit) == 0)
@@ -83,8 +85,7 @@ int	ft_heredoc(char *limit)
 		if (handle_signal_interrupt(heredoc_fd, saved_stdin) != 0)
 			return (130);
 		line = readline("heredoc> ");
-		res = process_heredoc_line(line, limit, heredoc_fd);
-		printf("coucou %d\n", res);
+		res = process_heredoc_line(line, limit, heredoc_fd, saved_stdin);
 		if (res == 1)
 			break ;
 		else if (res == 0 && !line)
