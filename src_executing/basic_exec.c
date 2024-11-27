@@ -6,17 +6,11 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:07 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/26 23:21:15 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/23 01:00:23 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-/*bool is_redirection (char *line)
-{
-	return (ft_strcmp(line, ">") == 0 || ft_strcmp(line, ">>") == 0 
-		|| ft_strcmp(line, "<") == 0 || ft_strcmp(line, "<<") == 0);
-}*/
 
 bool	syntax_redirect(char *line)
 {
@@ -25,14 +19,15 @@ bool	syntax_redirect(char *line)
 
 	i = 0;
 	split_line = ft_split(line, ' ');
-
-	// printf ("dans syntax redirect:\n");
-	// print_tab(split_line);
 	while (split_line[i] != NULL)
 	{
-		if (is_redirection(split_line[i]) && is_redirection(split_line[i + 1]))
+		if ((strcmp(split_line[i], ">") == 0 && split_line[i + 1] != NULL
+				&& strcmp(split_line[i + 1], ">") == 0)
+			|| (strcmp(split_line[i], "<") == 0 && split_line[i + 1] != NULL
+				&& strcmp(split_line[i + 1], "<") == 0))
 		{
-			printf("bash: syntax error near unexpected token '%s'\n", split_line[i + 1]);
+			printf("Error: consecutive redirections ('%s %s') not allowed.\n",
+				split_line[i], split_line[i + 1]);
 			ft_freetab(split_line);
 			g_signal = 2;
 			return (false);
@@ -47,7 +42,10 @@ int	ft_path_split(t_cmd *cmd)
 {
 	ft_path(cmd);
 	if (!cmd->path)
+	{
+		printf("SET COMMAND PATH command not found\n");
 		return (EXIT_FAILURE);
+	}
 	return (EXIT_SUCCESS);
 }
 
@@ -74,14 +72,13 @@ int	basic_child_process(t_cmd *cmd)
 	char	*command;
 
 	split_line = cmd->final_tab;
-	if (validate_redirections(cmd->final_tab) != EXIT_SUCCESS)
-		return (EXIT_FAILURE);
-	if (preprocess_redirections(cmd->final_tab, cmd) != EXIT_SUCCESS)
-		return (EXIT_FAILURE);
 	if (!split_line)
 		return (EXIT_FAILURE);
 	if (handle_redirections(split_line, HEREDOC_ON, cmd) != 0)
+	{
+		ft_freetab(split_line);
 		return (EXIT_FAILURE);
+	}
 	command = cmd_finder(split_line, cmd);
 	if (command)
 	{
@@ -100,6 +97,7 @@ int	basic_child_process(t_cmd *cmd)
 int	basic_execute(t_cmd *cmd, t_token **token_list)
 {
 	int	exit_code;
+
 	if (basic_setup(cmd) != EXIT_SUCCESS)
 		return (g_signal);
 	exit_code = ft_path_split(cmd);

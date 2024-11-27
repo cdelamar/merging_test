@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 18:28:06 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/26 21:32:17 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/23 01:30:01 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@ int	is_command_executable(char **command, char **env)
 	path = get_cmd_path(command[0], env);
 	if (path == NULL)
 	{
-//		if (ft_strcmp(command[0], "<") == 0
-//			|| ft_strcmp(command[0], ">") == 0
-//			|| ft_strcmp(command[0], "<<") == 0
-//			|| ft_strcmp(command[0], ">>") == 0)
-//		else
-		fprintf(stderr, "%s: command not found\n", command[0]);
+		if (ft_strcmp(command[0], "<") == 0
+			|| ft_strcmp(command[0], ">") == 0
+			|| ft_strcmp(command[0], "<<") == 0
+			|| ft_strcmp(command[0], ">>") == 0)
+			printf("redirections : syntax error\n");
+		else
+			fprintf(stderr, "%s: command not found\n", command[0]);
 		return (0);
 	}
 	free(path);

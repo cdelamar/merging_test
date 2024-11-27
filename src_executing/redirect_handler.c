@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 18:28:13 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/27 00:00:34 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/22 18:28:15 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,10 @@ int	handle_heredoc_redirection(char **split_line, int i, t_cmd *cmd)
 		printf("ft_heredoc return -1\n");
 		return (-1);
 	}
-	cmd->fd_in = open("/tmp/heredoc_tmp_minishell", O_RDONLY);
+	cmd->fd_in = open("/tmp/heredoc_tmp", O_RDONLY);
 	if (cmd->fd_in < 0)
 	{
-		close(cmd->fd[0]);
-		close(cmd->fd[1]);
-		//perror("Error opening heredoc temp file");
+		perror("Error opening heredoc temp file");
 		return (-1);
 	}
 	dup2(cmd->fd_in, STDIN_FILENO);

@@ -17,9 +17,9 @@ int	ft_output_redirect(char **split_line, int i, int append)
 	int	fd;
 	int	flags;
 
-	//if (ft_strcmp(split_line[0], ">") == 0
-	//	|| ft_strcmp(split_line[0], ">>") == 0)
-	//	return (EXIT_FAILURE);
+	if (ft_strcmp(split_line[0], ">") == 0
+		|| ft_strcmp(split_line[0], ">>") == 0)
+		return (EXIT_FAILURE);
 	if (!split_line[i + 1])
 	{
 		printf("Syntax error: expected file after redirection\n");
