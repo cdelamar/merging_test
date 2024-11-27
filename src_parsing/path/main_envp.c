@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:51:59 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/22 19:01:17 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/29 17:36:06 by jcario           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void	getenv_in_list(char **envp, t_token **token)
 	next = (*token)->next;
 	free((*token)->content);
 	free(*token);
+	free(rest);
 	*token = next;
 }
 

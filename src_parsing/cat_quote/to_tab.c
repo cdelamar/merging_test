@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:36:06 by laubry            #+#    #+#             */
-/*   Updated: 2024/10/22 17:09:04 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/27 19:20:39 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,12 @@ void	copy_non_space_tokens(char **finish_tab, char **tab_token, int len)
 		free(tab_token[i]);
 		i++;
 	}
+	i = 0;
+	//while (tab_token[i])
+	//{
+	//	free(tab_token[i]);
+	//	i++;
+	//}
 	finish_tab[j] = NULL;
 }
 
