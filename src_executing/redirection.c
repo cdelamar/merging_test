@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 19:01:29 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/15 23:07:13 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/27 19:57:56 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	ft_output_redirect(char **split_line, int i, int append)
 		return (EXIT_FAILURE);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
+	free(split_line[i]);
 	split_line[i] = NULL;
 	return (EXIT_SUCCESS);
 }
