@@ -6,7 +6,7 @@
 /*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:51:59 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/22 19:01:17 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/29 22:22:23 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*reste(char *start)
 	i = 0;
 	j = 0;
 	if (!start[i])
-		return (start);
+		return (NULL);
 	str = ft_calloc(ft_strlen(start) + 1, sizeof(char));
 	while (start[i])
 	{
@@ -82,6 +82,8 @@ void	getenv_in_list(char **envp, t_token **token)
 	free((*token)->content);
 	free(*token);
 	*token = next;
+	if (rest)
+		free(rest);
 }
 
 void	path_other(char **envp, t_token **token_list, int place_of_dollar)
