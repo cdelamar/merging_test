@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 21:54:18 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/29 20:25:14 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/29 21:34:34 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,31 +48,43 @@ bool	is_builtin(char *command)
 		|| ft_strcmp(command, "exit") == 0);
 }
 
-int	pipe_builtin(t_cmd *cmd, char **command, t_token **token_list,
-	char ***to_free)
+int	pipe_builtin(t_cmd *cmd, char **command,
+	t_token **token_list, char ***to_free)
 {
-	int		saved[2];
-	int		ret;
+	int				saved[2];
+	int				ret;
+	t_shell_context	ctx;
 
+	ctx.split_line = command;
+	ctx.cmd = cmd;
+	ctx.saved = saved;
+	ctx.token_list = token_list;
+	ctx.to_free = to_free;
 	if (backup_manager(command, saved, saved + 1, cmd) == EXIT_SUCCESS)
-		ret = builtin_commands(command, cmd, saved, token_list, to_free);
+		ret = builtin_commands(&ctx, saved);
 	else
-		ret = (EXIT_FAILURE);
+		ret = EXIT_FAILURE;
 	return (ret);
 }
 
 int	ft_builtin(t_cmd *cmd, t_token **token_list)
 {
-	char	**split_line;
-	int		saved[2];
-	int		ret;
+	char			**split_line;
+	int				saved[2];
+	int				ret;
+	t_shell_context	ctx;
 
 	split_line = cmd->final_tab;
 	if (!split_line)
 		return (EXIT_FAILURE);
+	ctx.split_line = split_line;
+	ctx.cmd = cmd;
+	ctx.saved = saved;
+	ctx.token_list = token_list;
+	ctx.to_free = NULL;
 	if (backup_manager(split_line, saved, saved + 1, cmd) == EXIT_SUCCESS)
-		ret = builtin_commands(split_line, cmd, saved, token_list, NULL);
+		ret = builtin_commands(&ctx, saved);
 	else
-		ret = (EXIT_FAILURE);
+		ret = EXIT_FAILURE;
 	return (ret);
 }

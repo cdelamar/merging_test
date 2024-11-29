@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 18:28:06 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/23 01:30:01 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/29 21:30:37 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,11 @@ int	check_all_commands_executable(char ***commands, char **env)
 	return (validate_commands(commands, env));
 }
 
-void	execute_builtin_child(t_cmd *cmd, char ***commands, t_token **token_list)
+void	execute_builtin_child(t_cmd *cmd, char ***commands,
+	t_token **token_list)
 {
-	if (pipe_builtin(cmd, cmd->path_command, token_list, commands) == EXIT_SUCCESS)
+	if (pipe_builtin(cmd, cmd->path_command, token_list, commands)
+		== EXIT_SUCCESS)
 		exit_with_clean(cmd, commands, EXIT_SUCCESS);
 	else
 		exit_with_clean(cmd, commands, EXIT_FAILURE);

@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:05:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/29 20:27:10 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/29 21:29:23 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,27 +79,32 @@ typedef struct s_cmd
 	t_token	*tokens;
 }	t_cmd;
 
+typedef struct s_shell_context
+{
+	char		**split_line;
+	t_cmd		*cmd;
+	int			*saved;
+	t_token		**token_list;
+	char		***to_free;
+}	t_shell_context;
+
 void				ft_path_command(t_cmd *cmd);
 int					ft_path_split(t_cmd *cmd);
 t_token				*copy_token_list(t_token *laubry_list);
 void				print_commands(char ***commands);
 
-// excecuting
 void				shell_exec_loop(char **envp);
 void				handle_error(char *msg, t_cmd *cmd, int *fd);
 int					execute(t_cmd *cmd, t_token **token_list);
 
-// memory
 int					malloc_structs(t_cmd **cmd);
 void				free_structs(t_cmd *cmd);
 void				ft_freetab(char **tab);
 
-// command
 char				*cmd_cat(const char *path_split, char *slash,
 						char *command);
 char				*cmd_finder(char **split_line, t_cmd *cmd);
 
-// envp
 int					ft_copy_envp(char **envp, t_cmd *cmd);
 char				*path_finder(t_cmd *cmd, char *path, int size);
 void				ft_path(t_cmd *cmd);
@@ -115,8 +120,7 @@ int					ft_env(t_cmd *cmd);
 int					ft_cd(char *path);
 int					ft_pwd(void);
 void				skip_x1f(char *line);
-int					builtin_commands(char **split_line, t_cmd *cmd,
-						int saved_in[], t_token **token_list, char ***to_free);
+int					builtin_commands(t_shell_context *ctx, int *saved);
 
 //signals
 void				sigint_handler(int sig);

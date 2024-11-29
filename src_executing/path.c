@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:23:37 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/22 16:13:29 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/29 21:30:57 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ void	print_commands(char ***commands)
 
 	if (!commands)
 	{
-		printf("Commands : NULL\n");
-		return;
+		printf ("Commands : NULL\n");
+		return ;
 	}
 	i = 0;
 	while (commands[i])

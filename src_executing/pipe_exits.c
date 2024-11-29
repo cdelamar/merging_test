@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 18:25:34 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/22 18:25:36 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/29 21:31:33 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	execve_or_exit(char *full_path, t_cmd *cmd, char ***commands)
 
 void	exit_with_clean(t_cmd *cmd, char ***commands, int exit_code)
 {
-	if(cmd->path_split)
+	if (cmd->path_split)
 		ft_freetab(cmd->path_split);
 	free_cmd_resources(cmd);
 	free_commands(commands);
