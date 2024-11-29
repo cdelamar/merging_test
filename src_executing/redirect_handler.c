@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 18:28:13 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/29 23:57:04 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/30 00:17:32 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ int	handle_heredoc_redirection(char **split_line, int i, t_cmd *cmd)
 	cmd->fd_in = open("/tmp/oui_tmp", O_RDONLY);
 	if (cmd->fd_in < 0)
 	{
+		close(cmd->fd[0]);
+		close(cmd->fd[1]);
 		perror("Error opening heredoc temp file");
 		return (-1);
 	}

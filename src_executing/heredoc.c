@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 18:59:33 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/29 23:55:35 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/30 00:27:48 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ static int	process_heredoc_line(char *line, char *limit, int heredoc_fd)
 {
 	if (!line)
 	{
-		write(STDOUT_FILENO, "\n", 1);
 		close(heredoc_fd);
 		reset_signals();
 		return (0);
@@ -79,10 +78,16 @@ int	ft_heredoc(char *limit)
 			return (130);
 		line = readline("heredoc> ");
 		res = process_heredoc_line(line, limit, heredoc_fd);
+
+		printf("result = %d\n", res);
 		if (res == 1)
 			break ;
 		else if (res == 0 && !line)
+		{
+			dup2(saved_stdin, STDIN_FILENO);
+			close(saved_stdin);
 			return (0);
+		}
 	}
 	close(heredoc_fd);
 	reset_signals();
