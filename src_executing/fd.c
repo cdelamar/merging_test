@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:23:59 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/10/22 16:05:08 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/29 23:56:30 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	open_heredoc_file(void)
 {
 	int	fd;
 
-	fd = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open("/tmp/oui_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		return (-1);
 	return (fd);

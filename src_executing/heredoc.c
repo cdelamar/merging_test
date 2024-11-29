@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 18:59:33 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/16 00:16:11 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/29 23:55:35 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	init_heredoc(int *saved_stdin, int *heredoc_fd)
 		return (-1);
 	g_signal = 0;
 	heredoc_signals();
-	*heredoc_fd = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	*heredoc_fd = open("/tmp/oui_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (*heredoc_fd < 0)
 	{
 		reset_signals();
@@ -35,7 +35,7 @@ static int	handle_signal_interrupt(int heredoc_fd, int saved_stdin)
 	if (g_signal == 1)
 	{
 		close(heredoc_fd);
-		unlink("/tmp/heredoc_tmp");
+		unlink("/tmp/oui_tmp");
 		reset_signals();
 		dup2(saved_stdin, STDIN_FILENO);
 		close(saved_stdin);
