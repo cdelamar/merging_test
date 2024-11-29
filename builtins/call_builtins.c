@@ -6,33 +6,24 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 17:43:11 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/23 01:32:42 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/29 20:23:32 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	handle_exit_cleanup(char **split_line, t_cmd *cmd, int saved[], t_token **token_list, char ***to_free)
+static void	handle_exit_cleanup(char **split_line, t_cmd *cmd, int saved[],
+	t_token **token_list, char ***to_free)
 {
-	// free : liberer split_line sans le char *** entraine un leak
-	//		  mais liberer le char *** PUIS split_line entraine un
-	//		  invalid read
-
-	// conclusion : le code est tellement charcute qu'on voit meme pas
-	// que char *** commands pointe tres certainement sur split_line
-	// resoud le leak du char *** mais reste main_cat a recuperer
-	if(to_free)
+	if (to_free)
 		free_commands(to_free);
-	/*if(split_line)
-		ft_freetab(split_line);
-	*/
 	(void)split_line;
 	token_lstclear(&cmd->tokens, free);
 	ft_freetab(cmd->env);
 	if (cmd->path_split)
 		ft_freetab(cmd->path_split);
 	free(cmd->final_line);
-	if(cmd->final_tab)
+	if (cmd->final_tab)
 		ft_freetab(cmd->final_tab);
 	free(cmd);
 	restore_fd(saved[0], saved[1]);
@@ -40,7 +31,8 @@ static void	handle_exit_cleanup(char **split_line, t_cmd *cmd, int saved[], t_to
 	exit(g_signal);
 }
 
-static int	handle_exit_builtin(char **split_line, t_cmd *cmd, int saved[], t_token **token_list, char ***to_free)
+static int	handle_exit_builtin(char **split_line, t_cmd *cmd,
+	int saved[], t_token **token_list, char ***to_free)
 {
 	int	exit_code;
 
@@ -69,7 +61,8 @@ static int	handle_builtins(char **split_line, t_cmd *cmd)
 	return (EXIT_FAILURE);
 }
 
-int	builtin_commands(char **split_line, t_cmd *cmd, int saved[], t_token **token_list, char ***to_free)
+int	builtin_commands(char **split_line, t_cmd *cmd, int saved[],
+	t_token **token_list, char ***to_free)
 {
 	int	ret;
 

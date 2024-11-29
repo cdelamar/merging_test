@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:05:45 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/23 01:29:34 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/29 20:27:10 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,8 @@ void				process_input(t_cmd *cmd, t_token **token_list);
 
 void				ignore_sigpipe(void);
 bool				is_builtin(char *command);
-int					pipe_builtin(t_cmd *cmd, char **command, t_token **token_list, char ***to_free);
+int					pipe_builtin(t_cmd *cmd, char **command,
+						t_token **token_list, char ***to_free);
 bool				synthax_manager(char **split_line);
 void				free_cmd_resources(t_cmd *cmd);
 
@@ -198,7 +199,8 @@ int					ft_parent(t_cmd *cmd, int exit_code);
 char				*ft_strjoin_path(char *path, char *cmd);
 char				*get_cmd_path(char *cmd_name, char **env);
 int					handle_input_redirection(char **split_line, int i);
-void				execute_builtin_child(t_cmd *cmd, char ***commands, t_token **token_list);
+void				execute_builtin_child(t_cmd *cmd, char ***commands,
+						t_token **token_list);
 int					check_all_commands_executable(char ***commands, char **env);
 
 int					child_failure_signal(t_cmd *cmd, char *command,
