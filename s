@@ -1,1 +1,0 @@
-gg: command not found
