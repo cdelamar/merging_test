@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_envp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: laubry <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:51:59 by laubry            #+#    #+#             */
-/*   Updated: 2024/11/29 22:22:23 by laubry           ###   ########.fr       */
+/*   Updated: 2024/11/30 00:56:20 by cdelamar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*reste(char *start)
 	str = ft_calloc(ft_strlen(start) + 1, sizeof(char));
 	while (start[i])
 	{
-		if (!ft_isalnum(start[i]))
+		if (!ft_isalnum(start[i]) && start[i] != '_')
 		{
 			while (start[i])
 			{
