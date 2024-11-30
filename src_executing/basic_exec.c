@@ -6,7 +6,7 @@
 /*   By: cdelamar <cdelamar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:07 by cdelamar          #+#    #+#             */
-/*   Updated: 2024/11/23 01:00:23 by cdelamar         ###   ########.fr       */
+/*   Updated: 2024/11/30 01:44:55 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ int	basic_child_process(t_cmd *cmd)
 		return (EXIT_FAILURE);
 	if (handle_redirections(split_line, HEREDOC_ON, cmd) != 0)
 	{
+		cmd->final_tab = NULL;
 		ft_freetab(split_line);
+		close(cmd->fd[1]);
 		return (EXIT_FAILURE);
 	}
 	command = cmd_finder(split_line, cmd);
